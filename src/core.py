@@ -1,4 +1,5 @@
 import logging
+# import util
 
 logging.basicConfig(
     filename="reports/all.log",
@@ -10,8 +11,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)  # put this in each file
 
 
+def active_problem():
+    return None
+
 def main():
     # Main function
+    print(active_problem())
 
     try:
         True
@@ -24,3 +29,5 @@ def main():
 if __name__ == "__main__":
     """[summary]"""
     main()
+
+
