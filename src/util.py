@@ -1,15 +1,13 @@
 import math
 
+
 def is_prime(n):
-    if n == 2 or n==3:
+    if n in (2, 3):
         return True
-    for i in range(2, int(n**0.5)+1):
-        if n%i == 0:
-            return False
-    return True
+    return all(n % i != 0 for i in range(2, int(n ** 0.5) + 1))
 
 
-def prime_list(n): 
+def prime_list(n):
     prime = [True]*n
     for i in range(3,int(n**0.5)+1,2):
         if prime[i]:
@@ -19,15 +17,11 @@ def prime_list(n):
 
 def is_palindrome(n):
     val = str(n)
-    if(val == val[::-1]):
-        return True
-    else:
-        return False
+    return val == val[::-1]
 
 
-def convert_list_to_int(inlist): 
-    res = int("".join(map(str, inlist)))   
-    return res
+def convert_list_to_int(inlist):
+    return int("".join(map(str, inlist)))
 
 
 def convert_int_to_list(num):
@@ -83,17 +77,11 @@ def unique_list(li):
 
 
 def divisible_by_all(num, values):
-    for ea in values:
-        if num % ea != 0:
-            return False
-    return True
+    return all(num % ea == 0 for ea in values)
 
 
 def divisible_by_any(num, values):
-    for ea in values:
-        if num % ea ==0:
-            return True
-    return False
+    return any(num % ea == 0 for ea in values)
 
 
 def get_nth_prime(nth_prime):
@@ -108,10 +96,11 @@ def get_nth_prime(nth_prime):
 
 
 def multiply_list(*args):
-    """Provide a list of values to multiply. Multiplies all provided numbers together
+    """Provide a list of values to multiply. Multiplies all provided numbers together.
 
     Returns:
         int : resulting multiplied value
+
     """
     res = 1
     if isinstance(args[0], list):

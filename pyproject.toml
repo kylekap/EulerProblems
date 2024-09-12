@@ -9,7 +9,7 @@ requires = ['setuptools', 'wheel']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'PythonTemplate'
+name = 'EulerProblems'
 version = '2024.1' # Versions are [Year].[Release of Year]
 description = 'Python template file for faster setup and builds'
 requires-python = '>=3.7'
@@ -31,10 +31,10 @@ dev = [
 ]
 
 [project.urls]
-homepage = 'https://github.com/kylekap/PythonTemplate'
-documentation = 'https://github.com/kylekap/PythonTemplate/tree/main/docs'
-repository = 'https://github.com/kylekap/PythonTemplate'
-changelog = 'https://github.com/kylekap/PythonTemplate/tree/main/Docs/Changelog.md'
+homepage = 'https://github.com/kylekap/EulerProblems'
+documentation = 'https://github.com/kylekap/EulerProblems/tree/main/docs'
+repository = 'https://github.com/kylekap/EulerProblems'
+changelog = 'https://github.com/kylekap/EulerProblems/tree/main/Docs/Changelog.md'
 
 
 [tool.ruff]
@@ -45,4 +45,18 @@ quote-style = "double" # Like Black, use double quotes for strings.
 indent-style = "space" # Like Black, indent with spaces, rather than tabs.
 
 [tool.ruff.lint]
-ignore = ["E501"] # Avoid enforcing line-length violations (`E501`)
+select = ["ALL"]
+ignore = [
+    "ANN",  # flake8-annotations
+    "E501", # Avoid enforcing line-length violations (`E501`)
+    "D100", # ignore missing docs
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "T201", # I'm gunna print sometimes, you gotta live with it
+    "ARG002", # Sometimes, you want functions to match
+    ]

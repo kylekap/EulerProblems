@@ -1,5 +1,4 @@
 import logging
-# import util
 
 logging.basicConfig(
     filename="reports/all.log",
@@ -16,12 +15,9 @@ def active_problem():
 
 def main():
     # Main function
-    print(active_problem())
-
     try:
-        True
+        print(active_problem())
     except Exception as E:
-        print(type(E).__name__, __file__, E.__traceback__.tb_lineno, "\n", E)
         logger.warning(type(E).__name__, __file__, E.__traceback__.tb_lineno, "\n", E)
         raise
 
