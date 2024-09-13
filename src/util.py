@@ -1,3 +1,4 @@
+import csv
 import math
 
 
@@ -16,8 +17,7 @@ def prime_list(n):
 
 
 def is_palindrome(n):
-    val = str(n)
-    return val == val[::-1]
+    return str(n) == str(n)[::-1]
 
 
 def convert_list_to_int(inlist):
@@ -110,3 +110,12 @@ def multiply_list(*args):
         for ea in args:
             res *= ea
     return res
+
+def import_data(filename):
+    table = []
+    with open(filename) as csvdatafile:
+        csvreader = csv.reader(csvdatafile)
+        for row in csvreader:
+            num_append = list(map(int,row))
+            table.append(num_append)
+    return table

@@ -88,7 +88,17 @@ def problem7_alt(num=10001):
     By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
     What is the 10,001st prime number?
     """
-    return util.get_nth_prime(num)[-1]
+    def get_nth_prime(nth_prime):
+        prime_list = [2]
+        num = 3
+        while len(prime_list) < nth_prime:
+            #The only numbers you care about are primes, since a prime is not divisible by any other primes.
+            if not util.divisible_by_any(num, prime_list):
+                prime_list.append(num)
+            num+=2
+        return prime_list
+
+    return get_nth_prime(num)[-1]
 
 def problem8(num=7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450, consecutive=13):
     """Euler Problem 8.
@@ -116,8 +126,78 @@ def problem8(num=731671765313306249192251196744265747423553491949349698352031277
     71636269561882670428252483600823257530420752963450
     Find the thirteen adjacent digits in the 1000-digit number that have the greatest product. What is the value of this product?
     """
-    li = util.convert_int_to_list(num)
+    li = [int(x) for x in str(num)]
     highest = 0
     for i in range(1,len(li)-consecutive):
         highest = max(util.multiply_list(li[i:i+consecutive]), highest)
     return highest
+
+def problem9(desired_sum):
+    """Euler Problem 9.
+
+    A Pythagorean triplet is a set of three natural numbers, a<b<c, for which a^2 + b^2 = c^2
+    For example, 3^2 + 4^2 = 9 + 16 = 25 = 5^2
+    There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+    Find the product a*b*c
+    """
+    a,b,c = 1,2,3
+    for a in range(1,desired_sum//3):
+        for b in range(a,desired_sum//2):
+            for c in range(max(b,desired_sum//3),desired_sum-b-a+1):
+                if a**2 + b**2 == c**2 and a+b+c==desired_sum:
+                    return a*b*c
+    return None
+
+def problem10():
+    """Euler Problem 10.
+
+    The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+    Find the sum of all the primes below two million.
+    """
+    def prime_list(n):
+        prime = [True]*n
+        for i in range(3,int(n**0.5)+1,2):
+            if prime[i]:
+                prime[i*i::2*i]=[False]*((n-i*i-1)//(2*i)+1)
+        return [2]+[i for i in range(3,n,2) if prime[i]]
+    return sum(prime_list(2000000))
+
+
+def problem11():
+    def get_rows(grid, adj):
+        li = []
+        for row_num in range(len(grid)):
+            for col_num in range(len(grid[row_num])-adj+1):
+                temp = [grid[row_num][col_num+offset] for offset in [0,1,2,3]]
+                li.append(temp)
+        return li
+
+    def get_cols(grid,adj):
+        li = []
+        for row_num in range(len(grid)-adj+1):
+                for col_num in range(len(grid[row_num])):
+                    temp = [grid[row_num+offset][col_num] for offset in [0,1,2,3]]
+                    li.append(temp)
+        return li
+
+    def get_diags(grid, adj):
+        li = []
+        for row_num in range(len(grid)-adj+1):
+            for col_num in range(len(grid[row_num])-adj+1):
+                temp = [grid[row_num+offset][col_num+offset] for offset in [0,1,2,3]]
+                li.append(temp)
+            for col_num in range(adj-1, len(grid[row_num])):
+                temp = [grid[row_num+offset][col_num-offset] for offset in [0,1,2,3]]
+                li.append(temp)
+        return li
+
+    grid = util.import_data("data/SumGrid.csv")
+    adj = 4
+    li = get_rows(grid, adj)
+    li+= get_cols(grid, adj)
+    li+= get_diags(grid, adj)
+
+    max_value = 0
+    for line in li:
+        max_value = max(max_value, util.multiply_list(line))
+    return max_value

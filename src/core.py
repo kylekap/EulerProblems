@@ -1,5 +1,7 @@
 import logging
 
+# import util
+
 logging.basicConfig(
     filename="reports/all.log",
     encoding="utf-8",
