@@ -1,4 +1,5 @@
 import csv
+import math
 
 import util
 
@@ -238,3 +239,42 @@ def problem13(filename):
     for ea in range(len(li)):
         li[ea] = int(li[ea][0])
     return str(sum(li))[0:10]
+
+def problem14(highest_num):
+    """Euler Problem 14.
+
+    The following iterative sequence is defined for the set of positive integers:
+    n => n/2 (n is even)
+    n => 3n+1 (n is odd)
+
+    Using the rule above and starting with 13, we generate the following sequence:
+    13, 40, 20, 10, 5, 16, 8, 4, 2, 1.
+    It can be seen that this sequence (starting at 13 and finishing at 1) contains 10 terms. Although it has not been proved yet (Collatz Problem), it is thought that all starting numbers finish at 1.
+    Which starting number, under one million, produces the longest chain?
+    Once the chain starts the terms are allowed to go above one million.
+    """
+    def eval_collatz(num):
+        curriter = 0
+        while num !=1:
+            curriter+=1
+            num = num / 2 if num % 2 == 0 else 3 * num + 1
+        return curriter
+
+    max_collatz = 0
+    value = 0
+    for ea in range(1, highest_num):
+        c = eval_collatz(ea)
+        if max_collatz < c:
+            max_collatz = c
+            value = ea
+    return value
+
+def problem15(n):
+    """Euler Problem 15.
+
+    Starting in the top left corner of a 2x2 grid, and only being able to move to the right and down, there are exactly 6 routes to the bottom right corner
+    How many such routes are there through a 20x20 grid?
+    """
+    def binomial_coefficient(n,k):
+        return math.factorial(n) // (math.factorial(k) * math.factorial(n - k))
+    return binomial_coefficient(2 * n, n)

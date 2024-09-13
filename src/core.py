@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)  # put this in each file
 def active_problem():
     return None
 
-
 def main():
     # Main function
     try:
