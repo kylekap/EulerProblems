@@ -1,7 +1,5 @@
 import logging
 
-# import util
-
 logging.basicConfig(
     filename="reports/all.log",
     encoding="utf-8",
@@ -14,6 +12,7 @@ logger = logging.getLogger(__name__)  # put this in each file
 
 def active_problem():
     return None
+
 
 def main():
     # Main function

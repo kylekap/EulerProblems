@@ -111,7 +111,7 @@ def multiply_list(*args):
             res *= ea
     return res
 
-def import_data(filename):
+def import_2d_array_data(filename):
     table = []
     with open(filename) as csvdatafile:
         csvreader = csv.reader(csvdatafile)
@@ -119,3 +119,7 @@ def import_data(filename):
             num_append = list(map(int,row))
             table.append(num_append)
     return table
+
+def import_data(filename):
+    with open(filename) as csvdatafile:
+        return list(csv.reader(csvdatafile))
