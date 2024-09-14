@@ -240,6 +240,7 @@ def problem13(filename):
         li[ea] = int(li[ea][0])
     return str(sum(li))[0:10]
 
+
 def problem14(highest_num):
     """Euler Problem 14.
 
@@ -269,6 +270,7 @@ def problem14(highest_num):
             value = ea
     return value
 
+
 def problem15(n):
     """Euler Problem 15.
 
@@ -278,3 +280,13 @@ def problem15(n):
     def binomial_coefficient(n,k):
         return math.factorial(n) // (math.factorial(k) * math.factorial(n - k))
     return binomial_coefficient(2 * n, n)
+
+
+def problem16(base, exponent):
+    """Euler Problem 16.
+
+    2^15 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
+    What is the sum of the digits of the number 2^1000?
+    """
+    val  = base**exponent
+    return sum(util.convert_int_to_list(val))
