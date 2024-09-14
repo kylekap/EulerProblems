@@ -1,6 +1,6 @@
 import logging
 
-# import util
+import util
 
 logging.basicConfig(
     filename="reports/all.log",
@@ -27,5 +27,3 @@ def main():
 if __name__ == "__main__":
     """[summary]"""
     main()
-
-

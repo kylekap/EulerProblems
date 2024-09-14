@@ -99,9 +99,9 @@ def problem7_alt(num=10001):
             if not util.divisible_by_any(num, prime_list):
                 prime_list.append(num)
             num+=2
-        return prime_list
+        return prime_list[-1]
 
-    return get_nth_prime(num)[-1]
+    return get_nth_prime(num)
 
 def problem8(num=7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450, consecutive=13):
     """Euler Problem 8.
@@ -328,3 +328,76 @@ def problem17():
     for n in range(1,1001):
         running_tot += num_len(n)
     return running_tot
+
+def problem18(filename="data/TriangleSum.csv"):
+    """Euler Problem 18.
+
+    By starting at the top of the triangle below and moving to adjacent numbers on the row below, the maximum total from top to bottom is 23.
+    Find the maximum total from top to bottom of the triangle below: [data/TriangleSum.csv]
+    note: As there are only 16384 routes, it is possible to solve this problem by trying every route. However, Problem 67, is the same challenge with a triangle containing one-hundred rows; it cannot be solved by brute force, and requires a clever method! ;o)
+    """
+    grid = util.import_2d_array_data(filename)
+
+    #Solution is based on rolling up from bottom.
+    # Each row will be the sum of the maximum path downwards.
+    # Each item touches 2 below it-> same col and 1 to the right.
+
+    for row_num in range(len(grid)-2, -1, -1): #-2 because -1 would be last, need to start 1 higher
+        for col_num in range(len(grid[row_num])):
+            grid[row_num][col_num] += max(grid[row_num+1][col_num], grid[row_num+1][col_num+1])
+    return grid[0][0]
+
+def problem67(filename="data/0067_triangle.csv"):
+    """Euler Problem 67.
+
+    By starting at the top of the triangle below and moving to adjacent numbers on the row below, the maximum total from top to bottom is 23.
+    Find the maximum total from top to bottom in [data/0067_triangle.csv], a file containing a triangle with one-hundred rows.
+    Note: This is a much more difficult version of Problem 18. It is not possible to try every route to solve this problem, as there are 2^99 altogether!
+    If you could check one trillion (10^12) routes every second it would take over twenty billion years to check them all. There is an efficient algorithm to solve it.
+    """
+    return problem18(filename)
+
+def problem19():
+    """Euler Problem 19.
+
+    You are given the following information, but you may prefer to do some research for yourself:
+        1 Jan 1900 was a Monday.
+        Thirty days has September,
+        April, June and November.
+        All the rest have thirty-one,
+        Saving February alone,
+        Which has twenty-eight, rain or shine.
+        And on leap years, twenty-nine.
+        A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400.
+    How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
+    """
+    def is_leap_year(year):
+        return bool(year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
+
+    month_days = [31,28,31,30,31,30,31,31,30,31,30,31] #how many days in each month
+    a = 2 #1901 starts on a Tuesday
+    sun = 0 # Number of sundays
+    february = 28
+    for year in range(1901,2001,1):
+        for ea in month_days:
+            if(a%7==0):
+                sun += 1
+            m_d = 29 if ea == february and is_leap_year(year) else ea
+            a += m_d
+    return sun
+
+
+def problem20():
+    """Euler Problem 20.
+
+    n! means nx(n-1)x...3x2x1
+    For example 10! = 10*9*8*7*6*5*4*3*2*1 - 3628800
+    and the sum of the digits in the number 10! is 3+6+2+8+8+0+0 = 27
+    Find the sum of the digits in the number 100!
+    """
+    def factorial(n):
+        tot=1
+        for i in range(1,n,1):
+            tot *= i
+        return tot
+    return sum(util.convert_int_to_list(factorial(100)))
