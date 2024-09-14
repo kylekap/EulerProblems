@@ -290,3 +290,41 @@ def problem16(base, exponent):
     """
     val  = base**exponent
     return sum(util.convert_int_to_list(val))
+
+
+def problem17():
+    """Euler Problem 17.
+
+    If the numbers 1 to 5 are written out in words: one, two, three, four, five, then there are 3 + 3 + 5 + 4 + 4 = 19 letters used in total
+    If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?
+    Do not count spaces or hyphens. For example, 342 (three hundred and forty-two) contains 23 letters and 115 (one hundred and fifteen) contains 20 letters. The use of "and" when writing out numbers is in compliance with British usage
+    """
+    def num_len(n):
+        def below_100(n,lasts,tens):
+            if n < len(lasts):
+                return lasts[n]
+            return tens[max(n//10, 0)]+lasts[n%10]
+
+        lasts = [0,len("one"),len("two"),len("three"),len("four"),len("five"),len("six"),len("seven"),len("eight"),len("nine"),len("ten"),len("eleven"),len("twelve"),len("thirteen"),len("fourteen"),len("fifteen"),len("sixteen"),len("seventeen"),len("eighteen"),len("nineteen")]
+        tens = [0, 0, len("twenty"),len("thirty"),len("forty"),len("fifty"),len("sixty"),len("seventy"),len("eighty"),len("ninety")]
+        tot = 0
+        h = int(n//100)%10
+        t = int(n//1000)
+        s = n%100
+
+        one_hundred, nineninenine = 100, 999
+
+        if n < one_hundred:
+            return below_100(n,lasts,tens)
+
+        if n > nineninenine:
+            tot += below_100(t,lasts,tens)+len("thousand")
+        if h != 0:
+            tot += lasts[h]+len("hundred")
+        if s != 0:
+            tot+= len("and") + below_100(s,lasts,tens)
+        return tot
+    running_tot = 0
+    for n in range(1,1001):
+        running_tot += num_len(n)
+    return running_tot
