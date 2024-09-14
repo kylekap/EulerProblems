@@ -90,7 +90,7 @@ def find_all_divisors(n):
             lis.append(i)
             lis.append(int(n/i))
         i += 1
-    return lis
+    return list(set(lis))
 
 
 def prime_factors(n):
