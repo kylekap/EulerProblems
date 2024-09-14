@@ -401,3 +401,50 @@ def problem20():
             tot *= i
         return tot
     return sum(util.convert_int_to_list(factorial(100)))
+
+def problem21(max_val=10000):
+    """Euler Problem 21.
+
+    Let d(n) be defined as the sum of proper divisors of n (numbers less than n which divide evenly into n).
+    If d(a) = b and d(b) = a, where a!=b, then a and b are an amicable pair and each of a and b are called amicable numbers.
+    For example, the proper divisors of 220 are 1, 2, 4, 5, 10, 11, 20, 22, 44, 55 and 110; therefore d(220) = 284. The proper divisors of 284 are $1, 2, 4, 71 and 142; so d(284) = 220
+    Evaluate the sum of all the amicable numbers under 10000.
+    """
+    amicable_set = set()
+    for ea in range(max_val):
+        if ea not in amicable_set:
+            number_1 = ea
+            number_2 = sum(util.find_all_divisors(ea))
+            if sum(util.find_all_divisors(number_2)) == number_1 and number_1 != number_2:
+                amicable_set.add(number_1)
+                amicable_set.add(number_2)
+    return sum(list(amicable_set))
+
+def problem22():
+    """Euler Problem 22.
+
+    Using [data/0022_names.csv], a file containing over five-thousand first names, begin by sorting it into alphabetical order. Then working out the alphabetical value for each name, multiply this value by its alphabetical position in the list to obtain a name score.
+    For example, when the list is sorted into alphabetical order, COLIN, which is worth 3 + 15 + 12 + 9 + 14 = 53, is the 938th name in the list.
+    So, COLIN would obtain a score of 938*53 = 49714.
+    What is the total of all the name scores in the file?
+    """
+    def letter_scoring():
+        letter_scores = {}
+        letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        for ea in range(len(letters)):
+            letter_scores[letters[ea]] = ea+1
+        return letter_scores
+
+    #Generate a dict of scores
+    score_lookup = letter_scoring()
+    names = util.import_data("data/0022_names.csv")[0]
+    names.sort()
+    total = 0
+
+    # For each name, find the letter total. Then multiply letter by name number on the list
+    for name_num in range(len(names)):
+        letter_score = 0
+        for letter in names[name_num]:
+            letter_score+= score_lookup.get(letter,0)
+        total += letter_score * (name_num+1)
+    return total
