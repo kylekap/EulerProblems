@@ -13,7 +13,7 @@ def is_prime(n):
     """
     if n in (2, 3):
         return True
-    return all(n % i != 0 for i in range(2, int(n ** 0.5) + 1))
+    return all(n % i != 0 for i in range(2, int(n**0.5) + 1))
 
 
 def prime_list(max_value):
@@ -26,11 +26,11 @@ def prime_list(max_value):
         list: list of prime numbers below n
 
     """
-    prime = [True]*max_value
-    for i in range(3,int(max_value**0.5)+1,2):
+    prime = [True] * max_value
+    for i in range(3, int(max_value**0.5) + 1, 2):
         if prime[i]:
-            prime[i*i::2*i]=[False]*((max_value-i*i-1)//(2*i)+1)
-    return [2]+[i for i in range(3,max_value,2) if prime[i]]
+            prime[i * i :: 2 * i] = [False] * ((max_value - i * i - 1) // (2 * i) + 1)
+    return [2] + [i for i in range(3, max_value, 2) if prime[i]]
 
 
 def is_palindrome(item):
@@ -82,13 +82,13 @@ def find_all_divisors(n):
         list : list of integer divisors
 
     """
-    x = int((n**0.5)//1)
+    x = int((n**0.5) // 1)
     i = 2
     lis = [1]
     while i <= x:
-        if n%i == 0:
+        if n % i == 0:
             lis.append(i)
-            lis.append(int(n/i))
+            lis.append(int(n / i))
         i += 1
     return list(set(lis))
 
@@ -121,7 +121,7 @@ def generate_fibonacci(end):
     y = 2
     fib_list = [1, 2]
     while y < end:
-        x,y = y, x+y
+        x, y = y, x + y
         fib_list.append(y)
     return fib_list
 
@@ -140,7 +140,7 @@ def count_of_digits(val):
     a = 0
     while val > 0:
         a += 1
-        val = val//10
+        val = val // 10
     return a
 
 
@@ -198,10 +198,10 @@ def get_nth_prime(nth_prime):
     prime_list = [2]
     num = 3
     while len(prime_list) < nth_prime:
-        #The only numbers you care about are primes, since a prime is not divisible by any other primes.
+        # The only numbers you care about are primes, since a prime is not divisible by any other primes.
         if not divisible_by_any(num, prime_list):
             prime_list.append(num)
-        num+=2
+        num += 2
     return prime_list[-1]
 
 
@@ -221,14 +221,16 @@ def multiply_list(*args):
             res *= ea
     return res
 
+
 def import_2d_array_data(filename):
     table = []
     with open(filename) as csvdatafile:
         csvreader = csv.reader(csvdatafile)
         for row in csvreader:
-            num_append = list(map(int,row))
+            num_append = list(map(int, row))
             table.append(num_append)
     return table
+
 
 def import_data(filename):
     with open(filename) as csvdatafile:
