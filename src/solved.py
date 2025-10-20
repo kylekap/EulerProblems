@@ -9,7 +9,8 @@ def problem1():
 
     If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The sum of these multiples is 23. Find the sum of all the multiples of 3 or 5 below .
     """
-    return sum([ea for ea in range(1000) if (ea%3 == 0 or ea%5 == 0)])
+    return sum([ea for ea in range(1000) if (ea % 3 == 0 or ea % 5 == 0)])
+
 
 def problem2():
     """Problem 2 Euler.
@@ -19,7 +20,8 @@ def problem2():
     By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
     """
     li = util.generate_fibonacci(4000000)
-    return sum([ea for ea in li if ea % 2 ==0])
+    return sum([ea for ea in li if ea % 2 == 0])
+
 
 def problem3(num=600851475143):
     """Problem 3 Euler.
@@ -29,13 +31,17 @@ def problem3(num=600851475143):
     """
     return max(util.prime_factors(num))
 
+
 def problem4():
     """Problem 4 Euler.
 
     A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 times 99.
     Find the largest palindrome made from the product of two 3-digit numbers.
     """
-    return max([ea_1*ea_2 for ea_1 in range(999,100,-1) for ea_2 in range(999,100,-1) if util.is_palindrome(ea_1*ea_2)])
+    return max(
+        [ea_1 * ea_2 for ea_1 in range(999, 100, -1) for ea_2 in range(999, 100, -1) if util.is_palindrome(ea_1 * ea_2)]
+    )
+
 
 def problem5():
     """Euler Problem 5.
@@ -43,12 +49,13 @@ def problem5():
     2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
     What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
     """
-    i = 2520 # Gave a starting point
-    vals = list(range(1,21))
+    i = 2520  # Gave a starting point
+    vals = list(range(1, 21))
     while True:
-        i+= 2520 #Gunna have to also be divisible by this
+        i += 2520  # Gunna have to also be divisible by this
         if util.divisible_by_all(i, vals):
             return i
+
 
 def problem6():
     """Euler Problem 6.
@@ -60,14 +67,17 @@ def problem6():
     Hence the difference between the sum of the squares of the first ten natural numbers and the square of the sum is 3025 - 385 = 2640.
     Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
     """
+
     def sum_of_squares(li):
         val = 0
         for ea in li:
-            val += ea*ea
+            val += ea * ea
         return val
-    a = sum(range(1,101))**2
-    b = sum_of_squares(range(1,101))
-    return a-b
+
+    a = sum(range(1, 101)) ** 2
+    b = sum_of_squares(range(1, 101))
+    return a - b
+
 
 def problem7(num=10001):
     """Euler Problem 7.
@@ -83,7 +93,8 @@ def problem7(num=10001):
             li.append(i)
             if len(li) == num:
                 return li[-1]
-        i+=1
+        i += 1
+
 
 def problem7_alt(num=10001):
     """Euler Problem 7.
@@ -91,19 +102,24 @@ def problem7_alt(num=10001):
     By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
     What is the 10,001st prime number?
     """
+
     def get_nth_prime(nth_prime):
         prime_list = [2]
         num = 3
         while len(prime_list) < nth_prime:
-            #The only numbers you care about are primes, since a prime is not divisible by any other primes.
+            # The only numbers you care about are primes, since a prime is not divisible by any other primes.
             if not util.divisible_by_any(num, prime_list):
                 prime_list.append(num)
-            num+=2
+            num += 2
         return prime_list[-1]
 
     return get_nth_prime(num)
 
-def problem8(num=7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450, consecutive=13):
+
+def problem8(
+    num=7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450,
+    consecutive=13,
+):
     """Euler Problem 8.
 
     The four adjacent digits in the 1000-digit number that have the greatest product are 9 times 9 times 8 times 9 = 5832.
@@ -131,9 +147,10 @@ def problem8(num=731671765313306249192251196744265747423553491949349698352031277
     """
     li = [int(x) for x in str(num)]
     highest = 0
-    for i in range(1,len(li)-consecutive):
-        highest = max(util.multiply_list(li[i:i+consecutive]), highest)
+    for i in range(1, len(li) - consecutive):
+        highest = max(util.multiply_list(li[i : i + consecutive]), highest)
     return highest
+
 
 def problem9(desired_sum):
     """Euler Problem 9.
@@ -143,13 +160,14 @@ def problem9(desired_sum):
     There exists exactly one Pythagorean triplet for which a + b + c = 1000.
     Find the product a*b*c
     """
-    a,b,c = 1,2,3
-    for a in range(1,desired_sum//3):
-        for b in range(a,desired_sum//2):
-            for c in range(max(b,desired_sum//3),desired_sum-b-a+1):
-                if a**2 + b**2 == c**2 and a+b+c==desired_sum:
-                    return a*b*c
+    a, b, c = 1, 2, 3
+    for a in range(1, desired_sum // 3):
+        for b in range(a, desired_sum // 2):
+            for c in range(max(b, desired_sum // 3), desired_sum - b - a + 1):
+                if a**2 + b**2 == c**2 and a + b + c == desired_sum:
+                    return a * b * c
     return None
+
 
 def problem10():
     """Euler Problem 10.
@@ -157,12 +175,14 @@ def problem10():
     The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
     Find the sum of all the primes below two million.
     """
+
     def prime_list(n):
-        prime = [True]*n
-        for i in range(3,int(n**0.5)+1,2):
+        prime = [True] * n
+        for i in range(3, int(n**0.5) + 1, 2):
             if prime[i]:
-                prime[i*i::2*i]=[False]*((n-i*i-1)//(2*i)+1)
-        return [2]+[i for i in range(3,n,2) if prime[i]]
+                prime[i * i :: 2 * i] = [False] * ((n - i * i - 1) // (2 * i) + 1)
+        return [2] + [i for i in range(3, n, 2) if prime[i]]
+
     return sum(prime_list(2000000))
 
 
@@ -170,40 +190,41 @@ def problem11():
     def get_rows(grid, adj):
         li = []
         for row_num in range(len(grid)):
-            for col_num in range(len(grid[row_num])-adj+1):
-                temp = [grid[row_num][col_num+offset] for offset in [0,1,2,3]]
+            for col_num in range(len(grid[row_num]) - adj + 1):
+                temp = [grid[row_num][col_num + offset] for offset in [0, 1, 2, 3]]
                 li.append(temp)
         return li
 
-    def get_cols(grid,adj):
+    def get_cols(grid, adj):
         li = []
-        for row_num in range(len(grid)-adj+1):
-                for col_num in range(len(grid[row_num])):
-                    temp = [grid[row_num+offset][col_num] for offset in [0,1,2,3]]
-                    li.append(temp)
+        for row_num in range(len(grid) - adj + 1):
+            for col_num in range(len(grid[row_num])):
+                temp = [grid[row_num + offset][col_num] for offset in [0, 1, 2, 3]]
+                li.append(temp)
         return li
 
     def get_diags(grid, adj):
         li = []
-        for row_num in range(len(grid)-adj+1):
-            for col_num in range(len(grid[row_num])-adj+1):
-                temp = [grid[row_num+offset][col_num+offset] for offset in [0,1,2,3]]
+        for row_num in range(len(grid) - adj + 1):
+            for col_num in range(len(grid[row_num]) - adj + 1):
+                temp = [grid[row_num + offset][col_num + offset] for offset in [0, 1, 2, 3]]
                 li.append(temp)
-            for col_num in range(adj-1, len(grid[row_num])):
-                temp = [grid[row_num+offset][col_num-offset] for offset in [0,1,2,3]]
+            for col_num in range(adj - 1, len(grid[row_num])):
+                temp = [grid[row_num + offset][col_num - offset] for offset in [0, 1, 2, 3]]
                 li.append(temp)
         return li
 
     grid = util.import_2d_array_data("data/SumGrid.csv")
     adj = 4
     li = get_rows(grid, adj)
-    li+= get_cols(grid, adj)
-    li+= get_diags(grid, adj)
+    li += get_cols(grid, adj)
+    li += get_diags(grid, adj)
 
     max_value = 0
     for line in li:
         max_value = max(max_value, util.multiply_list(line))
     return max_value
+
 
 def problem12(desired_divisors=500):
     """Euler Problem 12.
@@ -224,8 +245,8 @@ def problem12(desired_divisors=500):
     num = 28
     inc = 7
     while len(util.find_all_divisors(num)) < desired_divisors:
-        inc+=1
-        num+=inc
+        inc += 1
+        num += inc
     return num
 
 
@@ -254,10 +275,11 @@ def problem14(highest_num):
     Which starting number, under one million, produces the longest chain?
     Once the chain starts the terms are allowed to go above one million.
     """
+
     def eval_collatz(num):
         curriter = 0
-        while num !=1:
-            curriter+=1
+        while num != 1:
+            curriter += 1
             num = num / 2 if num % 2 == 0 else 3 * num + 1
         return curriter
 
@@ -277,8 +299,10 @@ def problem15(n):
     Starting in the top left corner of a 2x2 grid, and only being able to move to the right and down, there are exactly 6 routes to the bottom right corner
     How many such routes are there through a 20x20 grid?
     """
-    def binomial_coefficient(n,k):
+
+    def binomial_coefficient(n, k):
         return math.factorial(n) // (math.factorial(k) * math.factorial(n - k))
+
     return binomial_coefficient(2 * n, n)
 
 
@@ -288,7 +312,7 @@ def problem16(base, exponent):
     2^15 = 32768 and the sum of its digits is 3 + 2 + 7 + 6 + 8 = 26.
     What is the sum of the digits of the number 2^1000?
     """
-    val  = base**exponent
+    val = base**exponent
     return sum(util.convert_int_to_list(val))
 
 
@@ -299,35 +323,70 @@ def problem17():
     If all the numbers from 1 to 1000 (one thousand) inclusive were written out in words, how many letters would be used?
     Do not count spaces or hyphens. For example, 342 (three hundred and forty-two) contains 23 letters and 115 (one hundred and fifteen) contains 20 letters. The use of "and" when writing out numbers is in compliance with British usage
     """
+
     def num_len(n):
-        def below_100(n,lasts,tens):
+        def below_100(n, lasts, tens):
             if n < len(lasts):
                 return lasts[n]
-            return tens[max(n//10, 0)]+lasts[n%10]
+            return tens[max(n // 10, 0)] + lasts[n % 10]
 
-        lasts = [0,len("one"),len("two"),len("three"),len("four"),len("five"),len("six"),len("seven"),len("eight"),len("nine"),len("ten"),len("eleven"),len("twelve"),len("thirteen"),len("fourteen"),len("fifteen"),len("sixteen"),len("seventeen"),len("eighteen"),len("nineteen")]
-        tens = [0, 0, len("twenty"),len("thirty"),len("forty"),len("fifty"),len("sixty"),len("seventy"),len("eighty"),len("ninety")]
+        lasts = [
+            0,
+            len("one"),
+            len("two"),
+            len("three"),
+            len("four"),
+            len("five"),
+            len("six"),
+            len("seven"),
+            len("eight"),
+            len("nine"),
+            len("ten"),
+            len("eleven"),
+            len("twelve"),
+            len("thirteen"),
+            len("fourteen"),
+            len("fifteen"),
+            len("sixteen"),
+            len("seventeen"),
+            len("eighteen"),
+            len("nineteen"),
+        ]
+        tens = [
+            0,
+            0,
+            len("twenty"),
+            len("thirty"),
+            len("forty"),
+            len("fifty"),
+            len("sixty"),
+            len("seventy"),
+            len("eighty"),
+            len("ninety"),
+        ]
         tot = 0
-        h = int(n//100)%10
-        t = int(n//1000)
-        s = n%100
+        h = int(n // 100) % 10
+        t = int(n // 1000)
+        s = n % 100
 
         one_hundred, nineninenine = 100, 999
 
         if n < one_hundred:
-            return below_100(n,lasts,tens)
+            return below_100(n, lasts, tens)
 
         if n > nineninenine:
-            tot += below_100(t,lasts,tens)+len("thousand")
+            tot += below_100(t, lasts, tens) + len("thousand")
         if h != 0:
-            tot += lasts[h]+len("hundred")
+            tot += lasts[h] + len("hundred")
         if s != 0:
-            tot+= len("and") + below_100(s,lasts,tens)
+            tot += len("and") + below_100(s, lasts, tens)
         return tot
+
     running_tot = 0
-    for n in range(1,1001):
+    for n in range(1, 1001):
         running_tot += num_len(n)
     return running_tot
+
 
 def problem18(filename="data/TriangleSum.csv"):
     """Euler Problem 18.
@@ -338,14 +397,15 @@ def problem18(filename="data/TriangleSum.csv"):
     """
     grid = util.import_2d_array_data(filename)
 
-    #Solution is based on rolling up from bottom.
+    # Solution is based on rolling up from bottom.
     # Each row will be the sum of the maximum path downwards.
     # Each item touches 2 below it-> same col and 1 to the right.
 
-    for row_num in range(len(grid)-2, -1, -1): #-2 because -1 would be last, need to start 1 higher
+    for row_num in range(len(grid) - 2, -1, -1):  # -2 because -1 would be last, need to start 1 higher
         for col_num in range(len(grid[row_num])):
-            grid[row_num][col_num] += max(grid[row_num+1][col_num], grid[row_num+1][col_num+1])
+            grid[row_num][col_num] += max(grid[row_num + 1][col_num], grid[row_num + 1][col_num + 1])
     return grid[0][0]
+
 
 def problem67(filename="data/0067_triangle.csv"):
     """Euler Problem 67.
@@ -356,6 +416,7 @@ def problem67(filename="data/0067_triangle.csv"):
     If you could check one trillion (10^12) routes every second it would take over twenty billion years to check them all. There is an efficient algorithm to solve it.
     """
     return problem18(filename)
+
 
 def problem19():
     """Euler Problem 19.
@@ -371,16 +432,17 @@ def problem19():
         A leap year occurs on any year evenly divisible by 4, but not on a century unless it is divisible by 400.
     How many Sundays fell on the first of the month during the twentieth century (1 Jan 1901 to 31 Dec 2000)?
     """
+
     def is_leap_year(year):
         return bool(year % 4 == 0 and (year % 100 != 0 or year % 400 == 0))
 
-    month_days = [31,28,31,30,31,30,31,31,30,31,30,31] #how many days in each month
-    a = 2 #1901 starts on a Tuesday
-    sun = 0 # Number of sundays
+    month_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]  # how many days in each month
+    a = 2  # 1901 starts on a Tuesday
+    sun = 0  # Number of sundays
     february = 28
-    for year in range(1901,2001,1):
+    for year in range(1901, 2001, 1):
         for ea in month_days:
-            if(a%7==0):
+            if a % 7 == 0:
                 sun += 1
             m_d = 29 if ea == february and is_leap_year(year) else ea
             a += m_d
@@ -395,12 +457,15 @@ def problem20():
     and the sum of the digits in the number 10! is 3+6+2+8+8+0+0 = 27
     Find the sum of the digits in the number 100!
     """
+
     def factorial(n):
-        tot=1
-        for i in range(1,n,1):
+        tot = 1
+        for i in range(1, n, 1):
             tot *= i
         return tot
+
     return sum(util.convert_int_to_list(factorial(100)))
+
 
 def problem21(max_val=10000):
     """Euler Problem 21.
@@ -420,6 +485,7 @@ def problem21(max_val=10000):
                 amicable_set.add(number_2)
     return sum(list(amicable_set))
 
+
 def problem22():
     """Euler Problem 22.
 
@@ -428,14 +494,15 @@ def problem22():
     So, COLIN would obtain a score of 938*53 = 49714.
     What is the total of all the name scores in the file?
     """
+
     def letter_scoring():
         letter_scores = {}
         letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         for ea in range(len(letters)):
-            letter_scores[letters[ea]] = ea+1
+            letter_scores[letters[ea]] = ea + 1
         return letter_scores
 
-    #Generate a dict of scores
+    # Generate a dict of scores
     score_lookup = letter_scoring()
     names = util.import_data("data/0022_names.csv")[0]
     names.sort()
@@ -445,9 +512,10 @@ def problem22():
     for name_num in range(len(names)):
         letter_score = 0
         for letter in names[name_num]:
-            letter_score+= score_lookup.get(letter,0)
-        total += letter_score * (name_num+1)
+            letter_score += score_lookup.get(letter, 0)
+        total += letter_score * (name_num + 1)
     return total
+
 
 def problem23():
     """Euler Problem 23.
@@ -460,17 +528,20 @@ def problem23():
     However, this upper limit cannot be reduced any further by analysis even though it is known that the greatest number that cannot be expressed as the sum of two abundant numbers is less than this limit.
     Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
     """
+
     def abundant_numbers(max_num=28123):
         return {ea for ea in range(max_num) if sum(util.find_all_divisors(ea)) > ea}
+
     def check_represented(n, abu):
-        return any(n-ea in abu for ea in abu)
+        return any(n - ea in abu for ea in abu)
 
     tot = 0
     abundant_numbers_li = abundant_numbers(28123)
-    for ea in range(1,28123):
+    for ea in range(1, 28123):
         if check_represented(ea, abundant_numbers_li):
-            tot+=ea
+            tot += ea
     return tot
+
 
 def problem24(digits=None, idx=999999):
     """Euler Problem 24.
@@ -483,7 +554,7 @@ def problem24(digits=None, idx=999999):
     from itertools import permutations
 
     if digits is None:
-        digits=[0,1,2,3,4,5,6,7,8,9]
+        digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     perms = list(permutations(digits))
     perms.sort()
     return perms[idx]
