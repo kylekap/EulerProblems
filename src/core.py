@@ -1,5 +1,6 @@
 import logging
 
+import solved  # noqa: F401
 import util  # noqa: F401
 
 logging.basicConfig(

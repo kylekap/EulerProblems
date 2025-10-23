@@ -643,3 +643,39 @@ def problem26():
         max_so_far = max(max_so_far, current)
     return max_so_far
 
+
+def problem27(min_a=-999, max_a=999, max_b=1000):
+    """Euler Problem 27: Quadratic primes.
+
+    Euler discovered the remarkable quadratic formula:
+    n^2 + n + 41
+    It turns out that the formula will produce 40 primes for the consecutive integer values 0 ≤ n ≤ 39.
+    However, when n = 40, 402 + 40 + 41 = 1681 = 41 x 41, which is not prime.
+    The incredible formula n^2 - 79n + 1601 was discovered, which produces 80 primes for the consecutive values 0 ≤ n ≤ 79.
+    The product of the coefficients, -79 and 1601, is -126479.
+
+    Considering quadratics of the form:
+    n^2 + an + b, where |a| < 1000 and |b| ≤ 1000
+    where |n| is the modulus/absolute value of n
+    e.g. |11| = 11 and |-4| = 4
+    Find the product of the coefficients, a and b, for the quadratic expression that produces the maximum number of primes for consecutive values of n, starting with n = 0.
+
+    """
+    # Notes to self - if n=0, b must be prime.
+    # For n=1, 1 + a + b must also be prime -> a must be even (since b is odd, except for 2)
+
+    def evaluate(a, b): # Evaluate number of primes for given a and b
+        n = 1 # Start at 1 since n=0 is always prime (b is prime)
+        while True:
+            val = n**2 + a*n + b
+            if val < 0 or util.is_prime(val) is False:
+                return n
+            n += 1
+
+    n_primes = {}
+
+    for a in [num for num in range(min_a, max_a) if num % 2 != 0]: # a must be odd for n=1, so only do odd a
+        for b in util.prime_list(max_b): # b must be prime for n=0, so only do primes
+                n_primes[f"{a},{b}"] = evaluate(a,b) # Store number of primes for this a,b
+
+    return max(n_primes, key=n_primes.get), n_primes.get(max(n_primes, key=n_primes.get)) # Return a,b with max primes and number of primes that a,b has.
