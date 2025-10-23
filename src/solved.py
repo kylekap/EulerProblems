@@ -1,5 +1,6 @@
 import csv
 import math
+from itertools import permutations
 
 import util
 
@@ -39,7 +40,7 @@ def problem4():
     Find the largest palindrome made from the product of two 3-digit numbers.
     """
     return max(
-        [ea_1 * ea_2 for ea_1 in range(999, 100, -1) for ea_2 in range(999, 100, -1) if util.is_palindrome(ea_1 * ea_2)]
+        [ea_1 * ea_2 for ea_1 in range(999, 100, -1) for ea_2 in range(999, 100, -1) if util.is_palindrome(ea_1 * ea_2)],
     )
 
 
@@ -551,10 +552,94 @@ def problem24(digits=None, idx=999999):
     012   021   102   120   201   210
     What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
     """
-    from itertools import permutations
-
     if digits is None:
         digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     perms = list(permutations(digits))
     perms.sort()
     return perms[idx]
+
+def problem25():
+    """Euler Problem 25: 1000-digit Fibonacci number.
+
+    The Fibonacci sequence is defined by the recurrence relation: Fn = Fn-1 + Fn-2, where F1 = 1 and F2 = 1.
+    Hence the first 12 terms will be:
+    F1 = 1
+    F2 = 1
+    F3 = 2
+    F4 = 3
+    F5 = 5
+    F6 = 8
+    F7 = 13
+    F8 = 21
+    F9 = 34
+    F10 = 55
+    F11 = 89
+    F12 = 144
+    The 12th term, F12, is the first term to contain three digits.
+    What is the index of the first term in the Fibonacci sequence to contain 1000 digits?
+    """
+
+    def fibonacci_until_digits(number):
+        """Generate list of fibonacci numbers until one has 'number' digits.
+
+        Args:
+            number (int): number of digits to reach
+
+        Returns:
+            list: list of fibonacci numbers
+
+        """
+        x = 1
+        y = 2
+        fib_list = [1, 2]
+        while True:
+            x, y = y, x + y
+            fib_list.append(y)
+            if len(str(y)) >= number:
+                fib_list.append(y)
+                break
+        return fib_list
+
+    return len(fibonacci_until_digits(1000))
+
+def problem26():
+    """Euler Problem 26: Reciprocal cycles.
+
+    A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions with denominators 2 to 10 are given:
+    1/2	= 	0.5
+    1/3	= 	0.(3)
+    1/4	= 	0.25
+    1/5	= 	0.2
+    1/6	= 	0.1(6)
+    1/7	= 	0.(142857)
+    1/8	= 	0.125
+    1/9	= 	0.(1)
+    1/10	= 	0.1
+    Where 0.1(6) means 0.166666..., and has a 1-digit recurring cycle. It can be seen that 1/7 has a 6-digit recurring cycle.
+    Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal fraction part.
+    """
+
+    def find_reoccurring_section(numerator, denominator):
+        if denominator == 0:
+            return "Undefined"
+        if numerator == 0:
+            return 0
+
+        remainder = numerator % denominator
+        remainders = {}
+        result = ""
+
+        while remainder != 0 and remainder not in remainders:
+            remainders[remainder] = len(result) # store this remainder
+            remainder *= 10 # bring down a zero
+            result += str(remainder // denominator) # add to decimal part
+            remainder = remainder % denominator # get new remainder
+
+        return result[remainders[remainder]:] if remainder in remainders else ""
+
+    max_so_far = 0
+    for ea in range (1,1000):
+        current = len(find_reoccurring_section(1, ea))
+        max_so_far = max(max_so_far, current)
+    return max_so_far
+

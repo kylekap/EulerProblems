@@ -1,6 +1,6 @@
 import logging
 
-import util
+import util  # noqa: F401
 
 logging.basicConfig(
     filename="reports/all.log",
@@ -28,3 +28,4 @@ def main():
 if __name__ == "__main__":
     """[summary]"""
     main()
+    """Run main function if this is the main module."""
