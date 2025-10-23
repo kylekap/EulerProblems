@@ -235,3 +235,9 @@ def import_2d_array_data(filename):
 def import_data(filename):
     with open(filename) as csvdatafile:
         return list(csv.reader(csvdatafile))
+
+
+def roundup(numerator, denominator):
+    if numerator % denominator == 0:
+        return numerator // denominator
+    return (numerator // denominator) + 1
