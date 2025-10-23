@@ -679,3 +679,27 @@ def problem27(min_a=-999, max_a=999, max_b=1000):
                 n_primes[f"{a},{b}"] = evaluate(a,b) # Store number of primes for this a,b
 
     return max(n_primes, key=n_primes.get), n_primes.get(max(n_primes, key=n_primes.get)) # Return a,b with max primes and number of primes that a,b has.
+
+def problem28(size=1001):
+    """Euler Problem 28: Number spiral diagonals.
+
+    Starting with the number 1 and moving to the right in a clockwise direction a 5 by 5 spiral is formed as follows:
+    21 22 23 24 25
+    20  7  8  9 10
+    19  6  1  2 11
+    18  5  4  3 12
+    17 16 15 14 13
+    It can be verified that the sum of the numbers on the diagonals is 101.
+    What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way?
+    """
+    running_total = 1 #Ignore center
+    last_number = 1 # Start at center
+    #Each layer is increasingly far apart by 2. So layer is separated by 2 - 3, 5, 7, 9. Layer 2 is 4 separated, so 13, 17, 21, 25. This trend continues through whole spiral.
+    for layer in range(1, size//2 + 1): # Each layer adds 2 to each side
+        a = last_number + 2*layer # Each corner is 2*layer away from last
+        b = a + 2*layer
+        c = b + 2*layer
+        d = c + 2*layer
+        running_total += a+b+c+d # Add corners to total
+        last_number = d # Update last number to get ready for next layer
+    return running_total
