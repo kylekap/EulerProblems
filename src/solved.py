@@ -772,3 +772,50 @@ def problem31(coin_target=200, coins=None):
             ways[amount] += ways[amount - coin]
 
     return ways[coin_target]
+
+
+def problem32():
+    """Euler Problem 32: Pandigital products.
+
+    We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once; for example, the 5-digit number 15234 is 1 through 5 pandigital.
+    The product 7254 is unusual, as the identity 39 186 = 7254, containing multiplicand, multiplier, and product is 1 through 9 pandigital.
+    Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
+    Hints:
+    Some products can be obtained in more than one way so be sure to only include it once in your sum.
+    """
+
+    def list_to_num(digit_list):
+        """Convert a list of digits to a number."""
+        num = 0
+        for digit in digit_list:
+            num = num * 10 + digit
+        return num
+
+    def check_line(num_digits_first, num_digits_second, line):
+        """Check if a line is valid pandigital product. Must be of form first * second = product. Does not check for pandigitalism."""
+        first = line[:num_digits_first]
+        second = line[num_digits_first:num_digits_first+num_digits_second]
+        product = line[num_digits_first+num_digits_second:]
+        return list_to_num(first) * list_to_num(second) == list_to_num(product)
+
+    items = permutations([1,2,3,4,5,6,7,8,9], 9) # All pandigital permutations of 1-9
+    products = set()
+    """
+    Can ony be 2 forms - 1 digit * 4 digit = 4 digit, or 2 digit * 3 digit = 4 digit.
+    Neither multiplier can have more digits than product. Reverses are the same as previous checks.
+
+    1x2=6 - Not possible
+    1x3=5 - Not possible
+    1x4=4 - Valid
+    2x1=6 - Not possible
+    2x2=5 - Not possible
+    2x3=4 - Valid
+    3x2=4 - Same as 2x3=4, do not need to check again.
+    4x1=4 - Same as 1x4=4, do not need to check again.
+    """
+    for item in items:
+        if check_line(1,4,item):
+            products.add(int("".join(map(str,item[1+4:]))))
+        if check_line(2,3,item):
+            products.add(int("".join(map(str,item[2+3:]))))
+    return sum(products), len(products)
