@@ -241,3 +241,15 @@ def roundup(numerator, denominator):
     if numerator % denominator == 0:
         return numerator // denominator
     return (numerator // denominator) + 1
+
+def check_pandigital(value):
+    """Check if a number is 1-9 pandigital."""
+    return set(value) == {1,2,3,4,5,6,7,8,9}
+
+def check_repeats(value):
+    """Check if a number has repeats."""
+    return len(set(value)) != len(value)
+
+def flatten_list(nested_list):
+    """Flatten a nested list into a single list."""
+    return [item for sublist in nested_list for item in sublist]
