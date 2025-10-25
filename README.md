@@ -9,6 +9,10 @@
 
 This project is to compile my code for solving ProjectEuler.com problems.
 
-core.py contains active work / active solutions.
-util.py contains created generalized functions that help across multiple problems
-solved.py contains a record of code used to answer the euler problems. Will be named with their problem#, and docstring will include the question itself.
+## Usage
+
+- core.py contains active work / active solutions.
+
+- util.py contains created generalized functions that help across multiple problems
+
+- solved.py contains a record of code used to answer the euler problems. Will be named with their problem#, and docstring will include the question itself.
