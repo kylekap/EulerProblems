@@ -59,6 +59,8 @@ ignore = [
     "D107",
     "T201", # I'm gunna print sometimes, you gotta live with it
     "ARG002", # Sometimes, you want functions to match
-    "PTH123", # No
     "C901", # ignoring for the purposes of keeping solved.py appropriately grouped
+
+    "FIX002", # Will circle back.
+    "RUF100", # Ignore unused noqa, it's off & on
     ]

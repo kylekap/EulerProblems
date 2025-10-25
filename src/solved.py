@@ -1,6 +1,7 @@
 import csv
 import math
 from itertools import combinations_with_replacement, permutations
+from pathlib import Path
 
 import util
 
@@ -256,7 +257,7 @@ def problem13(filename):
 
     Work out the first ten digits of the sum of the following one-hundred -digit numbers. [included as CSV file LargeSum.csv]
     """
-    with open(filename) as csvdatafile:
+    with Path(filename).open() as csvdatafile:
         li = list(csv.reader(csvdatafile))
     for ea in range(len(li)):
         li[ea] = int(li[ea][0])
@@ -602,7 +603,7 @@ def problem25():
 
     return len(fibonacci_until_digits(1000))
 
-def problem26():
+def problem26(): # TODO(Kyle): #1 Troubleshoot errors.
     """Euler Problem 26: Reciprocal cycles.
 
     A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions with denominators 2 to 10 are given:
@@ -637,11 +638,11 @@ def problem26():
 
         return result[remainders[remainder]:] if remainder in remainders else ""
 
-    max_so_far = 0
+    reciprocal_cycles = {}
     for ea in range (1,1000):
-        current = len(find_reoccurring_section(1, ea))
-        max_so_far = max(max_so_far, current)
-    return max_so_far
+        current = find_reoccurring_section(1, ea)
+        reciprocal_cycles[ea] = current
+    return max(reciprocal_cycles, key=reciprocal_cycles.get)
 
 
 def problem27(min_a=-999, max_a=999, max_b=1000):
