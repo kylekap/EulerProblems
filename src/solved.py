@@ -640,7 +640,7 @@ def problem26(): # TODO(Kyle): #1 Troubleshoot errors.
 
     reciprocal_cycles = {}
     for ea in range (1,1000):
-        current = find_reoccurring_section(1, ea)
+        current = len(find_reoccurring_section(1, ea))
         reciprocal_cycles[ea] = current
     return max(reciprocal_cycles, key=reciprocal_cycles.get)
 
