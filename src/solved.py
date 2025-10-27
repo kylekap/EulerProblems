@@ -820,3 +820,61 @@ def problem32():
         if check_line(2,3,item):
             products.add(int("".join(map(str,item[2+3:]))))
     return sum(products), len(products)
+
+def problem33():
+    """Euler Problem 33: Digit cancelling fractions.
+
+    The fraction 49/98 is a curious fraction, as an inexperienced mathematician in attempting to simplify it may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
+    We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
+    There are exactly four non-trivial examples of this type of fraction, less than one in value, and containing two digits in the numerator and denominator.
+    If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
+    """
+    def shared_digit(num1, num2):
+        num1str =util.convert_int_to_list(num1)
+        num2str = util.convert_int_to_list(num2)
+        return list(set(num1str).intersection(set(num2str)))
+
+    def reduced(num, shared_digit):
+        numstr =util.convert_int_to_list(num)
+        return [x for x in numstr if x not in shared_digit]
+
+    val = 1
+    for top in range(1,99):
+        for bottom in range(top+1, 100):
+            digit = shared_digit(top, bottom)
+            if len(digit) == 1 and digit!=[0]:
+                reduced_top = util.convert_list_to_int(reduced(top, digit))
+                reduced_bottom = util.convert_list_to_int(reduced(bottom, digit))
+                if reduced_top !=0 and reduced_bottom !=0 and reduced_top/reduced_bottom == top/bottom:
+                    val*= reduced_top/reduced_bottom
+    return 1/round(val,5)
+
+
+def problem34():
+    """Euler Problem 34: Digit factorials.
+
+    145 is a curious number, as 1! + 4! + 5! = 1 + 24 + 120 = 145.  Find the sum of all numbers that are equal to the sum of the factorial of their digits.
+    Note: as 1! = 1 and 2! = 2 are not sums they are not included.
+    """
+    digit_factorials = []
+
+    for number in range(10,7*util.calc_factorial(9)):
+        li = util.convert_int_to_list(number)
+        val = 0
+        for item in li:
+            val+= util.calc_factorial(item)
+        if val == number:
+            digit_factorials.append(number)
+    return sum(digit_factorials)
+
+
+def problem34_alt():
+    """Euler Problem 33: Digit factorials. Alternate solution."""
+    return sum([x for x in range(10,10000000) if sum(map(util.calc_factorial, util.convert_int_to_list(x))) == x])
+
+def problem35(max_val=1000000):
+    def is_circular_prime(prime):
+        return all(util.is_prime(circular) for circular in util.generate_list_of_circulars(prime, return_type=int))
+
+    circular_primes = [prime for prime in util.prime_list(max_val) if is_circular_prime(prime)]
+    return len(circular_primes)

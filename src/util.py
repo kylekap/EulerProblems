@@ -1,4 +1,5 @@
 import csv
+from pathlib import Path
 
 
 def is_prime(n):
@@ -11,6 +12,8 @@ def is_prime(n):
         bool: True if n is prime. False otherwise.
 
     """
+    if isinstance(n, str):
+        n = int(n)
     if n in (2, 3):
         return True
     return all(n % i != 0 for i in range(2, int(n**0.5) + 1))
@@ -56,7 +59,11 @@ def convert_list_to_int(inlist):
         int: integer value
 
     """
-    return int("".join(map(str, inlist)))
+    try:
+        val = int("".join(map(str, inlist)))
+    except ValueError:
+        val = 0
+    return val
 
 
 def convert_int_to_list(num):
@@ -94,6 +101,15 @@ def find_all_divisors(n):
 
 
 def prime_factors(n):
+    """Return a list of prime factors of the given number.
+
+    Args:
+        n (int): number to get prime factors for
+
+    Returns:
+        list: list of prime factors
+
+    """
     i = 2
     factors = []
     while i * i <= n:
@@ -206,25 +222,29 @@ def get_nth_prime(nth_prime):
 
 
 def multiply_list(*args):
-    """Provide a list of values to multiply. Multiplies all provided numbers together.
+    """Multiply a list of values.
+
+    Args:
+        *args (list, int): values to multiply
 
     Returns:
         int : resulting multiplied value
 
     """
     res = 1
-    if isinstance(args[0], list):
-        for ea in args[0]:
-            res *= ea
-    else:
-        for ea in args:
-            res *= ea
+    for arg in args:
+        if isinstance(arg, list):
+            for ea in arg:
+                res *= ea
+        else:
+            res *= arg
     return res
 
 
 def import_2d_array_data(filename):
+    """Import a 2D array of data from a CSV file."""
     table = []
-    with open(filename) as csvdatafile:
+    with Path(filename).open()as csvdatafile:
         csvreader = csv.reader(csvdatafile)
         for row in csvreader:
             num_append = list(map(int, row))
@@ -233,23 +253,47 @@ def import_2d_array_data(filename):
 
 
 def import_data(filename):
-    with open(filename) as csvdatafile:
+    """Import data from a CSV file."""
+    with Path(filename).open() as csvdatafile:
         return list(csv.reader(csvdatafile))
 
 
 def roundup(numerator, denominator):
+    """Round up a number."""
     if numerator % denominator == 0:
         return numerator // denominator
     return (numerator // denominator) + 1
+
 
 def check_pandigital(value):
     """Check if a number is 1-9 pandigital."""
     return set(value) == {1,2,3,4,5,6,7,8,9}
 
+
 def check_repeats(value):
     """Check if a number has repeats."""
     return len(set(value)) != len(value)
 
+
 def flatten_list(nested_list):
     """Flatten a nested list into a single list."""
     return [item for sublist in nested_list for item in sublist]
+
+
+def calc_factorial(number):
+    """Calculate the factorial of a number."""
+    if number < 0:
+        return -1
+    val = 1
+    for ea in range(2, number+1):
+        val*=ea
+    return val
+
+
+def generate_list_of_circulars(val, return_type=int):
+    """Generate a list of circulars of a number. if return_type is int, returns a list of ints, otherwise returns a list of strings."""
+    if not isinstance(val, str):
+        val = str(val)
+    if isinstance(return_type, int):
+        return [int(val[i:]) + int(val[:i]) for i in range(len(val))]
+    return [val[i:] + val[:i] for i in range(len(val))]
