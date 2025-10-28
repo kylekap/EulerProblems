@@ -895,3 +895,55 @@ def problem36():
     (Please note that the palindromic number, in either base, may not include leading zeros.)
     """
     return sum([palindrome for palindrome in util.palindromes_list(1000000) if util.is_palindrome(util.convert_list_to_int(util.number_to_base(palindrome, 2)))])
+
+def problem37():
+    """Euler Problem 37: Truncatable primes.
+
+    The number 3797 has the property that being truncated from left to right the sequence of digits is a prime.
+    The number 3797 also has the property that being truncated from right to left the sequence of digits is a prime.
+    Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
+    Note: 2, 3, 5, and 7 are not considered to be truncatable primes.
+    """
+    def check_trunc(prime):
+        """Check if a prime is truncatable from left to right and right to left."""
+        prime_str = str(prime)
+        for i in range(1, len(prime_str)):
+            if int(prime_str[i:]) not in primes:
+                return False
+            if int(prime_str[:i]) not in primes:
+                return False
+        return True
+
+    primes = util.prime_list(1000000)
+    answer_list = [prime for prime in primes if check_trunc(prime) and prime not in [2, 3, 5, 7]]
+    return sum(answer_list)
+
+def problem38():
+    """Euler Problem 38: Pandigital multiples.
+
+    Take the number 192 and multiply it by each of 1, 2, and 3: 192 x 1 = 192, 192 x 2 = 384, 192 x 3 = 576.
+    By concatenating each product we get the 1 to 9 pandigital, 192384576.
+    We will call 192384576 the concatenated product of 192 and each of 1, 2, and 3.
+    The same can be achieved by starting with 9 and multiplying by  1, 2, 3, 4, and 5, giving the pandigital, 918273645, which is the concatenated product of 9 and each of 1, 2, 3, 4, and 5.
+    What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with 1, 2, 3, 4, 5, 6, 7, 8, or 9?
+    """
+
+    def is_pandigital_9_digits(s, length=9):
+        if len(s) != length:
+            return False
+        if not s.isdigit():
+            return False
+        return all(digit in s for digit in "123456789")
+
+    def build_pandigital(num):
+        item = ""
+        for ea in (1, 2, 3, 4, 5, 6, 7, 8, 9):
+            item += str(ea*num)
+            if is_pandigital_9_digits(item):
+                return int(item)
+        return 0
+
+    max_val = 0
+    for ea in range(1,1000000):
+        max_val = max(max_val, build_pandigital(ea))
+    return max_val
