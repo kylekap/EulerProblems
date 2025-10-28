@@ -348,3 +348,21 @@ def number_to_base(n, b):
         digits.append(int(n % b))
         n //= b
     return digits[::-1]
+
+
+def generate_string_ints_to_n(n):
+    if n == 0:
+        return ""
+    if n == 1:
+        return "1"
+    prev_string = generate_string_ints_to_n(n-1)
+    return prev_string + str(n)
+
+
+def is_pandigital(s):
+    check = "123456789"[:len(s)]
+    if len(s) != len(check):
+        return False
+    if not s.isdigit():
+        return False
+    return all(digit in s for digit in check)

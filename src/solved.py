@@ -928,18 +928,11 @@ def problem38():
     What is the largest 1 to 9 pandigital 9-digit number that can be formed as the concatenated product of an integer with 1, 2, 3, 4, 5, 6, 7, 8, or 9?
     """
 
-    def is_pandigital_9_digits(s, length=9):
-        if len(s) != length:
-            return False
-        if not s.isdigit():
-            return False
-        return all(digit in s for digit in "123456789")
-
     def build_pandigital(num):
         item = ""
         for ea in (1, 2, 3, 4, 5, 6, 7, 8, 9):
             item += str(ea*num)
-            if is_pandigital_9_digits(item):
+            if util.is_pandigital(item):
                 return int(item)
         return 0
 
@@ -969,3 +962,41 @@ def problem39():
                     solutions[a+b+c] = solutions.get(a + b + c,0)+1
     return max(solutions, key=solutions.get)
 
+
+def problem40():
+    """Euler Problem 40: Champernowne's constant.
+
+    An irrational decimal fraction is created by concatenating the positive integers:
+    0.123456789101112131415161718192021...
+    It can be seen that the 12th digit of the fractional part is 1.
+    If dn represents the nth digit of the fractional part, find the value of the following expression.
+    d1 x d10 x d100 x d1000 x d10000 x d100000 x d1000000
+    """
+
+    def create_champernownes(length):
+        constant = ""
+        i = 1
+        while len (constant) < length:
+            constant += str(i)
+            i += 1
+        return constant
+
+    a = list(map(int, create_champernownes(1000000)))
+    val = 1
+    for ea in [1, 10, 100, 1000, 10000, 100000, 1000000]:
+        val *= a[ea-1]
+    return val
+
+def problem41():
+    """Euler Problem 41: Pandigital prime.
+
+    We shall say that an n-digit number is pandigital if it makes use of all the digits 1 to n exactly once. For example, 2143 is a 4-digit pandigital and is also prime.
+    What is the largest n-digit pandigital prime that exists?
+    """
+    # 1+2+3+4+5+6+7+8+9 = 45, so divisible by 3
+    # 1+2+3+4+5+6+7+8 = 36, so divisible by 3
+    primes = util.prime_list(7654321) # largest possible 7 digit pandigital prime would be 7654321
+    for ea in primes[::-1]: # Go from biggest to smallest, stop at first once, since that's the largest.
+        if util.is_pandigital(str(ea)):
+            return ea
+    return None
