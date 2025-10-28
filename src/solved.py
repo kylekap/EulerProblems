@@ -947,3 +947,25 @@ def problem38():
     for ea in range(1,1000000):
         max_val = max(max_val, build_pandigital(ea))
     return max_val
+
+
+def problem39():
+    """Euler Problem 39: Integer right triangles.
+
+    If p is the perimeter of a right angle triangle with integral length sides
+    {a,b,c}, there are exactly three solutions for p = 120. {20,48,52}, {24,45,51}, {30,40,50}
+    For which value of p ≤ 1000, is the number of solutions maximised?
+    """
+
+    def triangle_check(a,b,c):
+        return a ** 2 + b ** 2 == c ** 2
+
+    solutions = {}
+
+    for a in range(1, 1000):
+        for b in range(a, (1000-a)):
+            for c in range(b, (1000-a-b)):
+                if triangle_check(a,b,c):
+                    solutions[a+b+c] = solutions.get(a + b + c,0)+1
+    return max(solutions, key=solutions.get)
+
