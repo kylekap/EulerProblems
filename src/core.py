@@ -1,4 +1,5 @@
 import logging
+import time
 
 import solved  # noqa: F401
 import util  # noqa: F401
@@ -20,7 +21,10 @@ def active_problem():
 def main():
     # Main function
     try:
-        print(active_problem())
+        start_time = time.time()
+        answer = active_problem()
+        sec = time.time() - start_time
+        print(f"Answer: {answer} in {sec} seconds ---")
     except Exception as E:
         logger.warning(type(E).__name__, __file__, E.__traceback__.tb_lineno, "\n", E)
         raise
