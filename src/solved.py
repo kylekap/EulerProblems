@@ -872,9 +872,26 @@ def problem34_alt():
     """Euler Problem 33: Digit factorials. Alternate solution."""
     return sum([x for x in range(10,10000000) if sum(map(util.calc_factorial, util.convert_int_to_list(x))) == x])
 
+
 def problem35(max_val=1000000):
+    """Euler Problem 35: Circular primes.
+
+    The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
+    There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.
+    How many circular primes are there below one million?
+    """
     def is_circular_prime(prime):
         return all(util.is_prime(circular) for circular in util.generate_list_of_circulars(prime, return_type=int))
 
     circular_primes = [prime for prime in util.prime_list(max_val) if is_circular_prime(prime)]
     return len(circular_primes)
+
+
+def problem36():
+    """Euler Problem 36: Double-base palindromes.
+
+    The decimal number, 585 = 10010010011 (binary), is palindromic in both bases.
+    Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
+    (Please note that the palindromic number, in either base, may not include leading zeros.)
+    """
+    return sum([palindrome for palindrome in util.palindromes_list(1000000) if util.is_palindrome(util.convert_list_to_int(util.number_to_base(palindrome, 2)))])

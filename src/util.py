@@ -79,6 +79,32 @@ def convert_int_to_list(num):
     return [int(x) for x in str(int(num))]
 
 
+def convert_list_to_str(li):
+    """Convert a list of integers to a string.
+
+    Args:
+        li (list): list to convert
+
+    Returns:
+        str: string of individual items
+
+    """
+    return "".join(map(str,li))
+
+
+def convert_str_to_list(string):
+    """Convert a string to a list of values.
+
+    Args:
+        string (str): string to convert
+
+    Returns:
+        list: list of values
+
+    """
+    return list(string)
+
+
 def find_all_divisors(n):
     """Return a list of all integers that are divisors of the given n.
 
@@ -297,3 +323,28 @@ def generate_list_of_circulars(val, return_type=int):
     if isinstance(return_type, int):
         return [int(val[i:]) + int(val[:i]) for i in range(len(val))]
     return [val[i:] + val[:i] for i in range(len(val))]
+
+
+def palindromes_list(max_num):
+    """Generate a list of palindromes below max_num."""
+    return [ea for ea in range(max_num) if is_palindrome(ea)]
+
+
+def number_to_base(n, b):
+    """Convert a number to a list of digits in a given base.
+
+    Args:
+        n (int): number to convert
+        b (int): base to convert to
+
+    Returns:
+        list: list of digits
+
+    """
+    if n == 0:
+        return [0]
+    digits = []
+    while n:
+        digits.append(int(n % b))
+        n //= b
+    return digits[::-1]
