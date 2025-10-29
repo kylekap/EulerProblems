@@ -267,6 +267,11 @@ def multiply_list(*args):
     return res
 
 
+def add_list(*args):
+    """Add a list of values."""
+    return sum(args)
+
+
 def import_2d_array_data(filename):
     """Import a 2D array of data from a CSV file."""
     table = []
@@ -366,3 +371,12 @@ def is_pandigital(s):
     if not s.isdigit():
         return False
     return all(digit in s for digit in check)
+
+def get_triangle_number(n):
+    return n*(n + 1)/2
+
+def get_pentagonal_number(n):
+        return n*(3*n-1)/2
+
+def get_hexagonal_number(n):
+        return n*(2*n-1)
