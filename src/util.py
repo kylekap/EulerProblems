@@ -380,3 +380,6 @@ def get_pentagonal_number(n):
 
 def get_hexagonal_number(n):
         return n*(2*n-1)
+
+def are_permutations(num1, num2):
+    return sorted(str(num1)) == sorted(str(num2))

@@ -1144,3 +1144,61 @@ def problem47(ct_unique_prime_factors=4):
     keys_with_value = [key for key, value in sequential_counts.items() if value == ct_unique_prime_factors]
 
     return min(keys_with_value)
+
+
+def problem48():
+    """Euler Problem 48: Self powers.
+
+    The series, 1^1 + 2^2 + 3^3 + ... + 10^10
+    is equal to 10405071317.
+    Find the last ten digits of the series, 1^1 + 2^2 + 3^3 + ... + 1000^1000.
+    """
+    val = 0
+    for ea in range(1,1001):
+        val+= ea**ea
+    return int(str(val)[-10:])
+
+
+def problem49(digits=4, given_solution=(1487, 4817, 8147)):
+    """Euler Problem 49: Prime permutations.
+
+    The arithmetic sequence, 1487, 4817, 8147, in which each of the terms increases by 3330, is unusual in two ways:
+    (i) each of the three terms are prime, and,
+    (ii) each of the 4 digits of each number are permutations of one another.
+    There are no arithmetic sequences made up of three primes from 1000 to 10000 that satisfy these properties.
+    Find the sum of all the primes, below one million, that are also trigrams.
+    """
+    primes = util.prime_list(1000000)
+    primes = [prime for prime in primes if len(str(prime)) == digits]
+    for prime in primes:
+        b = prime+3330
+        c = prime+6660
+        if b in primes and c in primes and util.are_permutations(prime, b) and util.are_permutations(prime, c) and (prime, b, c) != given_solution:
+            return int(str(prime)+str(b)+str(c))
+    return None
+
+
+def problem50(under=1000000):
+    """Euler Problem 50: Consecutive prime sum.
+
+    The prime 41 can be written as the sum of six consecutive primes:
+    41 = 2 + 3 + 5 + 7 + 11 + 13
+    This is the longest sum of consecutive primes that adds to a prime below one-hundred.
+    The longest sum of consecutive primes below one-thousand that adds to a prime, contains 21 terms, and is equal to 953.
+    Which prime, below one-million, can be written as the sum of the most consecutive primes?
+    """
+    primes = util.prime_list(under)
+    primes = [prime for prime in primes if prime < under]
+    start = 0
+    end = 0
+    max_prime_so_far = 0
+    num_of_primes_at_max = 0
+
+    for start in range(len(primes)):
+        for end in range(start, len(primes)):
+            if sum(primes[start:end]) > under:
+                break
+            if sum(primes[start:end]) in primes and (end - start) > num_of_primes_at_max:
+                num_of_primes_at_max = end - start
+                max_prime_so_far = sum(primes[start:end])
+    return num_of_primes_at_max, max_prime_so_far
