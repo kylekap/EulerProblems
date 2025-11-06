@@ -1,6 +1,6 @@
 import logging
 import time
-from itertools import combinations, permutations  # noqa: F401
+from itertools import combinations, combinations_with_replacement, permutations, product  # noqa: F401
 from pathlib import Path  # noqa: F401
 
 import solved  # noqa: F401
