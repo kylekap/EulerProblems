@@ -1,6 +1,6 @@
 import csv
 import math
-from itertools import combinations, combinations_with_replacement, permutations
+from itertools import combinations, combinations_with_replacement, permutations, product
 from pathlib import Path
 
 import util
@@ -1202,3 +1202,48 @@ def problem50(under=1000000):
                 num_of_primes_at_max = end - start
                 max_prime_so_far = sum(primes[start:end])
     return num_of_primes_at_max, max_prime_so_far
+
+
+def problem51(max_prime=1000000, prime_value_family_len=6):
+    """Euler Problem 51: Prime digit replacements.
+
+    By replacing the 1st digit of the 2-digit number *3, it turns out that six of the nine possible values: 13, 23, 43, 53, 73, and 83, are all prime.
+    By replacing the 3rd and 4th digits of 56**3 with the same digit, this 5-digit number is the first example having seven primes among the ten generated numbers,
+    yielding the family: 56003, 56113, 56333, 56443, 56663, 56773, and 56993. Consequently 56003, being the first member of this family, is the smallest prime with this property.
+    Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits) with the same digit, is part of an eight prime value family.
+    """
+    def prime_list(prime, mask, primes):
+        digits = list(str(prime))
+        new_numbers = [int("".join(str(replacement) if m else digit for digit, m in zip(digits, mask))) for replacement in range(1 if mask[0] else 0, 10)] # Generate all permuatations of this mask, replacing each True with 0-9.
+        return list({x for x in new_numbers if x in primes}) # Return only list of primes
+
+    primes = util.prime_list(max_prime)
+    prime_set = set(primes)
+
+    for prime in primes:
+        digits = list(str(prime))
+        masks = list(product([True, False], repeat=len(digits))) #Generates a list of all possible masks with True for replace and False for keep.
+        for mask in masks: #Iterates through all possible masks
+            prime_new_numbers = prime_list(prime, mask, prime_set) #Generates a list of all possible prime numbers based on the given mask
+            if len(prime_new_numbers) >= prime_value_family_len: # If you hit the right length
+                return min(prime_new_numbers) # Return the smallest prime
+    return None
+
+
+def problem52():
+    """Euler Problem 52: Permuted multiples.
+
+    It can be seen that the number, 125874, and its double, 251748, contain exactly the same digits, but in a different order.
+    Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits.
+    """
+    def check_multiple(num, multiple):
+        new_val = num * multiple
+        if len(str(new_val)) != len(str(num)): # Check same length
+            return False
+        return sorted(str(new_val)) == sorted(str(num)) # Check same digits
+
+    i = 0
+    while True:
+        i+=1
+        if all(check_multiple(i, value) for value in range(2, 6)): # Check if all multiples meet criteria. 2-6 because 1 is not a multiple.
+            return i # Return the smallest multiple

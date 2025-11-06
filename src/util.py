@@ -387,12 +387,3 @@ def get_hexagonal_number(n):
 
 def are_permutations(num1, num2):
     return sorted(str(num1)) == sorted(str(num2))
-
-
-def has_digit_repetition(number, repeat_ct=3):
-    if not isinstance(number, str):
-        number = str(abs(number))
-    for digit in set(number):
-        if number.count(digit) == repeat_ct:
-            return digit
-    return None
