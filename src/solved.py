@@ -1,5 +1,5 @@
 import csv
-import math
+from collections import Counter
 from itertools import combinations, combinations_with_replacement, permutations, product
 from pathlib import Path
 
@@ -301,11 +301,7 @@ def problem15(n):
     Starting in the top left corner of a 2x2 grid, and only being able to move to the right and down, there are exactly 6 routes to the bottom right corner
     How many such routes are there through a 20x20 grid?
     """
-
-    def binomial_coefficient(n, k):
-        return math.factorial(n) // (math.factorial(k) * math.factorial(n - k))
-
-    return binomial_coefficient(2 * n, n)
+    return util.binomial_coefficient(2 * n, n)
 
 
 def problem16(base, exponent):
@@ -459,14 +455,7 @@ def problem20():
     and the sum of the digits in the number 10! is 3+6+2+8+8+0+0 = 27
     Find the sum of the digits in the number 100!
     """
-
-    def factorial(n):
-        tot = 1
-        for i in range(1, n, 1):
-            tot *= i
-        return tot
-
-    return sum(util.convert_int_to_list(factorial(100)))
+    return sum(util.convert_int_to_list(util.calc_factorial(100)))
 
 
 def problem21(max_val=10000):
@@ -1247,3 +1236,125 @@ def problem52():
         i+=1
         if all(check_multiple(i, value) for value in range(2, 6)): # Check if all multiples meet criteria. 2-6 because 1 is not a multiple.
             return i # Return the smallest multiple
+
+def problem53(max_n=100, combination_over=1000000):
+    """Euler Problem 53: Combinatoric selections.
+
+    There are exactly ten ways of selecting three from five, 12345:
+    123, 124, 125, 134, 135, 145, 234, 235, 245, and 345
+    In combinatorics, we use the notation, 5C3 = 10.
+    In general,
+    nCr = n! / r!(n-r)!
+    where r ≤ n, n! = n *(n-1)*...*3*2*1, and 0! = 1.
+    It is not until n = 23, that a value exceeds one-million: 23C10 = 1144066.
+    How many, not necessarily distinct, values of nCr for 1 ≤ n ≤ 100, are greater than one-million?
+    """
+    i = 0
+    for ea_n in range(1,max_n+1):
+        for ea_r in range(1,ea_n):
+            if util.binomial_coefficient(ea_n,ea_r) > combination_over:
+                i+=1
+    return i
+
+
+def problem54(text_file_path="p054_poker.txt"):
+    """Euler Problem 54: Poker hands.
+
+    In the card game poker, a hand consists of five cards and are ranked, from lowest to highest, in the following way:
+    High Card: Highest value card.
+    One Pair: Two cards of the same value.
+    Two Pairs: Two different pairs.
+    Three of a Kind: Three cards of the same value.
+    Straight: All cards are consecutive values.
+    Flush: All cards of the same suit.
+    Full House: Three of a kind and a pair.
+    Four of a Kind: Four cards of the same value.
+    Straight Flush: All cards are consecutive values of same suit.
+    Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.
+    The cards are valued in the order: 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace.
+
+    If two players have the same ranked hands then the rank made up of the highest value wins; for example, a Straight Flush of 5Hearts beats a Straight Flush of 9Diamonds.
+
+    If two ranks tie, the next highest ranked hand determines the winner, and so on; for example, 2 of a Kind beats 3 of a Kind (of any suit), and so on.
+
+    The file, poker.txt, contains one-thousand random hands dealt to two players. Each line of the file contains ten cards (separated by a single space): the first five are Player 1's
+    cards and the last five are Player 2's cards. You can assume that all hands are valid (no invalid characters or repeated cards), each player's hand is in no specific order, and in each hand there is a clear winner.
+    How many hands does Player 1 win?
+    """
+    class Hand:
+        def __init__(self, cards):
+            self.card_value_dict = {"1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":11, "Q":12, "K":13, "A":14}
+            self.card_suits = ["H", "D", "C", "S"]
+            self.straight = "23456789TJQKA"
+            self.royal_straight = "TJQKA"
+            self.hand_rank = {"Royal flush":1000, "Straight flush":900, "Four of a kind":800, "Full house":700, "Flush":600, "Straight":500, "Three of a kind":400, "Two pair":300, "Pair":200, "High card":1}
+            self.card_groupings = {"Flush":5, "Four of a kind":4, "Three of a kind":3, "Pair":2}
+
+            self.cards = cards
+            self.card_values = []
+            self.card_names = []
+            self.card_suits = []
+            self._get_cards()
+            self.result = self._evaluate_hand()
+
+
+        def _get_cards(self):
+            for ea in self.cards:
+                self.card_values.append(self.card_value_dict[ea[0]])
+                self.card_suits.append(ea[1])
+                self.card_names.append(ea[0])
+            self.card_values.sort(reverse=True)
+            self.card_suits.sort()
+            self.card_names = "".join(sorted(util.convert_list_to_str(self.card_names), key= lambda x: self.card_value_dict[x]))
+
+        def _evaluate_hand(self):  # noqa: PLR0911
+            most_common_card_ct = Counter(self.card_values).most_common(1)[0][1]
+            second_common_card_ct = Counter(self.card_values).most_common(2)[1][1]
+            most_common_card_value = Counter(self.card_values).most_common(1)[0][0]
+            flush_check = Counter(self.card_suits).most_common(1)[0][1] == self.card_groupings["Flush"]
+            straight_check = self.card_names in self.straight
+            royal_check = self.card_names == self.royal_straight
+
+            if royal_check and flush_check:
+                return (self.hand_rank["Royal flush"])
+            if straight_check and flush_check:
+                return (self.hand_rank["Straight flush"]+most_common_card_value)
+            if most_common_card_ct == self.card_groupings["Four of a kind"]:
+                return (self.hand_rank["Four of a kind"]+most_common_card_value)
+            if most_common_card_ct == self.card_groupings["Three of a kind"] and second_common_card_ct == self.card_groupings["Pair"]:
+                return (self.hand_rank["Full house"]+most_common_card_value)
+            if flush_check:
+                return (self.hand_rank["Flush"])
+            if straight_check:
+                return (self.hand_rank["Straight"]+most_common_card_value)
+            if most_common_card_ct == self.card_groupings["Three of a kind"]:
+                return (self.hand_rank["Three of a kind"])
+            if most_common_card_ct == self.card_groupings["Pair"] and second_common_card_ct == self.card_groupings["Pair"]:
+                return (self.hand_rank["Two pair"])
+            if most_common_card_ct == self.card_groupings["Pair"]:
+                return (self.hand_rank["Pair"]+most_common_card_value)
+            return (max(self.card_values))
+
+        def __str__(self):
+            return f"{self.cards}, {self.result}"
+
+    def tiebreaker(p1_hand, p2_hand):
+        # Return True if p1_hand > p2_hand
+        for card in range(5):
+            if p1_hand.card_values[card] == p2_hand.card_values[card]:
+                continue
+            return p1_hand.card_values[card] > p2_hand.card_values[card]
+        return False
+
+    data = util.import_text_file(text_file_path)
+    p1_wins = 0
+    for line in data:
+        hand = line.split()
+        p1_hand = Hand(hand[:5])
+        p2_hand = Hand(hand[5:])
+        if p1_hand.result > p2_hand.result:
+            p1_wins += 1
+        if p1_hand.result == p2_hand.result and tiebreaker(p1_hand, p2_hand):
+                p1_wins += 1
+
+    return p1_wins

@@ -289,6 +289,11 @@ def import_data(filename):
         return list(csv.reader(csvdatafile))
 
 
+def import_text_file(file_path):
+    with Path(file_path).open("r") as f:
+        return f.readlines()
+
+
 def roundup(numerator, denominator):
     """Round up a number."""
     if numerator % denominator == 0:
@@ -387,3 +392,7 @@ def get_hexagonal_number(n):
 
 def are_permutations(num1, num2):
     return sorted(str(num1)) == sorted(str(num2))
+
+
+def binomial_coefficient(n, k):
+    return calc_factorial(n) / (calc_factorial(k) * calc_factorial(n - k))
