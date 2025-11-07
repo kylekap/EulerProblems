@@ -1390,3 +1390,48 @@ def problem55():
         return True
     lychrels = [lychrel for lychrel in range(10000) if check_lychrel(lychrel)]
     return len(lychrels)
+
+
+def problem56():
+    """Euler Problem 56: Powerful digit sum.
+
+    A googol (10^100) is a massive number: one followed by one-hundred zeros; 100^100 is almost unimaginably large: one followed by two-hundred zeros. Despite their size, the sum of the digits in each number is only 1.
+    Considering natural numbers of the form, a^b, where a, b < 100, what is the maximum digital sum?
+    """
+    val = 0
+    for a in range(100):
+        for b in range(100):
+            val = max(sum(util.convert_int_to_list(a**b)), val)
+    return val
+
+
+def problem56_alt():
+    # A bunch of list compression version of the above problem56
+    return max([sum(util.convert_int_to_list(x)) for x in [a**b for a in range(100) for b in range(100)]])
+
+
+def problem57(num=1000):
+    """Euler Problem 57: Square root convergents.
+
+    It is possible to show that the square root of two can be expressed as an infinite continued fraction.
+    √ 2 = 1 + 1/(2 + 1/(2 + 1/(2 + ... ))) = 1.414213...
+    By expanding this for the first four iterations, we get:
+    1 + 1/2 = 3/2 = 1.5
+    1 + 1/(2 + 1/2) = 7/5 = 1.4
+    1 + 1/(2 + 1/(2 + 1/2)) = 17/12 = 1.41
+    1 + 1/(2 + 1/(2 + 1/(2 + 1/2))) = 41/29 = 1.4142...
+    The next three expansions are 99/70, 239/169, and 577/408, but the eighth expansion, 1393/985, is the first example where the number of digits in the numerator exceeds the number of digits in the denominator.
+    In the first one-thousand expansions, how many fractions contain a numerator with more digits than the denominator?
+    """
+    def get_series_sqrt_2_series(num):
+        li = [(3,2)]
+        for i in range(1,num):
+            # each numerator = 2*previous demominator + previous numerator
+            # each denominator = previous denominator + previous numerator
+            prev_num = li[i-1][0]
+            prev_denom = li[i-1][1]
+            li.append((prev_num+2*prev_denom, prev_denom+prev_num))
+        return li
+
+    li = get_series_sqrt_2_series(num)
+    return len ([x for x in li if len(str(x[0])) > len(str(x[1]))])
