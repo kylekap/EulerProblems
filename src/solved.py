@@ -1435,3 +1435,83 @@ def problem57(num=1000):
 
     li = get_series_sqrt_2_series(num)
     return len ([x for x in li if len(str(x[0])) > len(str(x[1]))])
+
+
+def problem58(desired_ratio=0.1):
+    """Euler Problem 58: Spiral primes.
+
+    Starting with 1 and spiralling anticlockwise in the following way, a square spiral with side length 7 is formed.
+    37 36 35 34 33 32 31
+    38 17 16 15 14 13 30
+    39 18  5  4  3 12 29
+    40 19  6  1  2 11 28
+    41 20  7  8  9 10 27
+    42 21 22 23 24 25 26
+    43 44 45 46 47 48 49
+    It is interesting to note that the odd squares lie along the bottom right diagonal, but what is more interesting is that 8 out of the 13 numbers lying along both diagonals are prime; that is, a ratio of 8/13 ≈ 62%.
+    If one complete new layer is wrapped around the spiral above, a square spiral with side length 9 will be formed.
+    If this process is continued, what is the side length of the square spiral for which the ratio of primes along both diagonals first falls below 10%?
+    """
+    primes = 0
+    side_len = 1
+    num = 1
+    prime_ratio = 1
+
+    while prime_ratio >= desired_ratio:
+        side_len += 2 #Sides grow by 2 each round
+        for _ in range(4):
+            num += side_len - 1 #Each number is side length - 1 away
+            if util.is_prime(num):
+                primes += 1
+        prime_ratio =  primes / (2*side_len - 1) #Ratio of primes to side length
+    return side_len
+
+
+def problem59():
+    """Euler Problem 59: XOR decryption.
+
+    Each character on a computer is assigned a unique code and the preferred standard is ASCII (American Standard Code for Information Interchange).
+    For example, uppercase A = 65, asterisk (*) = 42, and lowercase k = 107.
+    A modern encryption method is to take a text file, convert the bytes to ASCII, then XOR each byte with a given value, taken from a secret key.
+    The advantage with the XOR function is that using the same encryption key on the cipher text, restores the plain text; for example, 65 XOR 42 = 107, then 107 XOR 42 = 65.
+
+    For unbreakable encryption, the key is the same length as the plain text message, and the key is made up of random bytes.
+    The user would keep the encrypted message and the encryption key in different locations, and without both "halves", it is impossible to decrypt the message.
+
+    Unfortunately, this method is impractical for most users, so the modified method is to use a password as a key.
+    If the password is shorter than the message, which is likely, the key is repeated cyclically throughout the message.
+    The balance for this method is using a sufficiently long password key for security, but short enough to be memorable.
+
+    Your task has been made easy, as the encryption key consists of three lower case characters.
+    The first letter of the password, if any, is 'a'; the second is 'b' and the third is 'c'.
+    Using p059_cipher.txt (right click and 'Save Link/Target As...'), a file containing the encrypted ASCII codes, and the knowledge that the plain text must contain common English words, decrypt the message and find the sum of the ASCII values in the original text.
+    """
+    def allowed_char(character):
+        return character in range(32, 123) #no idea what the range is, but at least this covers all upper & lower case with numbers.
+
+    def check_common_words(translated_text):
+        return bool(" the " in translated_text or " of " in translated_text or " and " in translated_text) # They said common words, so
+
+    ascii_lowercase = range(97,123)
+    text = [int(x) for x in util.import_data("data/0059_cipher.txt")[0]]
+    possible_codes = {}
+    for a in ascii_lowercase: #Loop through the lowercase letters
+        for b in ascii_lowercase: #and again
+            for c in ascii_lowercase: #... and again.
+                lowercase_key = (chr(a) + chr(b) + chr(c))*len(text) # Generate the key, since it's "repeated cyclically throughout the message", we can just multiply by the length of the text.
+                decrypted = []
+                """Slower version (no loop breaks) can use list compression. Replaces the "for count, i in enumerate(text)" loop:
+                decrypted = [util.xor(y,ord(lowercase_key[x])) for x,y in enumerate(text) if allowed_char(util.xor(y,ord(lowercase_key[x])))]
+                """
+                for count, i in enumerate(text): #For each character in the text
+                    temp = util.xor(i,ord(lowercase_key[count])) # See if the character is allowed
+                    if not allowed_char(temp):
+                        break #Speeds things up a bit
+                    decrypted.append(temp) #If it is, add it to the decrypted text
+                if len(decrypted) == len(text): #If the decrypted text is the same length as the text, it worked!
+                    finaltext = "".join(chr(x) for x in decrypted)
+                    if not check_common_words(finaltext): #Check if it's got a common word
+                        continue
+                    total = sum(decrypted)
+                    possible_codes[lowercase_key[:3]] = (total, finaltext)
+    return possible_codes # Need to check that there's only 1 possible key based on output.

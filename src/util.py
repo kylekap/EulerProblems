@@ -396,3 +396,7 @@ def are_permutations(num1, num2):
 
 def binomial_coefficient(n, k):
     return calc_factorial(n) / (calc_factorial(k) * calc_factorial(n - k))
+
+
+def xor(a, b):
+    return a ^ b
