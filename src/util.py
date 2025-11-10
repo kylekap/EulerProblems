@@ -89,7 +89,7 @@ def convert_list_to_str(li):
         str: string of individual items
 
     """
-    return "".join(map(str,li))
+    return "".join(map(str, li))
 
 
 def convert_str_to_list(string):
@@ -275,7 +275,7 @@ def add_list(*args):
 def import_2d_array_data(filename):
     """Import a 2D array of data from a CSV file."""
     table = []
-    with Path(filename).open()as csvdatafile:
+    with Path(filename).open() as csvdatafile:
         csvreader = csv.reader(csvdatafile)
         for row in csvreader:
             num_append = list(map(int, row))
@@ -303,7 +303,7 @@ def roundup(numerator, denominator):
 
 def check_pandigital(value):
     """Check if a number is 1-9 pandigital."""
-    return set(value) == {1,2,3,4,5,6,7,8,9}
+    return set(value) == {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
 
 def check_repeats(value):
@@ -321,8 +321,8 @@ def calc_factorial(number):
     if number < 0:
         return -1
     val = 1
-    for ea in range(2, number+1):
-        val*=ea
+    for ea in range(2, number + 1):
+        val *= ea
     return val
 
 
@@ -365,12 +365,12 @@ def generate_string_ints_to_n(n):
         return ""
     if n == 1:
         return "1"
-    prev_string = generate_string_ints_to_n(n-1)
+    prev_string = generate_string_ints_to_n(n - 1)
     return prev_string + str(n)
 
 
 def is_pandigital(s):
-    check = "123456789"[:len(s)]
+    check = "123456789"[: len(s)]
     if len(s) != len(check):
         return False
     if not s.isdigit():
@@ -379,15 +379,15 @@ def is_pandigital(s):
 
 
 def get_triangle_number(n):
-    return n*(n + 1)/2
+    return n * (n + 1) / 2
 
 
 def get_pentagonal_number(n):
-        return n*(3*n-1)/2
+    return n * (3 * n - 1) / 2
 
 
 def get_hexagonal_number(n):
-        return n*(2*n-1)
+    return n * (2 * n - 1)
 
 
 def are_permutations(num1, num2):
