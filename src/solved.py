@@ -1602,3 +1602,40 @@ def problem61(): #TODO(Kyle): #6
                                                 if cyclic(item_five, item_six) and cyclic(item_six, item_one): #and len({item_one, item_two, pen, hexagonal, hep, octagonal}) == 6:
                                                         return sum([int(x) for x in [item_one, item_two, item_three, item_four, item_five, item_six]])
     return None
+
+
+def problem62(num_cubes_needed=5):
+    """Euler Problem 62: Cubic permutations.
+
+    The cube, 41063625 (3453), can be permuted to produce two other cubes: 56623104 (3843) and 66624900 (4680).
+    Find the smallest cube for which exactly five permutations of its digits are cube.
+    """
+    def generate_cube(n):
+        return n*n*n
+
+    di = {1: [1]}
+    i = 1
+    # Create a growing dictionary, where the keys are the digits of the cubes, and the values are the numbers that were cubed. When the list hits num_cubes_needed, stop
+    while max(len(value) for value in di.values()) < num_cubes_needed:
+        next_cube = generate_cube(i)
+        next_cube_sort = "".join(sorted(str(next_cube)))
+        di.setdefault(next_cube_sort, []).append(i)
+        i += 1
+    # Return the smallest cube, by finding the smallest item of the largest list & cubing it.
+    return generate_cube(min(max(di.values(), key=len)))
+
+
+def problem62_alt(num_cubes_needed=5):
+    # Better performing version. Why store as a dict when a list will do?
+    def generate_cube(n):
+        return n*n*n
+    li = [0]
+    i = 1
+    while True:
+        next_cube = generate_cube(i)
+        next_cube_sort = "".join(sorted(str(next_cube)))
+        li.append(next_cube_sort)
+
+        if li.count(next_cube_sort) == num_cubes_needed:
+            return generate_cube(li.index(next_cube_sort))
+        i += 1
