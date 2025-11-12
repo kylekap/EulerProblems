@@ -405,17 +405,6 @@ def problem18(filename="data/TriangleSum.csv"):
     return grid[0][0]
 
 
-def problem67(filename="data/0067_triangle.csv"):
-    """Euler Problem 67.
-
-    By starting at the top of the triangle below and moving to adjacent numbers on the row below, the maximum total from top to bottom is 23.
-    Find the maximum total from top to bottom in [data/0067_triangle.csv], a file containing a triangle with one-hundred rows.
-    Note: This is a much more difficult version of Problem 18. It is not possible to try every route to solve this problem, as there are 2^99 altogether!
-    If you could check one trillion (10^12) routes every second it would take over twenty billion years to check them all. There is an efficient algorithm to solve it.
-    """
-    return problem18(filename)
-
-
 def problem19():
     """Euler Problem 19.
 
@@ -1639,3 +1628,71 @@ def problem62_alt(num_cubes_needed=5):
         if li.count(next_cube_sort) == num_cubes_needed:
             return generate_cube(li.index(next_cube_sort))
         i += 1
+
+
+def problem63():
+    """Euler Problem 63: Powerful digit counts.
+
+    The 5-digit number, 16807=7^5, is also a fifth power. Similarly, the 9-digit number, 134217728=8^9, is a ninth power.
+    How many n-digit positive integers exist which are also an nth power?
+    """
+    def check_power(base, power):
+        return len(util.convert_int_to_list(base**power)) == power
+
+    tot = 0
+    for b in range(1, 100):
+        for p in range(1, 100):
+            if check_power(base=b, power=p):
+                tot+=1
+    return tot
+
+def problem64(): #TODO(Kyle): #7 Complete
+    """Euler Problem 64: Odd period square roots.
+
+    All square roots are periodic when written as continued fractions and can be written in the form:
+    √N = a0 + 1/(a1 + 1/(a2 + 1/(a3 + ... )))
+    For example, let us consider √23:
+    √23 = 4 + √23 - 4 = 4 + 1/(1/(√23 - 4))
+    If we continue we would get the following expansion:
+    √23 = 4 + 1/(1 + 1/(3 + 1/(1 + 1/(8 + ... )))))
+    The process can be summarised as follows:
+    a0 = 4, 1/(√23 - 4) = 1/(1 + 1/(3 + 1/(1 + 1/(8 + ... )))))
+    a1 = 1 + 1/(3 + 1/(1 + 1/(8 + ... )))))
+    a2 = 3 + 1/(1 + 1/(8 + ... )))))
+    a3 = 1 + 1/(8 + ... )))))
+    a4 = 8 + ...
+    It can be seen that the sequence is repeating. For conciseness, we use the notation √23 = [4;(1,3,1,8)] to mean that the block (1,3,1,8) repeats indefinitely.
+    The first ten continued fraction representations of (irrational) square roots are:
+    √2 = [1;(2)]
+    √3 = [1;(1,2)]
+    √5 = [2;(4)]
+    √6 = [2;(2,4)]
+    √7 = [2;(1,1,1,4)]
+    √8 = [2;(1,4)]
+    √10 = [3;(6)]
+    √11 = [3;(3,6)]
+    √12 = [3;(2,6)]
+    √13 = [3;(1,1,1,1,6)]
+    Exactly four continued fractions below N=13 have an odd period.
+    How many continued fractions for N ≤ 10000 have an odd period?
+    """
+    # Function Implementation
+
+
+def problem65(): #TODO(Kyle): #8 Complete
+    return None
+
+
+def problem66(): #TODO(Kyle): #9 Complete
+    return None
+
+
+def problem67(filename="data/0067_triangle.csv"):
+    """Euler Problem 67.
+
+    By starting at the top of the triangle below and moving to adjacent numbers on the row below, the maximum total from top to bottom is 23.
+    Find the maximum total from top to bottom in [data/0067_triangle.csv], a file containing a triangle with one-hundred rows.
+    Note: This is a much more difficult version of Problem 18. It is not possible to try every route to solve this problem, as there are 2^99 altogether!
+    If you could check one trillion (10^12) routes every second it would take over twenty billion years to check them all. There is an efficient algorithm to solve it.
+    """
+    return problem18(filename) # Already solved it in problem 18.
