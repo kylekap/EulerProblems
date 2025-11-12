@@ -382,12 +382,24 @@ def get_triangle_number(n):
     return n*(n + 1)/2
 
 
+def get_square_number(n):
+    return n*n
+
+
 def get_pentagonal_number(n):
         return n*(3*n-1)/2
 
 
 def get_hexagonal_number(n):
         return n*(2*n-1)
+
+
+def get_heptagonal_number(n):
+        return n*(5*n-3)/2
+
+
+def get_octagonal_number(n):
+        return n*(3*n-2)
 
 
 def are_permutations(num1, num2):
