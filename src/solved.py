@@ -1515,3 +1515,34 @@ def problem59():
                     total = sum(decrypted)
                     possible_codes[lowercase_key[:3]] = (total, finaltext)
     return possible_codes # Need to check that there's only 1 possible key based on output.
+
+
+def problem60():
+    """Euler Problem 60: Prime pair sets.
+
+    The primes 3, 7, 109, and 673, are quite remarkable. By taking any two primes and concatenating them in any order the result will always be prime.
+    For example, taking 7 and 109, both 7109 and 1097 are prime. The sum of these four primes, 792, represents the lowest sum for a set of four primes with this property.
+    Find the lowest sum for a set of five primes for which any two primes concatenate to produce another prime.
+    """
+    def evaluate_set(combo):
+        return all(util.is_prime(int(f"{p[0]}{p[1]}")) for p in list(permutations(combo, 2)))
+    primes = util.prime_list(10000)
+    for a in primes:
+        print(a)
+        for b in [x for x in primes if x > a]:
+            if evaluate_set([a, b]):
+                for c in [x for x in primes if x > b]:
+                    if evaluate_set([a, b, c]):
+                        for d in [x for x in primes if x > c]:
+                            if evaluate_set([a, b, c, d]):
+                                for e in [x for x in primes if x > d]:
+                                    if evaluate_set([a, b, c, d, e]):
+                                        return sum([a, b, c, d, e]), [a, b, c, d, e]
+                                continue
+                            continue
+                        continue
+                    continue
+                continue
+            continue
+        continue
+    return None
