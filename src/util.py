@@ -412,3 +412,27 @@ def binomial_coefficient(n, k):
 
 def xor(a, b):
     return a ^ b
+
+
+def check_triangular(n):
+    return (8*n + 1)**0.5 % 1 == 0
+
+
+def check_square(n):
+    return n**0.5 % 1 == 0
+
+
+def check_pentagonal(n):
+    return (24*n + 1)**0.5 % 1 == 0
+
+
+def check_hexagonal(n):
+    return (8*n + 1)**0.5 % 1 == 0
+
+
+def check_heptagonal(n):
+    return (40*n + 9)**0.5 % 1 == 0
+
+
+def check_octagonal(n):
+    return (12*n + 1)**0.5 % 1 == 0
