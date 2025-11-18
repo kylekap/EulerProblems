@@ -436,3 +436,14 @@ def check_heptagonal(n):
 
 def check_octagonal(n):
     return (12 * n + 1) ** 0.5 % 1 == 0
+
+
+def eulers_totient(n):
+    """Calculate Euler's Totient function for a given integer n."""
+    if n == 0:
+        return 0
+    result = n
+    for p in set(prime_factors(n)): # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
+        result *= (1 - 1 / p)
+    return int(result)
+
