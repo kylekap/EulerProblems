@@ -664,7 +664,7 @@ def problem27(min_a=-999, max_a=999, max_b=1000):
             n_primes[f"{a},{b}"] = evaluate(a, b)  # Store number of primes for this a,b
 
     return max(n_primes, key=n_primes.get), n_primes.get(
-        max(n_primes, key=n_primes.get)
+        max(n_primes, key=n_primes.get),
     )  # Return a,b with max primes and number of primes that a,b has.
 
 
@@ -727,7 +727,7 @@ def problem30(power=5):
     li = []
 
     for val in range(
-        9, (1 + power) * (9**power)
+        9, (1 + power) * (9**power),
     ):  # Upper limit based on 9^power in every digit, and number of digits being power+1
         sum_digits_powers(val, 5)
         if sum_digits_powers(val, 5) == val:
@@ -895,7 +895,7 @@ def problem36():
             palindrome
             for palindrome in util.palindromes_list(1000000)
             if util.is_palindrome(util.convert_list_to_int(util.number_to_base(palindrome, 2)))
-        ]
+        ],
     )
 
 
@@ -1274,11 +1274,11 @@ def problem51(max_prime=1000000, prime_value_family_len=6):
     for prime in primes:
         digits = list(str(prime))
         masks = list(
-            product([True, False], repeat=len(digits))
+            product([True, False], repeat=len(digits)),
         )  # Generates a list of all possible masks with True for replace and False for keep.
         for mask in masks:  # Iterates through all possible masks
             prime_new_numbers = prime_list(
-                prime, mask, prime_set
+                prime, mask, prime_set,
             )  # Generates a list of all possible prime numbers based on the given mask
             if len(prime_new_numbers) >= prime_value_family_len:  # If you hit the right length
                 return min(prime_new_numbers)  # Return the smallest prime
@@ -1402,7 +1402,7 @@ def problem54(text_file_path="p054_poker.txt"):
             self.card_values.sort(reverse=True)
             self.card_suits.sort()
             self.card_names = "".join(
-                sorted(util.convert_list_to_str(self.card_names), key=lambda x: self.card_value_dict[x])
+                sorted(util.convert_list_to_str(self.card_names), key=lambda x: self.card_value_dict[x]),
             )
 
         def _evaluate_hand(self):  # noqa: PLR0911
@@ -1596,12 +1596,12 @@ def problem59():
 
     def allowed_char(character):
         return character in range(
-            32, 123
+            32, 123,
         )  # no idea what the range is, but at least this covers all upper & lower case with numbers.
 
     def check_common_words(translated_text):
         return bool(
-            " the " in translated_text or " of " in translated_text or " and " in translated_text
+            " the " in translated_text or " of " in translated_text or " and " in translated_text,
         )  # They said common words, so
 
     ascii_lowercase = range(97, 123)
@@ -1732,7 +1732,7 @@ def problem61():  # TODO(Kyle): #6
                                                                 item_five,
                                                                 item_six,
                                                             ]
-                                                        ]
+                                                        ],
                                                     )
     return None
 
