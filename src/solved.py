@@ -41,7 +41,12 @@ def problem4():
     Find the largest palindrome made from the product of two 3-digit numbers.
     """
     return max(
-        [ea_1 * ea_2 for ea_1 in range(999, 100, -1) for ea_2 in range(999, 100, -1) if util.is_palindrome(ea_1 * ea_2)],
+        [
+            ea_1 * ea_2
+            for ea_1 in range(999, 100, -1)
+            for ea_2 in range(999, 100, -1)
+            if util.is_palindrome(ea_1 * ea_2)
+        ],
     )
 
 
@@ -537,6 +542,7 @@ def problem24(digits=None, idx=999999):
     perms.sort()
     return perms[idx]
 
+
 def problem25():
     """Euler Problem 25: 1000-digit Fibonacci number.
 
@@ -581,7 +587,8 @@ def problem25():
 
     return len(fibonacci_until_digits(1000))
 
-def problem26(): # TODO(Kyle): #1 Troubleshoot errors.
+
+def problem26():  # TODO(Kyle): #1 Troubleshoot errors.
     """Euler Problem 26: Reciprocal cycles.
 
     A unit fraction contains 1 in the numerator. The decimal representation of the unit fractions with denominators 2 to 10 are given:
@@ -609,15 +616,15 @@ def problem26(): # TODO(Kyle): #1 Troubleshoot errors.
         result = ""
 
         while remainder != 0 and remainder not in remainders:
-            remainders[remainder] = len(result) # store this remainder
-            remainder *= 10 # bring down a zero
-            result += str(remainder // denominator) # add to decimal part
-            remainder = remainder % denominator # get new remainder
+            remainders[remainder] = len(result)  # store this remainder
+            remainder *= 10  # bring down a zero
+            result += str(remainder // denominator)  # add to decimal part
+            remainder = remainder % denominator  # get new remainder
 
-        return result[remainders[remainder]:] if remainder in remainders else ""
+        return result[remainders[remainder] :] if remainder in remainders else ""
 
     reciprocal_cycles = {}
-    for ea in range (1,1000):
+    for ea in range(1, 1000):
         current = len(find_reoccurring_section(1, ea))
         reciprocal_cycles[ea] = current
     return max(reciprocal_cycles, key=reciprocal_cycles.get)
@@ -642,21 +649,24 @@ def problem27(min_a=-999, max_a=999, max_b=1000):
     # Notes to self - if n=0, b must be prime.
     # For n=1, 1 + a + b must also be prime -> a must be even (since b is odd, except for 2)
 
-    def evaluate(a, b): # Evaluate number of primes for given a and b
-        n = 1 # Start at 1 since n=0 is always prime (b is prime)
+    def evaluate(a, b):  # Evaluate number of primes for given a and b
+        n = 1  # Start at 1 since n=0 is always prime (b is prime)
         while True:
-            val = n**2 + a*n + b
+            val = n**2 + a * n + b
             if val < 0 or util.is_prime(val) is False:
                 return n
             n += 1
 
     n_primes = {}
 
-    for a in [num for num in range(min_a, max_a) if num % 2 != 0]: # a must be odd for n=1, so only do odd a
-        for b in util.prime_list(max_b): # b must be prime for n=0, so only do primes
-                n_primes[f"{a},{b}"] = evaluate(a,b) # Store number of primes for this a,b
+    for a in [num for num in range(min_a, max_a) if num % 2 != 0]:  # a must be odd for n=1, so only do odd a
+        for b in util.prime_list(max_b):  # b must be prime for n=0, so only do primes
+            n_primes[f"{a},{b}"] = evaluate(a, b)  # Store number of primes for this a,b
 
-    return max(n_primes, key=n_primes.get), n_primes.get(max(n_primes, key=n_primes.get)) # Return a,b with max primes and number of primes that a,b has.
+    return max(n_primes, key=n_primes.get), n_primes.get(
+        max(n_primes, key=n_primes.get)
+    )  # Return a,b with max primes and number of primes that a,b has.
+
 
 def problem28(size=1001):
     """Euler Problem 28: Number spiral diagonals.
@@ -670,17 +680,18 @@ def problem28(size=1001):
     It can be verified that the sum of the numbers on the diagonals is 101.
     What is the sum of the numbers on the diagonals in a 1001 by 1001 spiral formed in the same way?
     """
-    running_total = 1 #Ignore center
-    last_number = 1 # Start at center
-    #Each layer is increasingly far apart by 2. So layer is separated by 2 - 3, 5, 7, 9. Layer 2 is 4 separated, so 13, 17, 21, 25. This trend continues through whole spiral.
-    for layer in range(1, size//2 + 1): # Each layer adds 2 to each side
-        a = last_number + 2*layer # Each corner is 2*layer away from last
-        b = a + 2*layer
-        c = b + 2*layer
-        d = c + 2*layer
-        running_total += a+b+c+d # Add corners to total
-        last_number = d # Update last number to get ready for next layer
+    running_total = 1  # Ignore center
+    last_number = 1  # Start at center
+    # Each layer is increasingly far apart by 2. So layer is separated by 2 - 3, 5, 7, 9. Layer 2 is 4 separated, so 13, 17, 21, 25. This trend continues through whole spiral.
+    for layer in range(1, size // 2 + 1):  # Each layer adds 2 to each side
+        a = last_number + 2 * layer  # Each corner is 2*layer away from last
+        b = a + 2 * layer
+        c = b + 2 * layer
+        d = c + 2 * layer
+        running_total += a + b + c + d  # Add corners to total
+        last_number = d  # Update last number to get ready for next layer
     return running_total
+
 
 def problem29(min_val=2, max_val=100):
     """Euler Problem 29: Distinct powers.
@@ -698,6 +709,7 @@ def problem29(min_val=2, max_val=100):
     val_list = [a**b for a in range(min_val, max_val) for b in range(min_val, max_val)]
     return len(set(val_list))
 
+
 def problem30(power=5):
     """Euler Problem 30: Digit fifth powers.
 
@@ -714,11 +726,14 @@ def problem30(power=5):
 
     li = []
 
-    for val in range(9, (1+power)* (9**power)): # Upper limit based on 9^power in every digit, and number of digits being power+1
-        sum_digits_powers(val,5)
-        if sum_digits_powers(val,5) == val:
+    for val in range(
+        9, (1 + power) * (9**power)
+    ):  # Upper limit based on 9^power in every digit, and number of digits being power+1
+        sum_digits_powers(val, 5)
+        if sum_digits_powers(val, 5) == val:
             li.append(val)
     return li
+
 
 def problem30_alt(power=5):
     # Still need to investigate this one further to ensure it works as expected.
@@ -743,11 +758,11 @@ def problem31(coin_target=200, coins=None):
     """
     if coins is None:
         coins = [1, 2, 5, 10, 20, 50, 100, 200]
-    ways = [0] * (coin_target + 1) # Create list to hold number of ways to make each amount
-    ways[0] = 1 # There is 1 way to make 0 amount
+    ways = [0] * (coin_target + 1)  # Create list to hold number of ways to make each amount
+    ways[0] = 1  # There is 1 way to make 0 amount
 
-    for coin in coins: #For each coin, update the ways to make each amount
-        for amount in range(coin, coin_target + 1): # For each amount that can be made with this coin
+    for coin in coins:  # For each coin, update the ways to make each amount
+        for amount in range(coin, coin_target + 1):  # For each amount that can be made with this coin
             ways[amount] += ways[amount - coin]
 
     return ways[coin_target]
@@ -773,11 +788,11 @@ def problem32():
     def check_line(num_digits_first, num_digits_second, line):
         """Check if a line is valid pandigital product. Must be of form first * second = product. Does not check for pandigitalism."""
         first = line[:num_digits_first]
-        second = line[num_digits_first:num_digits_first+num_digits_second]
-        product = line[num_digits_first+num_digits_second:]
+        second = line[num_digits_first : num_digits_first + num_digits_second]
+        product = line[num_digits_first + num_digits_second :]
         return list_to_num(first) * list_to_num(second) == list_to_num(product)
 
-    items = permutations([1,2,3,4,5,6,7,8,9], 9) # All pandigital permutations of 1-9
+    items = permutations([1, 2, 3, 4, 5, 6, 7, 8, 9], 9)  # All pandigital permutations of 1-9
     products = set()
     """
     Can ony be 2 forms - 1 digit * 4 digit = 4 digit, or 2 digit * 3 digit = 4 digit.
@@ -793,10 +808,10 @@ def problem32():
     4x1=4 - Same as 1x4=4, do not need to check again.
     """
     for item in items:
-        if check_line(1,4,item):
-            products.add(int("".join(map(str,item[1+4:]))))
-        if check_line(2,3,item):
-            products.add(int("".join(map(str,item[2+3:]))))
+        if check_line(1, 4, item):
+            products.add(int("".join(map(str, item[1 + 4 :]))))
+        if check_line(2, 3, item):
+            products.add(int("".join(map(str, item[2 + 3 :]))))
     return sum(products), len(products)
 
 
@@ -808,25 +823,26 @@ def problem33():
     There are exactly four non-trivial examples of this type of fraction, less than one in value, and containing two digits in the numerator and denominator.
     If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
     """
+
     def shared_digit(num1, num2):
-        num1str =util.convert_int_to_list(num1)
+        num1str = util.convert_int_to_list(num1)
         num2str = util.convert_int_to_list(num2)
         return list(set(num1str).intersection(set(num2str)))
 
     def reduced(num, shared_digit):
-        numstr =util.convert_int_to_list(num)
+        numstr = util.convert_int_to_list(num)
         return [x for x in numstr if x not in shared_digit]
 
     val = 1
-    for top in range(1,99):
-        for bottom in range(top+1, 100):
+    for top in range(1, 99):
+        for bottom in range(top + 1, 100):
             digit = shared_digit(top, bottom)
-            if len(digit) == 1 and digit!=[0]:
+            if len(digit) == 1 and digit != [0]:
                 reduced_top = util.convert_list_to_int(reduced(top, digit))
                 reduced_bottom = util.convert_list_to_int(reduced(bottom, digit))
-                if reduced_top !=0 and reduced_bottom !=0 and reduced_top/reduced_bottom == top/bottom:
-                    val*= reduced_top/reduced_bottom
-    return 1/round(val,5)
+                if reduced_top != 0 and reduced_bottom != 0 and reduced_top / reduced_bottom == top / bottom:
+                    val *= reduced_top / reduced_bottom
+    return 1 / round(val, 5)
 
 
 def problem34():
@@ -837,11 +853,11 @@ def problem34():
     """
     digit_factorials = []
 
-    for number in range(10,7*util.calc_factorial(9)):
+    for number in range(10, 7 * util.calc_factorial(9)):
         li = util.convert_int_to_list(number)
         val = 0
         for item in li:
-            val+= util.calc_factorial(item)
+            val += util.calc_factorial(item)
         if val == number:
             digit_factorials.append(number)
     return sum(digit_factorials)
@@ -849,7 +865,7 @@ def problem34():
 
 def problem34_alt():
     """Euler Problem 33: Digit factorials. Alternate solution."""
-    return sum([x for x in range(10,10000000) if sum(map(util.calc_factorial, util.convert_int_to_list(x))) == x])
+    return sum([x for x in range(10, 10000000) if sum(map(util.calc_factorial, util.convert_int_to_list(x))) == x])
 
 
 def problem35(max_val=1000000):
@@ -859,6 +875,7 @@ def problem35(max_val=1000000):
     There are thirteen such primes below 100: 2, 3, 5, 7, 11, 13, 17, 31, 37, 71, 73, 79, and 97.
     How many circular primes are there below one million?
     """
+
     def is_circular_prime(prime):
         return all(util.is_prime(circular) for circular in util.generate_list_of_circulars(prime, return_type=int))
 
@@ -873,7 +890,13 @@ def problem36():
     Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
     (Please note that the palindromic number, in either base, may not include leading zeros.)
     """
-    return sum([palindrome for palindrome in util.palindromes_list(1000000) if util.is_palindrome(util.convert_list_to_int(util.number_to_base(palindrome, 2)))])
+    return sum(
+        [
+            palindrome
+            for palindrome in util.palindromes_list(1000000)
+            if util.is_palindrome(util.convert_list_to_int(util.number_to_base(palindrome, 2)))
+        ]
+    )
 
 
 def problem37():
@@ -884,6 +907,7 @@ def problem37():
     Find the sum of the only eleven primes that are both truncatable from left to right and right to left.
     Note: 2, 3, 5, and 7 are not considered to be truncatable primes.
     """
+
     def check_trunc(prime):
         """Check if a prime is truncatable from left to right and right to left."""
         prime_str = str(prime)
@@ -898,6 +922,7 @@ def problem37():
     answer_list = [prime for prime in primes if check_trunc(prime) and prime not in [2, 3, 5, 7]]
     return sum(answer_list)
 
+
 def problem38():
     """Euler Problem 38: Pandigital multiples.
 
@@ -911,13 +936,13 @@ def problem38():
     def build_pandigital(num):
         item = ""
         for ea in (1, 2, 3, 4, 5, 6, 7, 8, 9):
-            item += str(ea*num)
+            item += str(ea * num)
             if util.is_pandigital(item):
                 return int(item)
         return 0
 
     max_val = 0
-    for ea in range(1,1000000):
+    for ea in range(1, 1000000):
         max_val = max(max_val, build_pandigital(ea))
     return max_val
 
@@ -930,16 +955,16 @@ def problem39():
     For which value of p ≤ 1000, is the number of solutions maximised?
     """
 
-    def triangle_check(a,b,c):
-        return a ** 2 + b ** 2 == c ** 2
+    def triangle_check(a, b, c):
+        return a**2 + b**2 == c**2
 
     solutions = {}
 
     for a in range(1, 1000):
-        for b in range(a, (1000-a)):
-            for c in range(b, (1000-a-b)):
-                if triangle_check(a,b,c):
-                    solutions[a+b+c] = solutions.get(a + b + c,0)+1
+        for b in range(a, (1000 - a)):
+            for c in range(b, (1000 - a - b)):
+                if triangle_check(a, b, c):
+                    solutions[a + b + c] = solutions.get(a + b + c, 0) + 1
     return max(solutions, key=solutions.get)
 
 
@@ -956,7 +981,7 @@ def problem40():
     def create_champernownes(length):
         constant = ""
         i = 1
-        while len (constant) < length:
+        while len(constant) < length:
             constant += str(i)
             i += 1
         return constant
@@ -964,8 +989,9 @@ def problem40():
     a = list(map(int, create_champernownes(1000000)))
     val = 1
     for ea in [1, 10, 100, 1000, 10000, 100000, 1000000]:
-        val *= a[ea-1]
+        val *= a[ea - 1]
     return val
+
 
 def problem41():
     """Euler Problem 41: Pandigital prime.
@@ -975,8 +1001,8 @@ def problem41():
     """
     # 1+2+3+4+5+6+7+8+9 = 45, so divisible by 3
     # 1+2+3+4+5+6+7+8 = 36, so divisible by 3
-    primes = util.prime_list(7654321) # largest possible 7 digit pandigital prime would be 7654321
-    for ea in primes[::-1]: # Go from biggest to smallest, stop at first once, since that's the largest.
+    primes = util.prime_list(7654321)  # largest possible 7 digit pandigital prime would be 7654321
+    for ea in primes[::-1]:  # Go from biggest to smallest, stop at first once, since that's the largest.
         if util.is_pandigital(str(ea)):
             return ea
     return None
@@ -989,21 +1015,51 @@ def problem42():
     1, 3, 6, 10, 15, 21, 28, 36, 45, 55, ...
     By converting the nth term, tn, to a string and sorting it into ascending order, find the values of the 3rd digit in the 2nd 5-digit number and the 4th digit in the 3rd 5-digit number.
     """
-    letter_dict = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7, "H": 8, "I": 9, "J": 10
-                   , "K": 11, "L": 12, "M": 13, "N": 14, "O": 15, "P": 16, "Q": 17, "R": 18, "S": 19, "T": 20
-                   , "U": 21, "V": 22, "W": 23, "X": 24, "Y": 25, "Z": 26}
+    letter_dict = {
+        "A": 1,
+        "B": 2,
+        "C": 3,
+        "D": 4,
+        "E": 5,
+        "F": 6,
+        "G": 7,
+        "H": 8,
+        "I": 9,
+        "J": 10,
+        "K": 11,
+        "L": 12,
+        "M": 13,
+        "N": 14,
+        "O": 15,
+        "P": 16,
+        "Q": 17,
+        "R": 18,
+        "S": 19,
+        "T": 20,
+        "U": 21,
+        "V": 22,
+        "W": 23,
+        "X": 24,
+        "Y": 25,
+        "Z": 26,
+    }
 
     with Path("data/0042_words.txt").open() as f:
         words = f.read().split(",")
 
-    triangle_numbers = [util.get_triangle_number(i) for i in range(1, len(max(words, key=len))*26)] # Calculate the triangle numbers up to the length of the longest word
+    triangle_numbers = [
+        util.get_triangle_number(i) for i in range(1, len(max(words, key=len)) * 26)
+    ]  # Calculate the triangle numbers up to the length of the longest word
     count_words = 0
 
     for word in words:
         fixed_word = word.replace('"', "").upper()
-        if sum([letter_dict[letter] for letter in fixed_word]) in triangle_numbers: # Check if the word is a triangle number
+        if (
+            sum([letter_dict[letter] for letter in fixed_word]) in triangle_numbers
+        ):  # Check if the word is a triangle number
             count_words += 1
     return count_words
+
 
 def problem43():
     """Euler Problem 43: Sub-string divisibility.
@@ -1019,7 +1075,7 @@ def problem43():
     d8d9d10=289 is divisible by 17
     Find the sum of all 0 to 9 pandigital numbers with this property.
     """
-    items = permutations([1,2,3,4,5,6,7,8,9,0], 10)
+    items = permutations([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], 10)
     li = []
     for item in items:
         d24 = item[1] * 100 + item[2] * 10 + item[3]
@@ -1029,12 +1085,20 @@ def problem43():
         d68 = item[5] * 100 + item[6] * 10 + item[7]
         d79 = item[6] * 100 + item[7] * 10 + item[8]
         d80 = item[7] * 100 + item[8] * 10 + item[9]
-        if d24 % 2 == 0 and d35 % 3 == 0 and d46 % 5 == 0 and d57 % 7 == 0 and d68 % 11 == 0 and d79 % 13 == 0 and d80 % 17 == 0:
+        if (
+            d24 % 2 == 0
+            and d35 % 3 == 0
+            and d46 % 5 == 0
+            and d57 % 7 == 0
+            and d68 % 11 == 0
+            and d79 % 13 == 0
+            and d80 % 17 == 0
+        ):
             li.append(util.convert_list_to_int(item))
     return sum(li)
 
 
-def problem44(): #TODO (Kyle): #3 IDK BRO, THIS TAKES FOREVER AND DOESNT WORK
+def problem44():  # TODO (Kyle): #3 IDK BRO, THIS TAKES FOREVER AND DOESNT WORK
     """Euler Problem 44: Pentagon numbers.
 
     Pentagonal numbers are generated by the formula, Pn=n(3n-1)/2. The first ten pentagonal numbers are:
@@ -1050,8 +1114,7 @@ def problem44(): #TODO (Kyle): #3 IDK BRO, THIS TAKES FOREVER AND DOESNT WORK
         return args[0] - args[1]
 
     def is_pentagonal_number(n):
-        return 1+(24*n+1)**0.5 % 6 == 0
-
+        return 1 + (24 * n + 1) ** 0.5 % 6 == 0
 
     pentagonal_numbers = {util.get_pentagonal_number(i) for i in range(1, 1000000)}
     c = combinations(pentagonal_numbers, 2)
@@ -1087,12 +1150,12 @@ def problem46():
     Find the smallest odd composite that cannot be written as the sum of a prime and twice a square.
     """
     prime_list = util.prime_list(10000)
-    squares = [x * x for x in range(1,10000)]
-    odd_composites = [x for x in range(2,10000) if x % 2 == 1 and x not in prime_list]
+    squares = [x * x for x in range(1, 10000)]
+    odd_composites = [x for x in range(2, 10000) if x % 2 == 1 and x not in prime_list]
     for prime in prime_list:
         for square in squares:
-            if prime + 2*square in odd_composites:
-                odd_composites.remove(prime + 2*square)
+            if prime + 2 * square in odd_composites:
+                odd_composites.remove(prime + 2 * square)
     return min(odd_composites)
 
 
@@ -1105,7 +1168,7 @@ def problem47(ct_unique_prime_factors=4):
     """
     li = []
 
-    for i in range(1,1000000):
+    for i in range(1, 1000000):
         factors = util.prime_factors(i)
         if len(set(factors)) == ct_unique_prime_factors and util.multiply_list(*factors) == i:
             li.extend([i])
@@ -1132,8 +1195,8 @@ def problem48():
     Find the last ten digits of the series, 1^1 + 2^2 + 3^3 + ... + 1000^1000.
     """
     val = 0
-    for ea in range(1,1001):
-        val+= ea**ea
+    for ea in range(1, 1001):
+        val += ea**ea
     return int(str(val)[-10:])
 
 
@@ -1149,10 +1212,16 @@ def problem49(digits=4, given_solution=(1487, 4817, 8147)):
     primes = util.prime_list(1000000)
     primes = [prime for prime in primes if len(str(prime)) == digits]
     for prime in primes:
-        b = prime+3330
-        c = prime+6660
-        if b in primes and c in primes and util.are_permutations(prime, b) and util.are_permutations(prime, c) and (prime, b, c) != given_solution:
-            return int(str(prime)+str(b)+str(c))
+        b = prime + 3330
+        c = prime + 6660
+        if (
+            b in primes
+            and c in primes
+            and util.are_permutations(prime, b)
+            and util.are_permutations(prime, c)
+            and (prime, b, c) != given_solution
+        ):
+            return int(str(prime) + str(b) + str(c))
     return None
 
 
@@ -1190,21 +1259,29 @@ def problem51(max_prime=1000000, prime_value_family_len=6):
     yielding the family: 56003, 56113, 56333, 56443, 56663, 56773, and 56993. Consequently 56003, being the first member of this family, is the smallest prime with this property.
     Find the smallest prime which, by replacing part of the number (not necessarily adjacent digits) with the same digit, is part of an eight prime value family.
     """
+
     def prime_list(prime, mask, primes):
         digits = list(str(prime))
-        new_numbers = [int("".join(str(replacement) if m else digit for digit, m in zip(digits, mask))) for replacement in range(1 if mask[0] else 0, 10)] # Generate all permuatations of this mask, replacing each True with 0-9.
-        return list({x for x in new_numbers if x in primes}) # Return only list of primes
+        new_numbers = [
+            int("".join(str(replacement) if m else digit for digit, m in zip(digits, mask)))
+            for replacement in range(1 if mask[0] else 0, 10)
+        ]  # Generate all permuatations of this mask, replacing each True with 0-9.
+        return list({x for x in new_numbers if x in primes})  # Return only list of primes
 
     primes = util.prime_list(max_prime)
     prime_set = set(primes)
 
     for prime in primes:
         digits = list(str(prime))
-        masks = list(product([True, False], repeat=len(digits))) #Generates a list of all possible masks with True for replace and False for keep.
-        for mask in masks: #Iterates through all possible masks
-            prime_new_numbers = prime_list(prime, mask, prime_set) #Generates a list of all possible prime numbers based on the given mask
-            if len(prime_new_numbers) >= prime_value_family_len: # If you hit the right length
-                return min(prime_new_numbers) # Return the smallest prime
+        masks = list(
+            product([True, False], repeat=len(digits))
+        )  # Generates a list of all possible masks with True for replace and False for keep.
+        for mask in masks:  # Iterates through all possible masks
+            prime_new_numbers = prime_list(
+                prime, mask, prime_set
+            )  # Generates a list of all possible prime numbers based on the given mask
+            if len(prime_new_numbers) >= prime_value_family_len:  # If you hit the right length
+                return min(prime_new_numbers)  # Return the smallest prime
     return None
 
 
@@ -1214,17 +1291,21 @@ def problem52():
     It can be seen that the number, 125874, and its double, 251748, contain exactly the same digits, but in a different order.
     Find the smallest positive integer, x, such that 2x, 3x, 4x, 5x, and 6x, contain the same digits.
     """
+
     def check_multiple(num, multiple):
         new_val = num * multiple
-        if len(str(new_val)) != len(str(num)): # Check same length
+        if len(str(new_val)) != len(str(num)):  # Check same length
             return False
-        return sorted(str(new_val)) == sorted(str(num)) # Check same digits
+        return sorted(str(new_val)) == sorted(str(num))  # Check same digits
 
     i = 0
     while True:
-        i+=1
-        if all(check_multiple(i, value) for value in range(2, 6)): # Check if all multiples meet criteria. 2-6 because 1 is not a multiple.
-            return i # Return the smallest multiple
+        i += 1
+        if all(
+            check_multiple(i, value) for value in range(2, 6)
+        ):  # Check if all multiples meet criteria. 2-6 because 1 is not a multiple.
+            return i  # Return the smallest multiple
+
 
 def problem53(max_n=100, combination_over=1000000):
     """Euler Problem 53: Combinatoric selections.
@@ -1239,10 +1320,10 @@ def problem53(max_n=100, combination_over=1000000):
     How many, not necessarily distinct, values of nCr for 1 ≤ n ≤ 100, are greater than one-million?
     """
     i = 0
-    for ea_n in range(1,max_n+1):
-        for ea_r in range(1,ea_n):
-            if util.binomial_coefficient(ea_n,ea_r) > combination_over:
-                i+=1
+    for ea_n in range(1, max_n + 1):
+        for ea_r in range(1, ea_n):
+            if util.binomial_coefficient(ea_n, ea_r) > combination_over:
+                i += 1
     return i
 
 
@@ -1270,14 +1351,41 @@ def problem54(text_file_path="p054_poker.txt"):
     cards and the last five are Player 2's cards. You can assume that all hands are valid (no invalid characters or repeated cards), each player's hand is in no specific order, and in each hand there is a clear winner.
     How many hands does Player 1 win?
     """
+
     class Hand:
         def __init__(self, cards):
-            self.card_value_dict = {"1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":11, "Q":12, "K":13, "A":14}
+            self.card_value_dict = {
+                "1": 1,
+                "2": 2,
+                "3": 3,
+                "4": 4,
+                "5": 5,
+                "6": 6,
+                "7": 7,
+                "8": 8,
+                "9": 9,
+                "T": 10,
+                "J": 11,
+                "Q": 12,
+                "K": 13,
+                "A": 14,
+            }
             self.card_suits = ["H", "D", "C", "S"]
             self.straight = "23456789TJQKA"
             self.royal_straight = "TJQKA"
-            self.hand_rank = {"Royal flush":1000, "Straight flush":900, "Four of a kind":800, "Full house":700, "Flush":600, "Straight":500, "Three of a kind":400, "Two pair":300, "Pair":200, "High card":1}
-            self.card_groupings = {"Flush":5, "Four of a kind":4, "Three of a kind":3, "Pair":2}
+            self.hand_rank = {
+                "Royal flush": 1000,
+                "Straight flush": 900,
+                "Four of a kind": 800,
+                "Full house": 700,
+                "Flush": 600,
+                "Straight": 500,
+                "Three of a kind": 400,
+                "Two pair": 300,
+                "Pair": 200,
+                "High card": 1,
+            }
+            self.card_groupings = {"Flush": 5, "Four of a kind": 4, "Three of a kind": 3, "Pair": 2}
 
             self.cards = cards
             self.card_values = []
@@ -1286,7 +1394,6 @@ def problem54(text_file_path="p054_poker.txt"):
             self._get_cards()
             self.result = self._evaluate_hand()
 
-
         def _get_cards(self):
             for ea in self.cards:
                 self.card_values.append(self.card_value_dict[ea[0]])
@@ -1294,7 +1401,9 @@ def problem54(text_file_path="p054_poker.txt"):
                 self.card_names.append(ea[0])
             self.card_values.sort(reverse=True)
             self.card_suits.sort()
-            self.card_names = "".join(sorted(util.convert_list_to_str(self.card_names), key= lambda x: self.card_value_dict[x]))
+            self.card_names = "".join(
+                sorted(util.convert_list_to_str(self.card_names), key=lambda x: self.card_value_dict[x])
+            )
 
         def _evaluate_hand(self):  # noqa: PLR0911
             most_common_card_ct = Counter(self.card_values).most_common(1)[0][1]
@@ -1305,24 +1414,30 @@ def problem54(text_file_path="p054_poker.txt"):
             royal_check = self.card_names == self.royal_straight
 
             if royal_check and flush_check:
-                return (self.hand_rank["Royal flush"])
+                return self.hand_rank["Royal flush"]
             if straight_check and flush_check:
-                return (self.hand_rank["Straight flush"]+most_common_card_value)
+                return self.hand_rank["Straight flush"] + most_common_card_value
             if most_common_card_ct == self.card_groupings["Four of a kind"]:
-                return (self.hand_rank["Four of a kind"]+most_common_card_value)
-            if most_common_card_ct == self.card_groupings["Three of a kind"] and second_common_card_ct == self.card_groupings["Pair"]:
-                return (self.hand_rank["Full house"]+most_common_card_value)
+                return self.hand_rank["Four of a kind"] + most_common_card_value
+            if (
+                most_common_card_ct == self.card_groupings["Three of a kind"]
+                and second_common_card_ct == self.card_groupings["Pair"]
+            ):
+                return self.hand_rank["Full house"] + most_common_card_value
             if flush_check:
-                return (self.hand_rank["Flush"])
+                return self.hand_rank["Flush"]
             if straight_check:
-                return (self.hand_rank["Straight"]+most_common_card_value)
+                return self.hand_rank["Straight"] + most_common_card_value
             if most_common_card_ct == self.card_groupings["Three of a kind"]:
-                return (self.hand_rank["Three of a kind"])
-            if most_common_card_ct == self.card_groupings["Pair"] and second_common_card_ct == self.card_groupings["Pair"]:
-                return (self.hand_rank["Two pair"])
+                return self.hand_rank["Three of a kind"]
+            if (
+                most_common_card_ct == self.card_groupings["Pair"]
+                and second_common_card_ct == self.card_groupings["Pair"]
+            ):
+                return self.hand_rank["Two pair"]
             if most_common_card_ct == self.card_groupings["Pair"]:
-                return (self.hand_rank["Pair"]+most_common_card_value)
-            return (max(self.card_values))
+                return self.hand_rank["Pair"] + most_common_card_value
+            return max(self.card_values)
 
         def __str__(self):
             return f"{self.cards}, {self.result}"
@@ -1344,9 +1459,10 @@ def problem54(text_file_path="p054_poker.txt"):
         if p1_hand.result > p2_hand.result:
             p1_wins += 1
         if p1_hand.result == p2_hand.result and tiebreaker(p1_hand, p2_hand):
-                p1_wins += 1
+            p1_wins += 1
 
     return p1_wins
+
 
 def problem55():
     """Euler Problem 55: Lychrel numbers.
@@ -1377,6 +1493,7 @@ def problem55():
             if n == n[::-1]:
                 return False
         return True
+
     lychrels = [lychrel for lychrel in range(10000) if check_lychrel(lychrel)]
     return len(lychrels)
 
@@ -1412,18 +1529,19 @@ def problem57(num=1000):
     The next three expansions are 99/70, 239/169, and 577/408, but the eighth expansion, 1393/985, is the first example where the number of digits in the numerator exceeds the number of digits in the denominator.
     In the first one-thousand expansions, how many fractions contain a numerator with more digits than the denominator?
     """
+
     def get_series_sqrt_2_series(num):
-        li = [(3,2)]
-        for i in range(1,num):
+        li = [(3, 2)]
+        for i in range(1, num):
             # each numerator = 2*previous demominator + previous numerator
             # each denominator = previous denominator + previous numerator
-            prev_num = li[i-1][0]
-            prev_denom = li[i-1][1]
-            li.append((prev_num+2*prev_denom, prev_denom+prev_num))
+            prev_num = li[i - 1][0]
+            prev_denom = li[i - 1][1]
+            li.append((prev_num + 2 * prev_denom, prev_denom + prev_num))
         return li
 
     li = get_series_sqrt_2_series(num)
-    return len ([x for x in li if len(str(x[0])) > len(str(x[1]))])
+    return len([x for x in li if len(str(x[0])) > len(str(x[1]))])
 
 
 def problem58(desired_ratio=0.1):
@@ -1447,12 +1565,12 @@ def problem58(desired_ratio=0.1):
     prime_ratio = 1
 
     while prime_ratio >= desired_ratio:
-        side_len += 2 #Sides grow by 2 each round
+        side_len += 2  # Sides grow by 2 each round
         for _ in range(4):
-            num += side_len - 1 #Each number is side length - 1 away
+            num += side_len - 1  # Each number is side length - 1 away
             if util.is_prime(num):
                 primes += 1
-        prime_ratio =  primes / (2*side_len - 1) #Ratio of primes to side length
+        prime_ratio = primes / (2 * side_len - 1)  # Ratio of primes to side length
     return side_len
 
 
@@ -1475,46 +1593,55 @@ def problem59():
     The first letter of the password, if any, is 'a'; the second is 'b' and the third is 'c'.
     Using p059_cipher.txt (right click and 'Save Link/Target As...'), a file containing the encrypted ASCII codes, and the knowledge that the plain text must contain common English words, decrypt the message and find the sum of the ASCII values in the original text.
     """
+
     def allowed_char(character):
-        return character in range(32, 123) #no idea what the range is, but at least this covers all upper & lower case with numbers.
+        return character in range(
+            32, 123
+        )  # no idea what the range is, but at least this covers all upper & lower case with numbers.
 
     def check_common_words(translated_text):
-        return bool(" the " in translated_text or " of " in translated_text or " and " in translated_text) # They said common words, so
+        return bool(
+            " the " in translated_text or " of " in translated_text or " and " in translated_text
+        )  # They said common words, so
 
-    ascii_lowercase = range(97,123)
+    ascii_lowercase = range(97, 123)
     text = [int(x) for x in util.import_data("data/0059_cipher.txt")[0]]
     possible_codes = {}
-    for a in ascii_lowercase: #Loop through the lowercase letters
-        for b in ascii_lowercase: #and again
-            for c in ascii_lowercase: #... and again.
-                lowercase_key = (chr(a) + chr(b) + chr(c))*len(text) # Generate the key, since it's "repeated cyclically throughout the message", we can just multiply by the length of the text.
+    for a in ascii_lowercase:  # Loop through the lowercase letters
+        for b in ascii_lowercase:  # and again
+            for c in ascii_lowercase:  # ... and again.
+                lowercase_key = (
+                    (chr(a) + chr(b) + chr(c)) * len(text)
+                )  # Generate the key, since it's "repeated cyclically throughout the message", we can just multiply by the length of the text.
                 decrypted = []
                 """Slower version (no loop breaks) can use list compression. Replaces the "for count, i in enumerate(text)" loop:
                 decrypted = [util.xor(y,ord(lowercase_key[x])) for x,y in enumerate(text) if allowed_char(util.xor(y,ord(lowercase_key[x])))]
                 """
-                for count, i in enumerate(text): #For each character in the text
-                    temp = util.xor(i,ord(lowercase_key[count])) # See if the character is allowed
+                for count, i in enumerate(text):  # For each character in the text
+                    temp = util.xor(i, ord(lowercase_key[count]))  # See if the character is allowed
                     if not allowed_char(temp):
-                        break #Speeds things up a bit
-                    decrypted.append(temp) #If it is, add it to the decrypted text
-                if len(decrypted) == len(text): #If the decrypted text is the same length as the text, it worked!
+                        break  # Speeds things up a bit
+                    decrypted.append(temp)  # If it is, add it to the decrypted text
+                if len(decrypted) == len(text):  # If the decrypted text is the same length as the text, it worked!
                     finaltext = "".join(chr(x) for x in decrypted)
-                    if not check_common_words(finaltext): #Check if it's got a common word
+                    if not check_common_words(finaltext):  # Check if it's got a common word
                         continue
                     total = sum(decrypted)
                     possible_codes[lowercase_key[:3]] = (total, finaltext)
-    return possible_codes # Need to check that there's only 1 possible key based on output.
+    return possible_codes  # Need to check that there's only 1 possible key based on output.
 
 
-def problem60(): #TODO(Kyle): #5
+def problem60():  # TODO(Kyle): #5
     """Euler Problem 60: Prime pair sets.
 
     The primes 3, 7, 109, and 673, are quite remarkable. By taking any two primes and concatenating them in any order the result will always be prime.
     For example, taking 7 and 109, both 7109 and 1097 are prime. The sum of these four primes, 792, represents the lowest sum for a set of four primes with this property.
     Find the lowest sum for a set of five primes for which any two primes concatenate to produce another prime.
     """
+
     def evaluate_set(combo):
         return all(util.is_prime(int(f"{p[0]}{p[1]}")) for p in list(permutations(combo, 2)))
+
     primes = util.prime_list(10000)
     for a in primes:
         print(a)
@@ -1537,7 +1664,7 @@ def problem60(): #TODO(Kyle): #5
     return None
 
 
-def problem61(): #TODO(Kyle): #6
+def problem61():  # TODO(Kyle): #6
     """Euler Problem 61: Cyclical figurate numbers.
 
     Triangle, square, pentagonal, hexagonal, heptagonal, and octagonal numbers are all figurate (polygonal) numbers and are generated by the following formulae:
@@ -1562,17 +1689,20 @@ def problem61(): #TODO(Kyle): #6
             i += 1
         return items
 
-    def cyclic(x,y):
+    def cyclic(x, y):
         return x[-2:] == y[:2]
 
-    groups = [generate_list(x, 10000) for x in [
-        util.get_triangle_number,
-        util.get_square_number,
-        util.get_pentagonal_number,
-        util.get_hexagonal_number,
-        util.get_heptagonal_number,
-        util.get_octagonal_number,
-    ]]
+    groups = [
+        generate_list(x, 10000)
+        for x in [
+            util.get_triangle_number,
+            util.get_square_number,
+            util.get_pentagonal_number,
+            util.get_hexagonal_number,
+            util.get_heptagonal_number,
+            util.get_octagonal_number,
+        ]
+    ]
 
     combos = list(permutations(range(6), 6))
     # Check at each level if it's a cyclic number or not to reduce the total checks.
@@ -1588,8 +1718,22 @@ def problem61(): #TODO(Kyle): #6
                                     for item_five in groups[li[4]]:
                                         if cyclic(item_four, item_five):
                                             for item_six in groups[li[5]]:
-                                                if cyclic(item_five, item_six) and cyclic(item_six, item_one): #and len({item_one, item_two, pen, hexagonal, hep, octagonal}) == 6:
-                                                        return sum([int(x) for x in [item_one, item_two, item_three, item_four, item_five, item_six]])
+                                                if (
+                                                    cyclic(item_five, item_six) and cyclic(item_six, item_one)
+                                                ):  # and len({item_one, item_two, pen, hexagonal, hep, octagonal}) == 6:
+                                                    return sum(
+                                                        [
+                                                            int(x)
+                                                            for x in [
+                                                                item_one,
+                                                                item_two,
+                                                                item_three,
+                                                                item_four,
+                                                                item_five,
+                                                                item_six,
+                                                            ]
+                                                        ]
+                                                    )
     return None
 
 
@@ -1599,8 +1743,9 @@ def problem62(num_cubes_needed=5):
     The cube, 41063625 (3453), can be permuted to produce two other cubes: 56623104 (3843) and 66624900 (4680).
     Find the smallest cube for which exactly five permutations of its digits are cube.
     """
+
     def generate_cube(n):
-        return n*n*n
+        return n * n * n
 
     di = {1: [1]}
     i = 1
@@ -1617,7 +1762,8 @@ def problem62(num_cubes_needed=5):
 def problem62_alt(num_cubes_needed=5):
     # Better performing version. Why store as a dict when a list will do?
     def generate_cube(n):
-        return n*n*n
+        return n * n * n
+
     li = [0]
     i = 1
     while True:
@@ -1636,6 +1782,7 @@ def problem63():
     The 5-digit number, 16807=7^5, is also a fifth power. Similarly, the 9-digit number, 134217728=8^9, is a ninth power.
     How many n-digit positive integers exist which are also an nth power?
     """
+
     def check_power(base, power):
         return len(util.convert_int_to_list(base**power)) == power
 
@@ -1643,10 +1790,11 @@ def problem63():
     for b in range(1, 100):
         for p in range(1, 100):
             if check_power(base=b, power=p):
-                tot+=1
+                tot += 1
     return tot
 
-def problem64(): #TODO(Kyle): #7 Complete
+
+def problem64():  # TODO(Kyle): #7 Complete
     """Euler Problem 64: Odd period square roots.
 
     All square roots are periodic when written as continued fractions and can be written in the form:
@@ -1679,11 +1827,11 @@ def problem64(): #TODO(Kyle): #7 Complete
     # Function Implementation
 
 
-def problem65(): #TODO(Kyle): #8 Complete
+def problem65():  # TODO(Kyle): #8 Complete
     return None
 
 
-def problem66(): #TODO(Kyle): #9 Complete
+def problem66():  # TODO(Kyle): #9 Complete
     return None
 
 
@@ -1695,4 +1843,4 @@ def problem67(filename="data/0067_triangle.csv"):
     Note: This is a much more difficult version of Problem 18. It is not possible to try every route to solve this problem, as there are 2^99 altogether!
     If you could check one trillion (10^12) routes every second it would take over twenty billion years to check them all. There is an efficient algorithm to solve it.
     """
-    return problem18(filename) # Already solved it in problem 18.
+    return problem18(filename)  # Already solved it in problem 18.
