@@ -1862,3 +1862,25 @@ def problem69(max_n=1000000):
     for n in range(1, max_n+1):
         di[n] = n/util.eulers_totient(n) # Calculate n/φ(n) and store in dictionary
     return max(di, key=di.get) # Return the key with the highest value
+
+
+def problem70(max_value=10000000):
+    """Euler Problem 70: Totient permutation.
+
+    Euler's Totient function, φ(n), is used to determine the number of numbers less than n which are relatively prime to n.
+    For example, as 1, 2, 4, 5, 7, and 8, are all less than nine and relatively prime to nine, φ(9)=6.
+    Surprisingly, φ(87109)=79180, and it can be seen that 87109 is a permutation of 79180.
+    Find the value of n, 1 < n < 10^7, for which φ(n) is a permutation of n and the ratio n/φ(n) produces a minimum.
+    """
+    di = {}
+    primes = util.prime_list(max_value//1000) # Generate a list of primes, up to max_value/1000 to ensure n=x*y is less than max_value.
+    #To maximize the ratio n/φ(n), n must be the product of two distinct primes. So we only check those.
+    for x in primes:
+        for y in [y for y in primes if x < y]: # Ensure distinct primes, and x < y to avoid double checking
+            n = x * y
+            if n > max_value: # If n is too large, skip
+                continue
+            t = (x - 1) * (y - 1) # Calculate φ(n)
+            if util.are_permutations(n, t): # Check if n and φ(n) are permutations
+                di[n] = n / t # Store n/φ(n) in dictionary
+    return min(di, key=di.get) # Return the key with the lowest value
