@@ -1696,3 +1696,31 @@ def problem67(filename="data/0067_triangle.csv"):
     If you could check one trillion (10^12) routes every second it would take over twenty billion years to check them all. There is an efficient algorithm to solve it.
     """
     return problem18(filename) # Already solved it in problem 18.
+
+
+def problem68(): #TODO(Kyle): #11 Complete
+    return None
+
+
+def problem69(max_n=1000000):
+    """Euler Problem 69: Totient maximum.
+
+    Euler's Totient function, φ(n) [sometimes called the phi function], is used to determine the number of numbers less than n which are relatively prime to n.
+    For example, as 1, 2, 4, 5, 7, and 8, are all less than nine and relatively prime to nine, φ(9)=6.
+    It can be seen that n=6 produces a maximum n/φ(n) for n ≤ 10.
+    Find the value of n ≤ 1000000 for which n/φ(n) is a maximum.
+    """
+    def eulers_totient(n):
+        """Calculate Euler's Totient function for a given integer n."""
+        if n == 0:
+            return 0
+        result = n
+        prime_factors = set(util.prime_factors(n))
+        for p in prime_factors: # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
+            result *= (1 - 1 / p)
+        return int(result)
+
+    di = {}
+    for n in range(1, max_n+1):
+        di[n] = n/eulers_totient(n) # Calculate n/φ(n) and store in dictionary
+    return max(di, key=di.get) # Return the key with the highest value
