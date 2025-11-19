@@ -448,12 +448,13 @@ def eulers_totient(n):
     return int(result)
 
 
-def reduce_fraction(numerator, denominator):
-    """Reduce a fraction to its simplest form."""
-    def gcd(a, b):
+def gcd(a, b):
         while b:
             a, b = b, a % b
         return a
 
+
+def reduce_fraction(numerator, denominator):
+    """Reduce a fraction to its simplest form."""
     common_divisor = gcd(numerator, denominator)
     return numerator // common_divisor, denominator // common_divisor
