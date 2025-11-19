@@ -1920,6 +1920,7 @@ def problem72(max_d=1000000):
         x+=util.eulers_totient(d) #Number of reduced proper fractions for denominator d is φ(d)
     return x
 
+
 def problem73(max_d=12000, lower_fraction=(1, 3), upper_fraction=(1, 2)):
     """Euler Problem 73: Counting fractions in a range.
 
