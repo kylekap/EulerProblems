@@ -458,3 +458,30 @@ def reduce_fraction(numerator, denominator):
     """Reduce a fraction to its simplest form."""
     common_divisor = gcd(numerator, denominator)
     return numerator // common_divisor, denominator // common_divisor
+
+
+def factorial_digits(n):
+    """Return the sum of the factorials of the digits of n."""
+    fact = {
+        1: 1,
+        2: 2,
+        3: 6,
+        4: 24,
+        5: 120,
+        6: 720,
+        7: 5040,
+        8: 40320,
+        9: 362880,
+        0: 1,
+        } #Precomputed factorials of digits 0-9
+    return sum(fact.get(int(digit)) for digit in str(n))
+
+def triangle_check(a, b, c):
+    """Check if a, b, and c form a Pythagorean triple."""
+    return a**2 + b**2 == c**2
+
+def euclids_formula(m,n):
+    a = m**2 - n**2 # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
+    b = 2*m*n # b = 2mn
+    c = m**2 + n**2 # c = m^2 + n^2
+    return a, b, c

@@ -954,18 +954,34 @@ def problem39():
     {a,b,c}, there are exactly three solutions for p = 120. {20,48,52}, {24,45,51}, {30,40,50}
     For which value of p ≤ 1000, is the number of solutions maximised?
     """
-
-    def triangle_check(a, b, c):
-        return a**2 + b**2 == c**2
-
     solutions = {}
 
     for a in range(1, 1000):
         for b in range(a, (1000 - a)):
             for c in range(b, (1000 - a - b)):
-                if triangle_check(a, b, c):
+                if util.triangle_check(a, b, c):
                     solutions[a + b + c] = solutions.get(a + b + c, 0) + 1
     return max(solutions, key=solutions.get)
+
+
+def problem39_alt(max_len_of_wire=1000):
+    """Euler Problem 39: Integer right triangles. Alternate solution.
+
+    I went and looked up the wiki for Euclids formula to make it more efficient.
+    """
+    di = {}
+    for m in range(2, int(max_len_of_wire**0.5) + 1): # Pythagorean triples
+        for n in range(1, m):
+            if (m - n) % 2 == 0 or util.gcd(m, n) != 1: # For primitive pythagorean triples, one of the two is even, and they are coprime
+                continue
+            # Pythagorean triples, from Euclids formula
+            a, b, c = util.euclids_formula(m, n)
+            perimeter = a + b + c # a + b + c = perimeter
+            k = 1
+            while k * perimeter <= max_len_of_wire: # Generate multiples of the primitive triple
+                di[k * perimeter] = di.get(k * perimeter, 0) + 1
+                k += 1
+    return max(di, key=di.get)
 
 
 def problem40():
@@ -1940,3 +1956,89 @@ def problem73(max_d=12000, lower_fraction=(1, 3), upper_fraction=(1, 2)):
                     continue
                 li.append((n/d, util.reduce_fraction(n, d)))
     return len(li)
+
+def problem74(max_starting_val=1000000, chain_length=60):
+    """Euler Problem 74: Digit factorial chains.
+
+    The number 145 is well known for the property that the sum of the factorial of its digits is equal to 145:
+    1! + 4! + 5! = 1 + 24 + 120 = 145
+    Perhaps less well known is 169, in that it produces the longest chain of numbers that link back to 169 itself:
+    169 → 363601 → 1454 → 169
+    It is not difficult to prove that EVERY starting number will eventually get stuck in a loop. For example,
+    69 → 363600 → 1454 → 169 → 363601 (→ 1454)
+    78 → 45360 → 871 → 45361 → 871
+    540 → 145 (→ 145)
+    Starting with 69 produces a chain of five non-repeating terms, but the longest non-repeating chain with a starting number below one million is sixty terms.
+    How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
+    """
+    def find_chain_length(x):
+        loop_val = x
+        chain = [x]
+        while True:
+            fd = util.factorial_digits(loop_val)
+            if fd in chain:
+                break
+            chain.append(fd)
+            loop_val = fd
+        return len(chain)
+
+    di = {}
+    for loop_val in range(1, max_starting_val):
+        chain_len = find_chain_length(loop_val)
+        di[chain_len] = di.get(chain_len, 0) + 1
+    return di.get(chain_length, 0)
+
+
+def problem74_alt(max_starting_val=1000000, chain_length=60):
+    """Alternate solution to problem 74.
+
+    Slightly faster. I saw someone mention a 'fingerprint', and it reminded me that the order of digits doesn't matter for factorial digit sums.
+    So we can cache the factorial digit sums based on the sorted string of digits, rather than recalculating each permutation every time.
+    """
+    di = {} # Cache for factorial digit sums
+    total = 0
+    for ea in range(1, max_starting_val):
+        loop_val = ea
+        chain = [ea]
+        while True:
+            str_fd = "".join(sorted(str(loop_val))) # The order of the digits doesn't matter, so why bother recalculating each permutation?
+            if str_fd not in di:
+                di[str_fd] = util.factorial_digits(loop_val) # Calculate and store if not already done
+            fd = di[str_fd]
+            if fd in chain:
+                break
+            chain.append(fd)
+            loop_val = fd
+        if chain_length == len(chain):
+            total+=1
+    return total
+
+
+def problem75(max_len_of_wire=1500000):
+    """Euler Problem 75: Singlular integer right triangles.
+
+    It turns out that 12 cm is the smallest length of wire that can be bent to form an integer sided right triangle in exactly one way, but there are many more examples.
+    12 cm: (3,4,5)
+    24 cm: (6,8,10)
+    30 cm: (5,12,13)
+    36 cm: (9,12,15)
+    40 cm: (8,15,17)
+    48 cm: (12,16,20)
+
+    In contrast, some lengths of wire, like 20 cm, cannot be bent to form an integer sided right triangle, and other lengths allow more than one solution to be found; for example, using 120 cm it is possible to form exactly three different integer sided right triangles.
+    120 cm: (30,40,50), (20,48,52), (24,45,51)
+    Given that L is the length of the wire, for how many values of L ≤ 1500000 can exactly one integer sided right triangle be formed?
+    """
+    di = {}
+    for m in range(2, int(max_len_of_wire**0.5) + 1): # Pythagorean triples
+        for n in range(1, m):
+            if (m - n) % 2 == 0 or util.gcd(m, n) != 1: # For primitive pythagorean triples, one of the two is even, and they are coprime
+                continue
+            # Pythagorean triples, from Euclids formula
+            a, b, c = util.euclids_formula(m, n)
+            perimeter = a + b + c # a + b + c = perimeter
+            k = 1
+            while k * perimeter <= max_len_of_wire: # Generate multiples of the primitive triple
+                di[k * perimeter] = di.get(k * perimeter, 0) + 1
+                k += 1
+    return sum(1 for x in di.values() if x == 1)
