@@ -2042,3 +2042,26 @@ def problem75(max_len_of_wire=1500000):
                 di[k * perimeter] = di.get(k * perimeter, 0) + 1
                 k += 1
     return sum(1 for x in di.values() if x == 1)
+
+
+def problem76(target=100):
+    """Euler Problem 76: Counting summations.
+
+    It is possible to write five as a sum in exactly six different ways:
+
+    4 + 1
+    3 + 2
+    3 + 1 + 1
+    2 + 2 + 1
+    2 + 1 + 1 + 1
+    1 + 1 + 1 + 1 + 1
+
+    How many different ways can one hundred be written as a sum of at least two positive integers?
+    """
+    #This is basically the same as the coin problem, except with all numbers.
+    ways = [0] * (target + 1)  # Create list to hold number of ways to make each amount
+    ways[0] = 1  # There is 1 way to make 0 amount
+    for val in range(1, target): # For each value, update the ways to make each amount
+        for amount in range(val, target + 1):  # For each amount that can be made with this value
+            ways[amount] += ways[amount - val]
+    return ways[-1]
