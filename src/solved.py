@@ -2065,3 +2065,55 @@ def problem76(target=100):
         for amount in range(val, target + 1):  # For each amount that can be made with this value
             ways[amount] += ways[amount - val]
     return ways[-1]
+
+
+def problem77(ways_target=5000):
+    """Euler Problem 77: Prime summations.
+
+    It is possible to write ten as the sum of primes in exactly five different ways:
+
+    7 + 3
+    5 + 5
+    5 + 3 + 2
+    3 + 3 + 2 + 2
+    2 + 2 + 2 + 2 + 2
+
+    What is the first value which can be written as the sum of primes in over five thousand ways?
+    """
+    # This is basically the same as the coin problem, except with primes. I limited it to 2x the amount of ways, since it expands so quickly.
+    primes = util.prime_list(ways_target)  # Get list of primes
+    ways = [0] * (ways_target + 1)  # Create list to hold number of ways to make each amount
+    ways[0] = 1  # There is 1 way to make 0 amount
+
+    for prime in primes:
+        for amount in range(prime, len(ways)):
+            ways[amount] += ways[amount - prime]
+
+    return min([x for x in range(len(ways)) if ways[x] > ways_target]) # Get the first amount with more than 5000 ways
+
+
+def problem78(modulus_to_check=1000000): #TODO(Kyle): #13 Refactor
+    """Euler Problem 78: Prime summations (again).
+
+    Let p(n) represent the number of different ways in which n coins can be separated into piles. For example, five coins can be separated into piles in exactly seven different ways, so p(5)=7.
+    Find the least value of n for which p(n) is divisible by one million.
+    """
+    def generate_euler_pentagonal(k, s):
+        return k*(3*k + s)//2
+
+    def summation(p, n, pent):
+        summ = 0
+        for k, v in enumerate(pent):
+            if v <= n:
+                summ += p[n-v] * (1-(k&2))
+            else:
+                break
+        return summ
+
+    pent = [generate_euler_pentagonal(k,s) for k in range(1,202) for s in(-1,1)]
+    p = [1]
+    for n in range(1,60001):
+        p.append(summation(p, n, pent))
+        if p[n] % modulus_to_check == 0:
+            return n
+    return None
