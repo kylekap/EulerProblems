@@ -1,6 +1,9 @@
 import csv
 from pathlib import Path
 
+uppercase_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+lowercase_letters = uppercase_letters.lower()
+digits = "0123456789"
 
 def is_prime(n):
     """Return True if n is prime. False otherwise.
@@ -476,9 +479,11 @@ def factorial_digits(n):
         } #Precomputed factorials of digits 0-9
     return sum(fact.get(int(digit)) for digit in str(n))
 
+
 def triangle_check(a, b, c):
     """Check if a, b, and c form a Pythagorean triple."""
     return a**2 + b**2 == c**2
+
 
 def euclids_formula(m,n):
     a = m**2 - n**2 # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
