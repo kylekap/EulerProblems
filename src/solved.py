@@ -482,7 +482,7 @@ def problem22():
 
     def letter_scoring():
         letter_scores = {}
-        letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        letters = util.uppercase_letters
         for ea in range(len(letters)):
             letter_scores[letters[ea]] = ea + 1
         return letter_scores
@@ -2116,4 +2116,28 @@ def problem78(modulus_to_check=1000000): #TODO(Kyle): #13 Refactor
         p.append(summation(p, n, pent))
         if p[n] % modulus_to_check == 0:
             return n
+    return None
+
+def problem79(filename="data/0079_keylog.txt"):
+    """Euler Problem 79: Passcode derivation.
+
+    A common security method used for online banking is to ask the user for three random characters from a passcode.
+    For example, if the passcode was 531278, they may ask for the 2nd, 3rd, and 5th characters; the expected reply would be: 317.
+    The text file, keylog.txt, contains fifty successful login attempts.
+    Given that the three characters are always asked for in order, analyse the file so as to determine the shortest possible secret passcode of unknown length.
+    """
+    data = util.import_text_file(filename)
+    digits = {x for y in data for x in y if x in util.digits}
+    perms = list(permutations(digits))
+
+    for possible_passcode in perms:
+        pp = "".join(possible_passcode)
+        x = 0
+        for code in data:
+            if pp.index(code[0]) < pp.index(code[1]) <pp.index(code[2]):
+                x+=1
+            else:
+                break
+        if x == len(data):
+            return pp
     return None
