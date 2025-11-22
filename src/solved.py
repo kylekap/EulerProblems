@@ -1,4 +1,5 @@
 import csv
+import fnmatch
 from collections import Counter
 from itertools import combinations, combinations_with_replacement, permutations, product
 from pathlib import Path
@@ -2118,6 +2119,7 @@ def problem78(modulus_to_check=1000000): #TODO(Kyle): #13 Refactor
             return n
     return None
 
+
 def problem79(filename="data/0079_keylog.txt"):
     """Euler Problem 79: Passcode derivation.
 
@@ -2126,6 +2128,19 @@ def problem79(filename="data/0079_keylog.txt"):
     The text file, keylog.txt, contains fifty successful login attempts.
     Given that the three characters are always asked for in order, analyse the file so as to determine the shortest possible secret passcode of unknown length.
     """
+    def check_match(x, y):
+        fnmatch.fnmatch(x, f"""*{"*".join(list(y))}*""") #Returns true if y is a substring of x, uses wildcards.
+
+    data = [x.strip() for x in util.import_text_file(filename)] #I hate whitespace
+
+    for pp in list(permutations({x for y in data for x in y if x in util.digits})): #Get all possible passcodes
+        possible_password = "".join(pp)
+        if sum([1 for key in data if check_match(possible_password, key)]) == len(data): #Check if the passcode is valid by checking each key is a wildcard match.
+            return possible_password
+    return None
+
+
+def problem79_alt(filename="data/0079_keylog.txt"):
     data = util.import_text_file(filename)
     digits = {x for y in data for x in y if x in util.digits}
     perms = list(permutations(digits))
