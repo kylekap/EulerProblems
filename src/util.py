@@ -5,6 +5,7 @@ uppercase_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 lowercase_letters = uppercase_letters.lower()
 digits = "0123456789"
 
+
 def is_prime(n):
     """Return True if n is prime. False otherwise.
 
@@ -446,15 +447,15 @@ def eulers_totient(n):
     if n == 0:
         return 0
     result = n
-    for p in set(prime_factors(n)): # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
-        result *= (1 - 1 / p)
+    for p in set(prime_factors(n)):  # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
+        result *= 1 - 1 / p
     return int(result)
 
 
 def gcd(a, b):
-        while b:
-            a, b = b, a % b
-        return a
+    while b:
+        a, b = b, a % b
+    return a
 
 
 def reduce_fraction(numerator, denominator):
@@ -476,7 +477,7 @@ def factorial_digits(n):
         8: 40320,
         9: 362880,
         0: 1,
-        } #Precomputed factorials of digits 0-9
+    }  # Precomputed factorials of digits 0-9
     return sum(fact.get(int(digit)) for digit in str(n))
 
 
@@ -485,8 +486,8 @@ def triangle_check(a, b, c):
     return a**2 + b**2 == c**2
 
 
-def euclids_formula(m,n):
-    a = m**2 - n**2 # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
-    b = 2*m*n # b = 2mn
-    c = m**2 + n**2 # c = m^2 + n^2
+def euclids_formula(m, n):
+    a = m**2 - n**2  # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
+    b = 2 * m * n  # b = 2mn
+    c = m**2 + n**2  # c = m^2 + n^2
     return a, b, c
