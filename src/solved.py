@@ -2156,3 +2156,44 @@ def problem79_alt(filename="data/0079_keylog.txt"):
         if x == len(data):
             return pp
     return None
+
+
+def problem92(max_num=10000000, desired_final_total=89):
+    def check_final_total(x):
+        curr = x
+        while curr not in [1, 89]:
+            curr = util.sum_digits(curr)
+        return curr
+    di = {}
+    for ea in range(1, max_num):
+        val = util.sum_digits(ea)
+        if val in di:
+            di[val] += 1
+        else:
+            di[val] = 1
+
+    cum_tot = 0
+    for key, value in di.items():
+        if check_final_total(key) == desired_final_total:
+            cum_tot+=value
+    return cum_tot
+
+
+def problem92_alt(max_num=10000000, desired_final_total=89):
+    def get_totals_final_amount(max_num):
+        li = [0]*81*len(util.convert_int_to_list(max_num))
+        for ea in range(1, len(li)):
+            if check_final_total(ea) == desired_final_total:
+                li.append(ea)
+        return set(li)
+    def check_final_total(x):
+        curr = x
+        while curr not in [1, 89]:
+            curr = util.sum_digits(curr)
+        return curr
+    sums = get_totals_final_amount(max_num)
+    ct = 0
+    for ea in range(1, max_num):
+        if util.sum_digits(ea) in sums:
+            ct+=1
+    return ct
