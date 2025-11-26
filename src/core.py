@@ -10,20 +10,7 @@ logger = logging.getLogger(__name__)  # put this in each file
 
 
 def active_problem():
-    ok_set = {89}
-    not_ok_set = {1}
-    running_list = []
-    for i in range(1, 100000):
-        curr = i
-        running_list = [i]
-        while curr not in ok_set and curr not in not_ok_set:
-            curr = sum([ea**2 for ea in util.convert_int_to_list(curr)])
-            running_list.append(curr)
-        if curr in ok_set:
-            ok_set = ok_set.union(set(running_list))
-        else:
-            not_ok_set = not_ok_set.union(set(running_list))
-    return len(ok_set)
+    return None
 
 
 def main():
