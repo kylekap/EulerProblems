@@ -189,6 +189,15 @@ def count_of_digits(val):
     return a
 
 
+def count_of_digits_alt(val):
+    """Return a count of the digits of the given integer."""
+    return len(str(val))
+
+
+def sum_digits(val):
+    return sum([ea**2 for ea in convert_int_to_list(val)])
+
+
 def unique_list(li):
     """Return a unique list.
 
