@@ -2157,6 +2157,52 @@ def problem79_alt(filename="data/0079_keylog.txt"):
             return pp
     return None
 
+def problem80():
+    return None
+
+
+def problem81():
+    return None
+
+
+def problem82():
+    return None
+
+
+def problem83():
+    return None
+
+
+def problem84():
+    return None
+
+
+def problem85():
+    return None
+
+
+def problem86():
+    return None
+
+
+def problem87():
+    return None
+
+
+def problem88():
+    return None
+
+
+def problem89():
+    return None
+
+
+def problem90():
+    return None
+
+
+def problem91():
+    return None
 
 def problem92(max_num=10000000, desired_final_total=89):
     def check_final_total(x):
@@ -2197,3 +2243,40 @@ def problem92_alt(max_num=10000000, desired_final_total=89):
         if util.sum_digits(ea) in sums:
             ct+=1
     return ct
+
+
+def problem93():
+    return None
+
+
+def problem94():
+    return None
+
+
+def problem95():
+    return None
+
+
+def problem96():
+    return None
+
+
+def problem97():
+    """Euler Problem 97: Large non-Mersenne prime.
+
+    The first known prime found to exceed one million digits was discovered in 1999, and is a Mersenne prime of the form 2^6972593 - 1; it contains exactly 2,098,960 digits. Subsequently other Mersenne primes, of the form 2^p - 1, have been found which contain more digits.
+    However, in 2004 there was found a massive non-Mersenne prime which contains 2,357,207 digits: 28433 * 2^7830457 + 1.
+    Find the last ten digits of this prime number.
+    """
+    x = (28433)*(2**7830457)+1
+    return str(x % 10**10)
+
+def problem98():
+    return None
+
+
+def problem99():
+    return None
+
+def problem100():
+    return None
