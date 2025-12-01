@@ -728,7 +728,8 @@ def problem30(power=5):
     li = []
 
     for val in range(
-        9, (1 + power) * (9**power),
+        9,
+        (1 + power) * (9**power),
     ):  # Upper limit based on 9^power in every digit, and number of digits being power+1
         sum_digits_powers(val, 5)
         if sum_digits_powers(val, 5) == val:
@@ -971,15 +972,17 @@ def problem39_alt(max_len_of_wire=1000):
     I went and looked up the wiki for Euclids formula to make it more efficient.
     """
     di = {}
-    for m in range(2, int(max_len_of_wire**0.5) + 1): # Pythagorean triples
+    for m in range(2, int(max_len_of_wire**0.5) + 1):  # Pythagorean triples
         for n in range(1, m):
-            if (m - n) % 2 == 0 or util.gcd(m, n) != 1: # For primitive pythagorean triples, one of the two is even, and they are coprime
+            if (m - n) % 2 == 0 or util.gcd(
+                m, n
+            ) != 1:  # For primitive pythagorean triples, one of the two is even, and they are coprime
                 continue
             # Pythagorean triples, from Euclids formula
             a, b, c = util.euclids_formula(m, n)
-            perimeter = a + b + c # a + b + c = perimeter
+            perimeter = a + b + c  # a + b + c = perimeter
             k = 1
-            while k * perimeter <= max_len_of_wire: # Generate multiples of the primitive triple
+            while k * perimeter <= max_len_of_wire:  # Generate multiples of the primitive triple
                 di[k * perimeter] = di.get(k * perimeter, 0) + 1
                 k += 1
     return max(di, key=di.get)
@@ -1295,7 +1298,9 @@ def problem51(max_prime=1000000, prime_value_family_len=6):
         )  # Generates a list of all possible masks with True for replace and False for keep.
         for mask in masks:  # Iterates through all possible masks
             prime_new_numbers = prime_list(
-                prime, mask, prime_set,
+                prime,
+                mask,
+                prime_set,
             )  # Generates a list of all possible prime numbers based on the given mask
             if len(prime_new_numbers) >= prime_value_family_len:  # If you hit the right length
                 return min(prime_new_numbers)  # Return the smallest prime
@@ -1613,7 +1618,8 @@ def problem59():
 
     def allowed_char(character):
         return character in range(
-            32, 123,
+            32,
+            123,
         )  # no idea what the range is, but at least this covers all upper & lower case with numbers.
 
     def check_common_words(translated_text):
@@ -1863,7 +1869,7 @@ def problem67(filename="data/0067_triangle.csv"):
     return problem18(filename)  # Already solved it in problem 18.
 
 
-def problem68(): #TODO(Kyle): #11 Complete
+def problem68():  # TODO(Kyle): #11 Complete
     return None
 
 
@@ -1876,9 +1882,9 @@ def problem69(max_n=1000000):
     Find the value of n ≤ 1000000 for which n/φ(n) is a maximum.
     """
     di = {}
-    for n in range(1, max_n+1):
-        di[n] = n/util.eulers_totient(n) # Calculate n/φ(n) and store in dictionary
-    return max(di, key=di.get) # Return the key with the highest value
+    for n in range(1, max_n + 1):
+        di[n] = n / util.eulers_totient(n)  # Calculate n/φ(n) and store in dictionary
+    return max(di, key=di.get)  # Return the key with the highest value
 
 
 def problem70(max_value=10000000):
@@ -1890,20 +1896,24 @@ def problem70(max_value=10000000):
     Find the value of n, 1 < n < 10^7, for which φ(n) is a permutation of n and the ratio n/φ(n) produces a minimum.
     """
     di = {}
-    primes = util.prime_list(max_value//1000) # Generate a list of primes, up to max_value/1000 to ensure n=x*y is less than max_value.
-    #To maximize the ratio n/φ(n), n must be the product of two distinct primes. So we only check those.
+    primes = util.prime_list(
+        max_value // 1000
+    )  # Generate a list of primes, up to max_value/1000 to ensure n=x*y is less than max_value.
+    # To maximize the ratio n/φ(n), n must be the product of two distinct primes. So we only check those.
     for x in primes:
-        for y in [y for y in primes if x < y]: # Ensure distinct primes, and x < y to avoid double checking
+        for y in [y for y in primes if x < y]:  # Ensure distinct primes, and x < y to avoid double checking
             n = x * y
-            if n > max_value: # If n is too large, skip
+            if n > max_value:  # If n is too large, skip
                 continue
-            t = (x - 1) * (y - 1) # Calculate φ(n)
-            if util.are_permutations(n, t): # Check if n and φ(n) are permutations
-                di[n] = n / t # Store n/φ(n) in dictionary
-    return min(di, key=di.get) # Return the key with the lowest value
+            t = (x - 1) * (y - 1)  # Calculate φ(n)
+            if util.are_permutations(n, t):  # Check if n and φ(n) are permutations
+                di[n] = n / t  # Store n/φ(n) in dictionary
+    return min(di, key=di.get)  # Return the key with the lowest value
 
 
-def problem71(max_d=1000000, target_fraction=(3, 7)): #TODO(Kyle): #12 Should be able to do this without the for loop on n?
+def problem71(
+    max_d=1000000, target_fraction=(3, 7)
+):  # TODO(Kyle): #12 Should be able to do this without the for loop on n?
     """Euler Problem 71: Ordered fractions.
 
     Consider the fraction, n/d, where n and d are positive integers. If n<d and HCF(n,d)=1, it is called a reduced proper fraction.
@@ -1912,13 +1922,13 @@ def problem71(max_d=1000000, target_fraction=(3, 7)): #TODO(Kyle): #12 Should be
     It can be seen that 2/5 is the fraction immediately to the left of 3/7.
     By listing the set of reduced proper fractions for d ≤ 1,000,000 in ascending order of size, find the numerator of the fraction immediately to the left of 3/7.
     """
-    left_fraction = ((target_fraction[0]-1)/(target_fraction[1]+1), target_fraction)
-    for d in range(1, max_d + 1): # Go through all denominators
-        max_n = int(target_fraction[0]*d/target_fraction[1]) # Largest n where n/d < 3/7
-        min_n = int(left_fraction[0]*d) # Smallest n where n/d >= 2/5
-        for n in reversed(range(min_n, max_n)): #use the biggest, since it'll be closest to 3/7
-            if left_fraction[0]<(n/d): # If n/d is closer to target_fraction than left_fraction
-                left_fraction = (n/d, util.reduce_fraction(n, d)) # Use it
+    left_fraction = ((target_fraction[0] - 1) / (target_fraction[1] + 1), target_fraction)
+    for d in range(1, max_d + 1):  # Go through all denominators
+        max_n = int(target_fraction[0] * d / target_fraction[1])  # Largest n where n/d < 3/7
+        min_n = int(left_fraction[0] * d)  # Smallest n where n/d >= 2/5
+        for n in reversed(range(min_n, max_n)):  # use the biggest, since it'll be closest to 3/7
+            if left_fraction[0] < (n / d):  # If n/d is closer to target_fraction than left_fraction
+                left_fraction = (n / d, util.reduce_fraction(n, d))  # Use it
             continue
     return left_fraction[1]
 
@@ -1933,8 +1943,8 @@ def problem72(max_d=1000000):
     How many elements would be contained in the set of all reduced proper fractions for d ≤ 1,000,000?
     """
     x = 0
-    for d in range(2,max_d+1): #Go through all denominators
-        x+=util.eulers_totient(d) #Number of reduced proper fractions for denominator d is φ(d)
+    for d in range(2, max_d + 1):  # Go through all denominators
+        x += util.eulers_totient(d)  # Number of reduced proper fractions for denominator d is φ(d)
     return x
 
 
@@ -1948,15 +1958,16 @@ def problem73(max_d=12000, lower_fraction=(1, 3), upper_fraction=(1, 2)):
     How many fractions lie between 1/3 and 1/2 for d ≤ 12000?
     """
     li = []
-    for d in range(1, max_d + 1): # Go through all denominators
-        max_n = int(upper_fraction[0]*d/upper_fraction[1])+1
-        min_n = int(lower_fraction[0]*d/lower_fraction[1])
+    for d in range(1, max_d + 1):  # Go through all denominators
+        max_n = int(upper_fraction[0] * d / upper_fraction[1]) + 1
+        min_n = int(lower_fraction[0] * d / lower_fraction[1])
         for n in range(min_n, max_n):
-            if n/d > lower_fraction[0]/lower_fraction[1] and n/d < upper_fraction[0]/upper_fraction[1]:
+            if n / d > lower_fraction[0] / lower_fraction[1] and n / d < upper_fraction[0] / upper_fraction[1]:
                 if util.reduce_fraction(n, d) != (n, d):
                     continue
-                li.append((n/d, util.reduce_fraction(n, d)))
+                li.append((n / d, util.reduce_fraction(n, d)))
     return len(li)
+
 
 def problem74(max_starting_val=1000000, chain_length=60):
     """Euler Problem 74: Digit factorial chains.
@@ -1972,6 +1983,7 @@ def problem74(max_starting_val=1000000, chain_length=60):
     Starting with 69 produces a chain of five non-repeating terms, but the longest non-repeating chain with a starting number below one million is sixty terms.
     How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
     """
+
     def find_chain_length(x):
         loop_val = x
         chain = [x]
@@ -1996,22 +2008,24 @@ def problem74_alt(max_starting_val=1000000, chain_length=60):
     Slightly faster. I saw someone mention a 'fingerprint', and it reminded me that the order of digits doesn't matter for factorial digit sums.
     So we can cache the factorial digit sums based on the sorted string of digits, rather than recalculating each permutation every time.
     """
-    di = {} # Cache for factorial digit sums
+    di = {}  # Cache for factorial digit sums
     total = 0
     for ea in range(1, max_starting_val):
         loop_val = ea
         chain = [ea]
         while True:
-            str_fd = "".join(sorted(str(loop_val))) # The order of the digits doesn't matter, so why bother recalculating each permutation?
+            str_fd = "".join(
+                sorted(str(loop_val))
+            )  # The order of the digits doesn't matter, so why bother recalculating each permutation?
             if str_fd not in di:
-                di[str_fd] = util.factorial_digits(loop_val) # Calculate and store if not already done
+                di[str_fd] = util.factorial_digits(loop_val)  # Calculate and store if not already done
             fd = di[str_fd]
             if fd in chain:
                 break
             chain.append(fd)
             loop_val = fd
         if chain_length == len(chain):
-            total+=1
+            total += 1
     return total
 
 
@@ -2031,15 +2045,17 @@ def problem75(max_len_of_wire=1500000):
     Given that L is the length of the wire, for how many values of L ≤ 1500000 can exactly one integer sided right triangle be formed?
     """
     di = {}
-    for m in range(2, int(max_len_of_wire**0.5) + 1): # Pythagorean triples
+    for m in range(2, int(max_len_of_wire**0.5) + 1):  # Pythagorean triples
         for n in range(1, m):
-            if (m - n) % 2 == 0 or util.gcd(m, n) != 1: # For primitive pythagorean triples, one of the two is even, and they are coprime
+            if (m - n) % 2 == 0 or util.gcd(
+                m, n
+            ) != 1:  # For primitive pythagorean triples, one of the two is even, and they are coprime
                 continue
             # Pythagorean triples, from Euclids formula
             a, b, c = util.euclids_formula(m, n)
-            perimeter = a + b + c # a + b + c = perimeter
+            perimeter = a + b + c  # a + b + c = perimeter
             k = 1
-            while k * perimeter <= max_len_of_wire: # Generate multiples of the primitive triple
+            while k * perimeter <= max_len_of_wire:  # Generate multiples of the primitive triple
                 di[k * perimeter] = di.get(k * perimeter, 0) + 1
                 k += 1
     return sum(1 for x in di.values() if x == 1)
@@ -2059,10 +2075,10 @@ def problem76(target=100):
 
     How many different ways can one hundred be written as a sum of at least two positive integers?
     """
-    #This is basically the same as the coin problem, except with all numbers.
+    # This is basically the same as the coin problem, except with all numbers.
     ways = [0] * (target + 1)  # Create list to hold number of ways to make each amount
     ways[0] = 1  # There is 1 way to make 0 amount
-    for val in range(1, target): # For each value, update the ways to make each amount
+    for val in range(1, target):  # For each value, update the ways to make each amount
         for amount in range(val, target + 1):  # For each amount that can be made with this value
             ways[amount] += ways[amount - val]
     return ways[-1]
@@ -2090,30 +2106,31 @@ def problem77(ways_target=5000):
         for amount in range(prime, len(ways)):
             ways[amount] += ways[amount - prime]
 
-    return min([x for x in range(len(ways)) if ways[x] > ways_target]) # Get the first amount with more than 5000 ways
+    return min([x for x in range(len(ways)) if ways[x] > ways_target])  # Get the first amount with more than 5000 ways
 
 
-def problem78(modulus_to_check=1000000): #TODO(Kyle): #13 Refactor
+def problem78(modulus_to_check=1000000):  # TODO(Kyle): #13 Refactor
     """Euler Problem 78: Prime summations (again).
 
     Let p(n) represent the number of different ways in which n coins can be separated into piles. For example, five coins can be separated into piles in exactly seven different ways, so p(5)=7.
     Find the least value of n for which p(n) is divisible by one million.
     """
+
     def generate_euler_pentagonal(k, s):
-        return k*(3*k + s)//2
+        return k * (3 * k + s) // 2
 
     def summation(p, n, pent):
         summ = 0
         for k, v in enumerate(pent):
             if v <= n:
-                summ += p[n-v] * (1-(k&2))
+                summ += p[n - v] * (1 - (k & 2))
             else:
                 break
         return summ
 
-    pent = [generate_euler_pentagonal(k,s) for k in range(1,202) for s in(-1,1)]
+    pent = [generate_euler_pentagonal(k, s) for k in range(1, 202) for s in (-1, 1)]
     p = [1]
-    for n in range(1,60001):
+    for n in range(1, 60001):
         p.append(summation(p, n, pent))
         if p[n] % modulus_to_check == 0:
             return n
@@ -2128,14 +2145,17 @@ def problem79(filename="data/0079_keylog.txt"):
     The text file, keylog.txt, contains fifty successful login attempts.
     Given that the three characters are always asked for in order, analyse the file so as to determine the shortest possible secret passcode of unknown length.
     """
+
     def check_match(x, y):
-        fnmatch.fnmatch(x, f"""*{"*".join(list(y))}*""") #Returns true if y is a substring of x, uses wildcards.
+        fnmatch.fnmatch(x, f"""*{"*".join(list(y))}*""")  # Returns true if y is a substring of x, uses wildcards.
 
-    data = [x.strip() for x in util.import_text_file(filename)] #I hate whitespace
+    data = [x.strip() for x in util.import_text_file(filename)]  # I hate whitespace
 
-    for pp in list(permutations({x for y in data for x in y if x in util.digits})): #Get all possible passcodes
+    for pp in list(permutations({x for y in data for x in y if x in util.digits})):  # Get all possible passcodes
         possible_password = "".join(pp)
-        if sum([1 for key in data if check_match(possible_password, key)]) == len(data): #Check if the passcode is valid by checking each key is a wildcard match.
+        if sum([1 for key in data if check_match(possible_password, key)]) == len(
+            data
+        ):  # Check if the passcode is valid by checking each key is a wildcard match.
             return possible_password
     return None
 
@@ -2149,13 +2169,14 @@ def problem79_alt(filename="data/0079_keylog.txt"):
         pp = "".join(possible_passcode)
         x = 0
         for code in data:
-            if pp.index(code[0]) < pp.index(code[1]) <pp.index(code[2]):
-                x+=1
+            if pp.index(code[0]) < pp.index(code[1]) < pp.index(code[2]):
+                x += 1
             else:
                 break
         if x == len(data):
             return pp
     return None
+
 
 def problem80():
     return None
@@ -2195,7 +2216,7 @@ def problem87(total=50_000_000):
     47 = 2^2 + 3^3 + 2^4
     How many numbers below fifty-million can be expressed as the sum of a prime square, prime cube, and prime fourth power?
     """
-    instances = int(total**0.5)+1
+    instances = int(total**0.5) + 1
     primes = util.prime_list(instances)
     squares = [x**2 for x in primes if x**2 < total]
     cubes = [x**3 for x in primes if x**3 < total]
@@ -2229,12 +2250,14 @@ def problem90():
 def problem91():
     return None
 
+
 def problem92(max_num=10000000, desired_final_total=89):
     def check_final_total(x):
         curr = x
         while curr not in [1, 89]:
             curr = util.sum_digits(curr)
         return curr
+
     di = {}
     for ea in range(1, max_num):
         val = util.sum_digits(ea)
@@ -2246,27 +2269,29 @@ def problem92(max_num=10000000, desired_final_total=89):
     cum_tot = 0
     for key, value in di.items():
         if check_final_total(key) == desired_final_total:
-            cum_tot+=value
+            cum_tot += value
     return cum_tot
 
 
 def problem92_alt(max_num=10000000, desired_final_total=89):
     def get_totals_final_amount(max_num):
-        li = [0]*81*len(util.convert_int_to_list(max_num))
+        li = [0] * 81 * len(util.convert_int_to_list(max_num))
         for ea in range(1, len(li)):
             if check_final_total(ea) == desired_final_total:
                 li.append(ea)
         return set(li)
+
     def check_final_total(x):
         curr = x
         while curr not in [1, 89]:
             curr = util.sum_digits(curr)
         return curr
+
     sums = get_totals_final_amount(max_num)
     ct = 0
     for ea in range(1, max_num):
         if util.sum_digits(ea) in sums:
-            ct+=1
+            ct += 1
     return ct
 
 
@@ -2293,8 +2318,9 @@ def problem97():
     However, in 2004 there was found a massive non-Mersenne prime which contains 2,357,207 digits: 28433 * 2^7830457 + 1.
     Find the last ten digits of this prime number.
     """
-    x = (28433)*(2**7830457)+1
+    x = (28433) * (2**7830457) + 1
     return str(x % 10**10)
+
 
 def problem98():
     return None
@@ -2302,6 +2328,7 @@ def problem98():
 
 def problem99():
     return None
+
 
 def problem100():
     return None
