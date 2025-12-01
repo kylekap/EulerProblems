@@ -2185,8 +2185,33 @@ def problem86():
     return None
 
 
-def problem87():
-    return None
+def problem87(total=50_000_000):
+    """Euler Problem 87: Prime square remainder theorem.
+
+    The smallest number expressible as the sum of a prime square, prime cube, and prime fourth power is 28. In fact, there are exactly four distinct solutions for p < 100:
+    28 = 2^2 + 2^3 + 2^4
+    33 = 3^2 + 2^3 + 2^4
+    49 = 5^2 + 2^3 + 2^4
+    47 = 2^2 + 3^3 + 2^4
+    How many numbers below fifty-million can be expressed as the sum of a prime square, prime cube, and prime fourth power?
+    """
+    instances = int(total**0.5)+1
+    primes = util.prime_list(instances)
+    squares = [x**2 for x in primes if x**2 < total]
+    cubes = [x**3 for x in primes if x**3 < total]
+    fourths = [x**4 for x in primes if x**4 < total]
+
+    nums = set()
+
+    for square in squares:
+        for cube in cubes:
+            if square + cube >= total:
+                break
+            for fourth in fourths:
+                if square + cube + fourth >= total:
+                    break
+                nums.add(square + cube + fourth)
+    return len(nums)
 
 
 def problem88():
