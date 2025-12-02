@@ -721,19 +721,7 @@ def problem30(power=5):
     As 1 = 1^4 is not a sum it is not included. The sum of these numbers is 1634 + 8208 + 9474 = 19316.
     Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
     """
-
-    def sum_digits_powers(number, power):
-        return sum(int(ea) ** power for ea in str(number))
-
-    li = []
-
-    for val in range(
-        9, (1 + power) * (9**power),
-    ):  # Upper limit based on 9^power in every digit, and number of digits being power+1
-        sum_digits_powers(val, 5)
-        if sum_digits_powers(val, 5) == val:
-            li.append(val)
-    return li
+    return sum([val for val in range(9, (1 + power) * (9**power)) if util.sum_digits_powers(val, 5) == val])
 
 
 def problem30_alt(power=5):
@@ -1811,7 +1799,7 @@ def problem63():
     return tot
 
 
-def problem64():  # TODO(Kyle): #7 Complete
+def problem64(max_n=10_000):
     """Euler Problem 64: Odd period square roots.
 
     All square roots are periodic when written as continued fractions and can be written in the form:
@@ -1841,7 +1829,12 @@ def problem64():  # TODO(Kyle): #7 Complete
     Exactly four continued fractions below N=13 have an odd period.
     How many continued fractions for N ≤ 10000 have an odd period?
     """
-    # Function Implementation
+    odds = 0
+    for i in range(1, max_n+1):
+        cf = util.continued_fraction_sqrt(i)
+        if len(cf) % 2 == 1:
+            odds += 1
+    return odds
 
 
 def problem65():  # TODO(Kyle): #8 Complete
@@ -2233,11 +2226,11 @@ def problem92(max_num=10000000, desired_final_total=89):
     def check_final_total(x):
         curr = x
         while curr not in [1, 89]:
-            curr = util.sum_digits(curr)
+            curr = util.sum_digits_powers(curr,2)
         return curr
     di = {}
     for ea in range(1, max_num):
-        val = util.sum_digits(ea)
+        val = util.sum_digits_powers(ea,2)
         if val in di:
             di[val] += 1
         else:
@@ -2260,12 +2253,12 @@ def problem92_alt(max_num=10000000, desired_final_total=89):
     def check_final_total(x):
         curr = x
         while curr not in [1, 89]:
-            curr = util.sum_digits(curr)
+            curr = util.sum_digits_powers(curr,2)
         return curr
     sums = get_totals_final_amount(max_num)
     ct = 0
     for ea in range(1, max_num):
-        if util.sum_digits(ea) in sums:
+        if util.sum_digits_powers(ea,2) in sums:
             ct+=1
     return ct
 

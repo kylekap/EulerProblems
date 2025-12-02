@@ -9,8 +9,24 @@ import util  # noqa: F401
 logger = logging.getLogger(__name__)  # put this in each file
 
 
-def active_problem():
-    return None
+def active_problem(limit=100):
+    e = [2]
+    i = 1
+    while len(e) < limit:
+        e += [1, i*2, 1]
+        i += 1
+    e = e[0:limit]
+    e.reverse()
+    numerator, denominator = 1, e[0]
+
+    for x in range(1,limit):
+        numerator, denominator = denominator, e[x]*denominator + numerator
+
+    return util.sum_digits_powers(denominator,1)
+
+
+def active_problem2():
+    return solved.problem92_alt()
 
 
 def main():
