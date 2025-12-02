@@ -194,8 +194,8 @@ def count_of_digits_alt(val):
     return len(str(val))
 
 
-def sum_digits(val):
-    return sum([ea**2 for ea in convert_int_to_list(val)])
+def sum_digits_powers(number, power):
+    return sum(int(ea) ** power for ea in str(number))
 
 
 def unique_list(li):
@@ -499,3 +499,36 @@ def euclids_formula(m,n):
     b = 2*m*n # b = 2mn
     c = m**2 + n**2 # c = m^2 + n^2
     return a, b, c
+
+
+def continued_fraction_sqrt(c):
+    """Compute the continued fraction of sqrt(c) using integer arithmetic.
+
+    Modified from From wikipedia (https://en.wikipedia.org/wiki/Integer_square_root#continued_fraction_sqrt_Python).
+    Returns [] if c is a perfect square, otherwise returns the period of the continued fraction.
+    """
+    a0 = int(c**0.5) # Get the whole number start
+
+    # Perfect square: return period empty
+    if a0**2 == c:
+        return []
+
+    m = 0
+    d = 1
+    a = a0
+    period = []
+    seen = set()
+
+    while True:
+        m_next = d * a - m
+        d_next = (c - m_next * m_next) // d
+        a_next = (a0 + m_next) // d_next
+
+        if (m_next, d_next, a_next) in seen:
+            break
+
+        seen.add((m_next, d_next, a_next))
+        period.append(a_next)
+        m, d, a = m_next, d_next, a_next
+
+    return period
