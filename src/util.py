@@ -461,9 +461,21 @@ def eulers_totient(n):
 
 
 def gcd(a, b):
-        while b:
-            a, b = b, a % b
+    """Euclidean algorithm for gcd.
+
+    The basic Euclidean algorithm is based on the principle that the GCD of two numbers does not change if the larger number
+    is replaced by its remainder when divided by the smaller number. The algorithm stops when the remainder is zero.
+    """
+    while b: #While b is not zero
+        a, b = b, a % b #Keep replacing a with b and b with a % b (moving down the chain)
+    return a
+
+
+def alt_gcd(a, b):
+    """Alternate gcd function that uses Euclid's algorithm."""
+    if b == 0:
         return a
+    return alt_gcd(b, a % b)
 
 
 def reduce_fraction(numerator, denominator):
@@ -531,4 +543,4 @@ def continued_fraction_sqrt(c):
         period.append(a_next)
         m, d, a = m_next, d_next, a_next
 
-    return period
+    return a0, period

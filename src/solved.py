@@ -1831,7 +1831,7 @@ def problem64(max_n=10_000):
     """
     odds = 0
     for i in range(1, max_n+1):
-        cf = util.continued_fraction_sqrt(i)
+        _, cf = util.continued_fraction_sqrt(i)
         if len(cf) % 2 == 1:
             odds += 1
     return odds
@@ -1872,8 +1872,34 @@ def problem65(limit=100):
     return util.sum_digits_powers(denominator,1)
 
 
-def problem66():  # TODO(Kyle): #9 Complete
-    return None
+def problem66(max_d=1000):
+    """Euler Problem 66: Diophantine equation.
+
+    Consider quadratic Diophantine equations of the form:
+    x^2 - Dy^2 = 1
+    For example, when D=13, the minimal solution in x is 67^2 - 13*8^2 = 1.
+    Find the minimal solution in x for D ≤ 1000.
+    """
+    def pell(original_value):
+        """Return numerator & denominator for the fundamental solution of Pell's equation for given d.
+
+        Pell's equation is x^2 - d*y^2 = 1.
+        """
+        p, k, x1, y = 1, 1, 1, 0
+        int_sqrt_d = int(original_value**0.5)
+        if int_sqrt_d**2 == original_value: # d is a square
+            return int_sqrt_d, None
+        while k != 1 or y == 0:
+            p = k * ((p//k) + 1) - p
+            p-= ((p - int_sqrt_d)//k) * k
+            x1, y = (p*x1 + original_value * y)//abs(k), (p*y + x1)//abs(k)
+            k = (p*p - original_value)//k
+        return x1, y
+
+    di = {}
+    for d in range(2, max_d):
+        di[d] = pell(d)[0] #For each d, get the numerator of the fundamental solution
+    return max(di, key=di.get) #Return the d with the largest numerator
 
 
 def problem67(filename="data/0067_triangle.csv"):
@@ -2254,6 +2280,13 @@ def problem91():
     return None
 
 def problem92(max_num=10000000, desired_final_total=89):
+    """Euler Problem 92: Square digit chains.
+
+    A number chain is created by continuously adding the square of the digits in a number to form a new number until it has been seen before.
+    For example, 44 -> 32 -> 13 -> 10 -> 1 -> 1
+    Will stop at 1 as it repeats itself.
+    How many starting numbers below ten million will arrive at 89?
+    """
     def check_final_total(x):
         curr = x
         while curr not in [1, 89]:
