@@ -1880,25 +1880,9 @@ def problem66(max_d=1000):
     For example, when D=13, the minimal solution in x is 67^2 - 13*8^2 = 1.
     Find the minimal solution in x for D ≤ 1000.
     """
-    def pell(original_value):
-        """Return numerator & denominator for the fundamental solution of Pell's equation for given d.
-
-        Pell's equation is x^2 - d*y^2 = 1.
-        """
-        p, k, x1, y = 1, 1, 1, 0
-        int_sqrt_d = int(original_value**0.5)
-        if int_sqrt_d**2 == original_value: # d is a square
-            return int_sqrt_d, None
-        while k != 1 or y == 0:
-            p = k * ((p//k) + 1) - p
-            p-= ((p - int_sqrt_d)//k) * k
-            x1, y = (p*x1 + original_value * y)//abs(k), (p*y + x1)//abs(k)
-            k = (p*p - original_value)//k
-        return x1, y
-
     di = {}
     for d in range(2, max_d):
-        di[d] = pell(d)[0] #For each d, get the numerator of the fundamental solution
+        di[d] = util.pell(d)[0] #For each d, get the numerator of the fundamental solution
     return max(di, key=di.get) #Return the d with the largest numerator
 
 
@@ -2207,8 +2191,19 @@ def problem79_alt(filename="data/0079_keylog.txt"):
             return pp
     return None
 
-def problem80():
-    return None
+
+def problem80(max_int=100, prec=100):
+    """Euler Problem 80: Square root digital expansion.
+
+    It is well known that if the square root of a natural number is not an integer, then it is irrational. The decimal expansion of such square roots is infinite without any repeating pattern at all.
+    The square root of two is 1.41421356237309504880..., and the digital sum of the first one hundred decimal digits is 475.
+    For the first one hundred natural numbers, find the total of the digital sums of the first one hundred decimal digits for all the irrational square roots.
+    """
+    values = [x for x in range(max_int+1) if int(x**0.5) != x**0.5]
+    tot = 0
+    for value in values:
+        tot += sum([int(x) for x in util.sqrt_by_subtraction(value, prec)])
+    return tot
 
 
 def problem81():

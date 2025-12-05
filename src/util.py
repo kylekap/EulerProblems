@@ -544,3 +544,29 @@ def continued_fraction_sqrt(c):
         m, d, a = m_next, d_next, a_next
 
     return a0, period
+
+def pell(original_value):
+    """Return numerator & denominator for the fundamental solution of Pell's equation for given d.
+
+    Pell's equation is x^2 - d*y^2 = 1.
+    """
+    p, k, x1, y = 1, 1, 1, 0
+    int_sqrt_d = int(original_value**0.5)
+    if int_sqrt_d**2 == original_value: # d is a square
+        return int_sqrt_d, None
+    while k != 1 or y == 0:
+        p = k * ((p//k) + 1) - p
+        p-= ((p - int_sqrt_d)//k) * k
+        x1, y = (p*x1 + original_value * y)//abs(k), (p*y + x1)//abs(k)
+        k = (p*p - original_value)//k
+    return x1, y
+
+def sqrt_by_subtraction(number, precision):
+    """Francis Jarvis method to calculate square root of an integer."""
+    a, b = 5*number, 5
+    while len(str(b)) < precision+3:
+        if a >= b:
+            a,b = a-b, b+10
+        else:
+            a, b = a*100, (b-b%10)*10+b%10
+    return str(b)[:precision]
