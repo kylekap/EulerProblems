@@ -5,6 +5,7 @@ uppercase_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 lowercase_letters = uppercase_letters.lower()
 digits = "0123456789"
 
+
 def is_prime(n):
     """Return True if n is prime. False otherwise.
 
@@ -455,8 +456,8 @@ def eulers_totient(n):
     if n == 0:
         return 0
     result = n
-    for p in set(prime_factors(n)): # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
-        result *= (1 - 1 / p)
+    for p in set(prime_factors(n)):  # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
+        result *= 1 - 1 / p
     return int(result)
 
 
@@ -466,8 +467,8 @@ def gcd(a, b):
     The basic Euclidean algorithm is based on the principle that the GCD of two numbers does not change if the larger number
     is replaced by its remainder when divided by the smaller number. The algorithm stops when the remainder is zero.
     """
-    while b: #While b is not zero
-        a, b = b, a % b #Keep replacing a with b and b with a % b (moving down the chain)
+    while b:  # While b is not zero
+        a, b = b, a % b  # Keep replacing a with b and b with a % b (moving down the chain)
     return a
 
 
@@ -497,7 +498,7 @@ def factorial_digits(n):
         8: 40320,
         9: 362880,
         0: 1,
-        } #Precomputed factorials of digits 0-9
+    }  # Precomputed factorials of digits 0-9
     return sum(fact.get(int(digit)) for digit in str(n))
 
 
@@ -506,10 +507,10 @@ def triangle_check(a, b, c):
     return a**2 + b**2 == c**2
 
 
-def euclids_formula(m,n):
-    a = m**2 - n**2 # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
-    b = 2*m*n # b = 2mn
-    c = m**2 + n**2 # c = m^2 + n^2
+def euclids_formula(m, n):
+    a = m**2 - n**2  # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
+    b = 2 * m * n  # b = 2mn
+    c = m**2 + n**2  # c = m^2 + n^2
     return a, b, c
 
 
@@ -519,7 +520,7 @@ def continued_fraction_sqrt(c):
     Modified from From wikipedia (https://en.wikipedia.org/wiki/Integer_square_root#continued_fraction_sqrt_Python).
     Returns [] if c is a perfect square, otherwise returns the period of the continued fraction.
     """
-    a0 = int(c**0.5) # Get the whole number start
+    a0 = int(c**0.5)  # Get the whole number start
 
     # Perfect square: return period empty
     if a0**2 == c:
@@ -545,6 +546,7 @@ def continued_fraction_sqrt(c):
 
     return a0, period
 
+
 def pell(original_value):
     """Return numerator & denominator for the fundamental solution of Pell's equation for given d.
 
@@ -552,21 +554,22 @@ def pell(original_value):
     """
     p, k, x1, y = 1, 1, 1, 0
     int_sqrt_d = int(original_value**0.5)
-    if int_sqrt_d**2 == original_value: # d is a square
+    if int_sqrt_d**2 == original_value:  # d is a square
         return int_sqrt_d, None
     while k != 1 or y == 0:
-        p = k * ((p//k) + 1) - p
-        p-= ((p - int_sqrt_d)//k) * k
-        x1, y = (p*x1 + original_value * y)//abs(k), (p*y + x1)//abs(k)
-        k = (p*p - original_value)//k
+        p = k * ((p // k) + 1) - p
+        p -= ((p - int_sqrt_d) // k) * k
+        x1, y = (p * x1 + original_value * y) // abs(k), (p * y + x1) // abs(k)
+        k = (p * p - original_value) // k
     return x1, y
+
 
 def sqrt_by_subtraction(number, precision):
     """Francis Jarvis method to calculate square root of an integer."""
-    a, b = 5*number, 5
-    while len(str(b)) < precision+3:
+    a, b = 5 * number, 5
+    while len(str(b)) < precision + 3:
         if a >= b:
-            a,b = a-b, b+10
+            a, b = a - b, b + 10
         else:
-            a, b = a*100, (b-b%10)*10+b%10
+            a, b = a * 100, (b - b % 10) * 10 + b % 10
     return str(b)[:precision]
