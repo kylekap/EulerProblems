@@ -570,3 +570,6 @@ def sqrt_by_subtraction(number, precision):
         else:
             a, b = a*100, (b-b%10)*10+b%10
     return str(b)[:precision]
+
+def generate_2d(h, w, fill_value=0):
+    return [[fill_value for x in range(w)] for y in range(h)]

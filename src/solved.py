@@ -2206,12 +2206,62 @@ def problem80(max_int=100, prec=100):
     return tot
 
 
-def problem81():
-    return None
+def problem81(filename="data/0081_matrix.txt"):
+    """Euler Problem 81: Path sum: two ways.
+
+    In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right, by only moving to the right and down, is indicated in bold red and is equal to 2427.
+    Find the minimal path sum from the top left to the bottom right by only moving right and down in [data/0081_matrix.txt], a 31K text file containing an 80 by 80 matrix.
+    """
+    matrix = util.import_2d_array_data(filename)
+    output_matrix = [[0]*len(matrix[0])]*len(matrix)
+
+    #Go through the matrix, starting at upper left & taking min of up & left all the way to the bottom. If no upper? Left. If no left? Up. If neither? Start.
+    for x in range(len(matrix)):
+        for y in range(len(matrix[x])):
+            if x - 1 >= 0 and y - 1 >= 0: #Take min of up & left
+                output_matrix[x][y] = matrix[x][y] + min(output_matrix[x-1][y], output_matrix[x][y-1])
+            elif x - 1 >= 0: #If no left, take up
+                output_matrix[x][y] = matrix[x][y] + output_matrix[x-1][y]
+            elif y - 1 >= 0: #If no up, take left
+                output_matrix[x][y] = matrix[x][y] + output_matrix[x][y-1]
+            else: #Starting Point
+                output_matrix[x][y] = matrix[x][y]
+    return output_matrix[x][y]
 
 
-def problem82():
-    return None
+def problem82(filename="data/0082_matrix.txt"):
+    """Euler Problem 82: Path sum: three ways.
+
+    The minimal path sum in the 5 by 5 matrix below, by starting in any cell in the left column and finishing in any cell in the right column, and only moving up, down and right, is indicated in red and is equal to 994.
+    Find the minimal path sum from the left column to the right column in [data/0082_matrix.txt], a 31K text file containing a 80 by 80 matrix.
+    """
+    def mindistance(ref_x, ref_y):
+        lengths = []
+        up_curr = 0
+        down_curr = 0
+
+        for i in range(1, len(matrix)):
+            # Check up
+            up = ref_x - i
+            if up >= 0:
+                up_curr += matrix[up][ref_y]
+                lengths.append(up_curr + mask[up][ref_y-1])
+            # Check down
+            down = ref_x + i
+            if down < len(matrix):
+                down_curr += matrix[down][ref_y]
+                lengths.append(down_curr + mask[down][ref_y-1])
+        # Check left
+        lengths.append(mask[ref_x][ref_y-1])
+
+        return min(lengths) # Pick the shortest
+
+    matrix = util.import_2d_array_data(filename)
+    mask = util.generate_2d(len(matrix), len(matrix[0]), 0)
+    for col in range(len(matrix[0])):
+        for row in range(len(matrix)):
+            mask[row][col] += matrix[row][col] + mindistance(row, col)
+    return min(mask[row][-1] for row in range(len(matrix)))
 
 
 def problem83():
