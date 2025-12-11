@@ -545,6 +545,7 @@ def continued_fraction_sqrt(c):
 
     return a0, period
 
+
 def pell(original_value):
     """Return numerator & denominator for the fundamental solution of Pell's equation for given d.
 
@@ -561,6 +562,7 @@ def pell(original_value):
         k = (p*p - original_value)//k
     return x1, y
 
+
 def sqrt_by_subtraction(number, precision):
     """Francis Jarvis method to calculate square root of an integer."""
     a, b = 5*number, 5
@@ -571,5 +573,40 @@ def sqrt_by_subtraction(number, precision):
             a, b = a*100, (b-b%10)*10+b%10
     return str(b)[:precision]
 
+
 def generate_2d(h, w, fill_value=0):
     return [[fill_value for x in range(w)] for y in range(h)]
+
+
+def sum_2d(matrix):
+    return sum([sum(row) for row in matrix])
+
+def flatten_2d(matrix):
+    return [item for row in matrix for item in row]
+
+def return_matrix_value(matrix, coordinate):
+    return matrix[coordinate[0]][coordinate[1]]
+
+def set_matrix_value(matrix, coordinate, value):
+    matrix[coordinate[0]][coordinate[1]] = value
+
+
+def modified_dijkstra(matrix, start=(0,0), destination=(0,0)):
+    size = len(matrix)
+    infinity = sum_2d(matrix) + 1 # Bigger than any of the searches
+    unvisited = [(row, col) for row in range(size) for col in range(size)]
+    distances = generate_2d(size, size, infinity)
+    set_matrix_value(distances, start, return_matrix_value(matrix, start))
+    while return_matrix_value(distances, destination) == infinity:
+        current = min(unvisited, key=lambda node: return_matrix_value(distances, node))
+        for neighbor in [(current[0]-1, current[1]), # up
+                         (current[0]+1, current[1]), # down
+                         (current[0], current[1]-1), # left
+                         (current[0], current[1]+1), # right
+                         ]:
+            if neighbor in unvisited: # If neighbor is unvisited, this will also serve to make sure we only check cells that are actually in the matrix
+                set_matrix_value(distances,
+                                      neighbor,
+                                      min(return_matrix_value(distances, neighbor), return_matrix_value(distances, current) + return_matrix_value(matrix, neighbor)))
+        unvisited.remove(current) # We've visited it now
+    return return_matrix_value(distances, destination) # Return the final value

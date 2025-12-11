@@ -2264,8 +2264,17 @@ def problem82(filename="data/0082_matrix.txt"):
     return min(mask[row][-1] for row in range(len(matrix)))
 
 
-def problem83():
-    return None
+def problem83(filename="data/0083_matrix.txt"):
+    """Euler Problem 83: Path sum: four ways.
+
+    In the 5 by 5 matrix below, the minimal path sum from the top left to the bottom right by only moving right and down is indicated in red and is equal to 994.
+    Find the minimal path sum from the top left to the bottom right in [data/0083_matrix.txt], a 31K text file containing a 80 by 80 matrix.
+    """
+    matrix = util.import_2d_array_data(filename)
+    return util.modified_dijkstra(matrix,
+                                  (0,0), # Start
+                                  (len(matrix)-1, len(matrix[0])-1), # End
+                                  )
 
 
 def problem84():
