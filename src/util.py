@@ -610,3 +610,16 @@ def modified_dijkstra(matrix, start=(0,0), destination=(0,0)):
                                       min(return_matrix_value(distances, neighbor), return_matrix_value(distances, current) + return_matrix_value(matrix, neighbor)))
         unvisited.remove(current) # We've visited it now
     return return_matrix_value(distances, destination) # Return the final value
+
+
+def top_x_from_dict(num_values, my_dict):
+    return dict(sorted(my_dict.items(), key=lambda x: x[1], reverse=True)[:num_values])
+
+
+def print_dict(di):
+    for k, v in di.items():
+        print(f"{k}: {v}")
+
+def print_matrix(matrix):
+    for row in matrix:
+        print(row)
