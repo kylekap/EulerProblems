@@ -4,6 +4,8 @@ from pathlib import Path
 uppercase_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 lowercase_letters = uppercase_letters.lower()
 digits = "0123456789"
+roman_numerals = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000, "IV": 4, "IX": 9, "XL": 40, "XC": 90, "CD": 400, "CM": 900}
+
 
 def is_prime(n):
     """Return True if n is prime. False otherwise.
@@ -623,3 +625,22 @@ def print_dict(di):
 def print_matrix(matrix):
     for row in matrix:
         print(row)
+
+def roman_numeral_to_int(s):
+    li = [roman_numerals[x] for x in s]
+    tot = 0
+    for i in range(len(li)):
+        if i < len(li) - 1 and li[i] < li[i + 1]:
+            tot -= li[i]
+        else:
+            tot += li[i]
+    return tot
+
+
+def int_to_roman_numeral(n):
+    roman = ""
+    for letter, value in dict(sorted(roman_numerals.items(), key=lambda item: item[1], reverse=True)).items():
+        while n >= value:
+            n -= value
+            roman += letter
+    return roman
