@@ -622,9 +622,11 @@ def print_dict(di):
     for k, v in di.items():
         print(f"{k}: {v}")
 
+
 def print_matrix(matrix):
     for row in matrix:
         print(row)
+
 
 def roman_numeral_to_int(s):
     li = [roman_numerals[x] for x in s]
@@ -644,3 +646,13 @@ def int_to_roman_numeral(n):
             n -= value
             roman += letter
     return roman
+
+
+def pythagorean_triples_under(k):
+    max_m = (-1 + (k*2+1)**0.5)/2
+    for m in range(2, int(max_m)): # Pythagorean triples
+        for n in range(1, m):
+            if m*m+n*n > k:
+                break
+            if gcd(m,n) == 1:
+                yield m*m-n*n,2*m*n,m*m+n*n

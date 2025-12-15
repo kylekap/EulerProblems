@@ -1,5 +1,6 @@
 import csv
 import fnmatch
+import math
 import random
 import secrets
 from collections import Counter
@@ -2544,8 +2545,14 @@ def problem93():
     return None
 
 
-def problem94():
-    return None
+def problem94(max_perimeter=1_000_000_000): #not fast enough?
+    result = 0
+    for a,b,c in util.pythagorean_triples_under(max_perimeter//3+2):
+        if abs(2*a-c)==1:               # (c,c,2*a) almost equilateral triangle
+            result += 2*a+2*c
+        if abs(2*b-c)==1:               # (c,c,2*b) almost equilateral triangle
+            result += 2*b+2*c
+    return result
 
 
 def problem95():
@@ -2570,8 +2577,31 @@ def problem98():
     return None
 
 
-def problem99():
-    return None
+def problem99(txt_file="data/0099_base_exp.txt"):
+    """Euler Problem 99: Largest exponential.
+
+    Comparing two numbers written in index form like 2^11 and 3^7 is not difficult, as any calculator would confirm that 2^11 = 2048 < 3^7 = 2187.
+    However, confirming that 632382^518061 > 519432^525806 would be much more difficult, as both numbers contain over three million digits.
+    Using base_exp.txt (right click and 'Save Link/Target As...'), a 22K text file containing one thousand lines with a base/exponent pair on each line, determine which line number has the greatest numerical value.
+    NOTE: The first two lines in the file represent the numbers in the example given above.
+    """
+    max_value = 1
+    max_exponent = 1
+    line_of_max = 0
+
+    for line_num, line in enumerate(util.import_2d_array_data(txt_file)): #line[0] is base, line[1] is exponent, enumerate to track the line #
+        next_value = int(line[0])
+        next_exponent = int(line[1])
+
+
+        if next_exponent*math.log(next_value) > max_exponent*math.log(max_value): # x^y == y*log(x), which is easier to work with
+            #Update maximums
+            max_value = next_value
+            max_exponent = next_exponent
+            line_of_max = line_num
+
+    return line_of_max+1 #Enumerate starts at 0
+
 
 def problem100():
     return None
