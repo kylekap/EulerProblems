@@ -2414,8 +2414,29 @@ def problem_84(iterations=1_000_000):
     return "".join(f"{board.index(x):02d}" for x in di), di
 
 
-def problem85():
-    return None
+def problem85(nearest_total=2_000_000):
+    """Euler Problem 85: Counting rectangles.
+
+    By counting carefully it can be seen that a rectangular grid measuring 3 by 2 contains eighteen rectangles:
+    Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest number of rectangles to two million.
+    """
+
+    def num_rectangles(x, y): # Returns the number of rectangles in an x by y grid
+        tot = 0
+        for ea_x in range(x): # x by y
+            for ea_y in range(y):
+                tot+=(x-ea_x) * (y-ea_y) # I didn't want to deal with +1, so i'm starting at subtracting 0 and going to 1 less than the number.
+                # I thought it was a factorial at first, but it's not - original was missing 5. Instead it's a sum of the different possible x and y combinations
+        return tot
+
+    nearest = (0, 0, 0) # x, y, count of rectangles
+    for x in range(1, 100):
+        for y in range(1, 100): # 100x100 grid to limit how big it actually gets.
+            rectangles = num_rectangles(x, y)
+            if abs(rectangles-nearest_total) < (abs(nearest[2]-nearest_total)):
+                nearest = (x, y, rectangles)
+    return nearest[0]*nearest[1]
+
 
 
 def problem86():
