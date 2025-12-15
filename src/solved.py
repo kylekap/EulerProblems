@@ -2605,3 +2605,31 @@ def problem99(txt_file="data/0099_base_exp.txt"):
 
 def problem100():
     return None
+
+
+"""
+###################################################################################################
+This section contains problem solutions after the first 100 problems.
+Answers will be ordered by problem number, but will not cover full range of solutions.
+###################################################################################################
+"""
+
+
+def problem808(num_elements):
+    """Euler Problem 808: Prime square palindromes.
+
+    Both 169 and 961 are the square of a prime. 169 is the reverse of 961.
+
+    We call a number a reversible prime square if:
+    1. it is not a palindrome
+    2. it is the square of a prime
+    3. its reverse is also the square of a prime
+
+    Find the sum of the first 50 reversible prime squares.
+    """
+    primes = util.prime_list(100_000_000)
+    prime_squares = {x * x for x in primes if x*x != int(str(x*x)[::-1])} # Ignore palindromes, generate squared primes
+    reversed_prime_squares = {int(str(x)[::-1]) for x in prime_squares} # Generate reversed squared primes
+    shared = [x for x in prime_squares if x in reversed_prime_squares] # Find shared values
+    shared.sort() # Order the list
+    return sum(shared[:num_elements]) # Return the sum of the first 50
