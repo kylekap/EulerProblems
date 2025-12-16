@@ -2635,6 +2635,85 @@ Answers will be ordered by problem number, but will not cover full range of solu
 ###################################################################################################
 """
 
+def problem112(min_bouncy=0.99):
+    """Euler Problem 112: Bouncy numbers.
+
+    Working from left-to-right if no digit is exceeded by the digit to its left it is called an increasing number; for example, 134468.
+    Similarly if no digit is exceeded by the digit to its right it is called a decreasing number; for example, 66420.
+    We shall call a positive integer that is neither increasing nor decreasing a "bouncy" number; for example, 155349.
+
+    Clearly there cannot be any bouncy numbers below one-hundred, but just over half of the numbers below one-thousand (525) are bouncy.
+    In fact, the least number for which the proportion of bouncy numbers first reaches 50% is 538.
+
+    Surprisingly, bouncy numbers become more and more common and by the time we reach 21780 the proportion of bouncy numbers is equal to 90%.
+
+    Find the least number for which the proportion of bouncy numbers is exactly 99%.
+    """
+    def check_increasing(num):
+        numstr = str(num)
+        return all(int(numstr[i]) <= int(numstr[i + 1]) for i in range(len(numstr) - 1))
+
+    def check_decreasing(num):
+        numstr = str(num)
+        return all(int(numstr[i]) >= int(numstr[i + 1]) for i in range(len(numstr) - 1))
+
+    bouncy = 0
+    total_checked = 0
+
+    while True:
+        total_checked += 1
+        if not check_increasing(total_checked) and not check_decreasing(total_checked): #Check if number is bouncy (aka, not increasing && not decreasing)
+            bouncy += 1
+        if bouncy / total_checked > min_bouncy:
+            return total_checked-1
+
+
+def problem113(n=100):
+    """Euler Problem 113: Non-bouncy numbers.
+
+    Working from left-to-right if no digit is exceeded by the digit to its left it is called an increasing number; for example, 134468.
+    Similarly if no digit is exceeded by the digit to its right it is called a decreasing number; for example, 66420.
+    We shall call a positive integer that is neither increasing nor decreasing a "bouncy" number; for example, 155349.
+
+    As n increases, the proportion of bouncy numbers below n increases such that there are only 12951 numbers below one-million that are not bouncy and only 277032 non-bouncy numbers below 10^10.
+    How many numbers below a googol (10^100) are not bouncy?
+    """
+    increasing = util.binomial_coefficient(n+9, 9)-1 #Combinatorics -> Number of increasing numbers is basically a binomial coefficient problem. Use 9 since no leading 0's
+    decreasing = util.binomial_coefficient(n+10, 10)-1 #Can use 10, since decreasing doesn't worry about leading 0's.
+    return increasing + decreasing-10*n #Return the difference, removingall-same-digit numbers (10^n).
+
+
+def problem206():
+    """Euler problem 206: Concealed Square.
+
+    Find the unique positive integer whose square has the form 1_2_3_4_5_6_7_8_9_0.
+    """
+    for ea in product(util.convert_str_to_list(util.digits[::-1]), repeat=8): #Enumerate all possible combinations. There are 8 digits, since we know last digit is 0
+        #997242480 answer
+        num = f"1{ea[0]}2{ea[1]}3{ea[2]}4{ea[3]}5{ea[4]}6{ea[5]}7{ea[6]}8{ea[7]}900" #Build it
+        number = int(num)
+        if math.isqrt(number)**2 == number: #Check if it's a square
+            return math.isqrt(number), ea # We know there's only 1, so stop & return it.
+    return None
+
+
+def problem206_alt():
+    """Alternate solution for problem 206, from internet search & a little internal change for formats."""
+    def alternating_digits(n):
+        return str(n)[::2]
+
+    min_sqrt = math.isqrt(1020304050607080900)
+    max_sqrt = math.isqrt(1929394959697989900)
+    x = min_sqrt
+    while x < max_sqrt:
+        if alternating_digits(x**2) == "1234567890":
+            return x
+        if x % 100 == 30:  # noqa: PLR2004
+            x+=40
+        else:
+            x+=60
+    return None
+
 
 def problem808(num_elements):
     """Euler Problem 808: Prime square palindromes.
