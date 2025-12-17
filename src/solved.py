@@ -2635,6 +2635,29 @@ Answers will be ordered by problem number, but will not cover full range of solu
 ###################################################################################################
 """
 
+def problem102(filename="data/0102_triangles.txt", given_point=(0, 0)):
+    """Euler Problem 102: Triangle containment.
+
+    Three distinct points are plotted at random on a Cartesian plane, for which -1000 ≤ x, y ≤ 1000, such that a triangle is formed.
+    Consider the following two triangles:
+    A(-340,495), B(-153,-910), C(835,-947)
+    X(-175,41), Y(-421,-714), Z(574,-645)
+    It can be verified that triangle ABC contains the origin, while triangle XYZ does not.
+    Using triangles.txt (right click and 'Save Link/Target As...'), a 27K text file containing the co-ordinates of one thousand "random" triangles, find the number of triangles for which the interior contains the origin.
+    NOTE: The first two lines in the file represent the triangles in the example given above.
+    """
+    data = util.import_2d_array_data(filename)
+    contains_origin = 0
+    for line in data:
+        point1 = (line[0], line[1])
+        point2 = (line[2], line[3])
+        point3 = (line[4], line[5])
+        if util.check_point_in_triangle(point1, point2, point3, given_point):
+            contains_origin += 1
+    return contains_origin
+
+
+
 def problem112(min_bouncy=0.99):
     """Euler Problem 112: Bouncy numbers.
 

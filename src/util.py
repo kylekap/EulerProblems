@@ -656,3 +656,15 @@ def pythagorean_triples_under(k):
                 break
             if gcd(m,n) == 1:
                 yield m*m-n*n,2*m*n,m*m+n*n
+
+
+def area_of_triangle(point1=(0,0), point2=(0,0), point3=(0,0)):
+    """Calculate the area of a triangle given three points."""
+    return abs(point1[0] * (point2[1] - point3[1]) + point2[0] * (point3[1] - point1[1]) + point3[0] * (point1[1] - point2[1])) / 2
+
+
+def check_point_in_triangle(point1=(0,0), point2=(0,0), point3=(0,0), point=(0,0)):
+    """Check if a point is inside a triangle given three points."""
+    # If the the three triangles formed by using the point in the coordinates have areas totaling the area of the triangle, then the point is in the triangle. If it's bigger, it's outside.
+    return area_of_triangle(point1, point2, point3) == area_of_triangle(point1, point2, point) + area_of_triangle(point1, point, point3) + area_of_triangle(point, point2, point3)
+
