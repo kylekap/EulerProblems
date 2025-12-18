@@ -110,6 +110,10 @@ def convert_str_to_list(string):
     return list(string)
 
 
+def generate_number_from_digits(*args):
+    return int("".join([str(i) for i in args]))
+
+
 def find_all_divisors(n):
     """Return a list of all integers that are divisors of the given n.
 
@@ -668,3 +672,11 @@ def check_point_in_triangle(point1=(0,0), point2=(0,0), point3=(0,0), point=(0,0
     # If the the three triangles formed by using the point in the coordinates have areas totaling the area of the triangle, then the point is in the triangle. If it's bigger, it's outside.
     return area_of_triangle(point1, point2, point3) == area_of_triangle(point1, point2, point) + area_of_triangle(point1, point, point3) + area_of_triangle(point, point2, point3)
 
+def countifs(iterable, condition):
+    return sum(1 for x in iterable if condition(x))
+
+def countall(iterable):
+    di = {}
+    for x in iterable:
+        di[x] = di.get(x, 0) + 1
+    return di

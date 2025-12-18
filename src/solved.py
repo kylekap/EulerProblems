@@ -2581,7 +2581,105 @@ def problem95():
 
 
 def problem96():
-    return None
+    """Euler Problem 96: Su Doku.
+
+    Su Doku (Japanese meaning number place) is the name given to a popular puzzle concept. Its origin is unclear, but credit must be attributed to Leonhard Euler who invented a similar,
+    and much more difficult, puzzle idea called Latin Squares. The objective of Su Doku puzzles, however, is to replace the blanks (or zeros) in a 9 by 9 grid in such a way that each row, column, and 3 by 3 sub-box contains each of the digits 1 through 9 exactly once.
+    Below is an example of a typical starting grid for a Su Doku puzzle.
+
+    A well constructed Su Doku puzzle has a unique solution and can be solved by logic, although it may be necessary to employ "guess and test" methods in order to eliminate options (there is only one solution).
+    The complexity of the search determines the difficulty of the puzzle; the example above is considered easy because it can be solved by straight forward direct deduction.
+
+    A 6K text file, sudoku.txt (right click and 'Save Link/Target As...'), contains fifty different Su Doku puzzles ranging in difficulty, but all with unique solutions (the first puzzle in the file is the example above).
+    By solving all fifty puzzles find the sum of the 3-digit numbers found in the top left corner of each solution grid.
+    """
+    class Sudoku:
+        def __init__(self, board):
+            self.board = board
+            self.guess_board = [[[] for _ in range(9)] for _ in range(9)]
+            self.set_possibilities()
+
+        def __str__(self):
+            self.print_board(board=self.board)
+            return ""
+
+        def print_board(self, **kwargs):
+            for row in kwargs.get("board", self.board):  # self.board:
+                print(row)
+
+        def get_row(self, x):
+            return self.board[x]
+        def _check_row(self, x, num):
+            return num in self.get_row(x)
+
+        def get_col(self, y):
+            return [self.board[i][y] for i in range(9)]
+        def _check_col(self, y, num):
+            return num in self.get_col(y)
+
+        def get_box(self, x, y):
+            return [self.board[3 * (x // 3) + i][3 * (y // 3) + j] for i, j in product(range(3), range(3))]
+        def _check_box(self, x, y, num):
+            return num in self.get_box(x, y)
+
+        def check_all(self, x, y, num):
+            return self._check_row(x, num) or self._check_col(y, num) or self._check_box(x, y, num)
+
+        def set_possibilities(self):
+            for x in range(9):
+                for y in range(9):
+                    if self.board[x][y] == 0:
+                        self.guess_board[x][y] = [i for i in range(1, 10) if not self.check_all(x, y, i)] # Get the possible answers
+                    else:
+                        self.guess_board[x][y] = [] # If the box is already filled, there's no other possible answers
+
+        def exact_solve(self):
+            # Get the number of possible answers for each empty box. If any are 1, solve that one. If none are 1, break
+            while 1 in util.countall([len(self.guess_board[x][y if isinstance(self.guess_board[x][y], list) else 0]) for x in range(9) for y in range(9)]):
+                for x in range(9):
+                    for y in range(9):
+                        if len(self.guess_board[x][y]) == 1: # If there's only one possible answer
+                            self.board[x][y] = self.guess_board[x][y][0] # Set the box to that answer
+                            self.set_possibilities() # Update the possibilities
+            return self.board
+
+
+        def brute_force_solve(self, board, row, col):
+            if row >= len(board):
+                return True, board
+            if board[row][col]:
+                return self.brute_force_solve(board, row + 1 if col == len(board[0])-1 else row, (col + 1) % len(board[0]))
+
+            for num in [i for i in range(1, 10) if not self.check_all(row, col, i)]:
+                board[row][col] = num
+                if self.brute_force_solve(board, row + 1 if col == len(board[0])-1 else row, (col + 1) % len(board[0])):
+                    return True, board
+                board[row][col] = 0
+            return False
+
+    data = util.import_text_file("data/0096_sudoku.txt")
+    active_board = []
+    first_three_spots_total = 0
+
+    for line in data:
+        if line.startswith("Grid"):
+            active_board = [] # Reset the board for the next grid
+        else:
+            cleaned_line = line.replace("  ", " ").replace(" ", "").replace("\n", "").replace("\r\n", "") # Housekeeping
+            cleaned_line = [int(i) for i in cleaned_line] # Convert to int
+            active_board.append(cleaned_line) # Add to board
+
+            if len(active_board) == len(active_board[0]): # If the board is square
+                sudoku_to_solve = Sudoku(active_board) # Create the sudoku object
+                sudoku_to_solve.exact_solve() # Reduces the complexity by pre-solving the 1 possibility cells.
+                brute, board = sudoku_to_solve.brute_force_solve(sudoku_to_solve.board, 0, 0) # Brute force solution
+                if brute: # If a solution was found
+                    sudoku_to_solve.board = board # Set the board to the solution
+                    first_three_spots_total += util.generate_number_from_digits(sudoku_to_solve.board[0][0], sudoku_to_solve.board[0][1], sudoku_to_solve.board[0][2]) # Add the sum of the first three numbers
+                else:
+                    print("No solution found!")
+    return first_three_spots_total
+
 
 
 def problem97():
