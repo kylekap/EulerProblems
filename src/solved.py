@@ -2804,6 +2804,38 @@ def problem113(n=100):
     return increasing + decreasing-10*n #Return the difference, removingall-same-digit numbers (10^n).
 
 
+def problem205():
+    """Euler problem 205: Dice Game.
+
+    Peter has nine four-sided (pyramidal) dice, each with faces numbered 1, 2, 3, 4.
+    Colin has six six-sided (cubic) dice, each with faces numbered 1, 2, 3, 4, 5, 6.
+    Peter and Colin roll their dice and compare totals: the highest total wins. The result is a draw if the totals are equal.
+
+    What is the probability that Pyramidal Peter beats Cubic Colin? Give your answer rounded to seven decimal places in the form 0.abcdefg.
+    """
+
+    def dice_possibilities(dice_size=6, n=1):
+        return product(range(1, dice_size + 1), repeat=n) #Returns all possible combinations
+
+    wins = 0
+    cubic_di = {}
+    pyramid_di = {}
+
+    for ea in dice_possibilities(dice_size=6, n=6):
+        cubic_di[sum(ea)] = cubic_di.get(sum(ea), 0) + 1 #Generate a dict of all possible sums of dice, and how many times they occur
+
+    for ea in dice_possibilities(dice_size=4, n=9):
+        pyramid_di[sum(ea)] = pyramid_di.get(sum(ea), 0) + 1 #Generate a dict of all possible sums of dice, and how many times they occur
+
+    for n, cubic_sum in cubic_di.items():
+        for p, pyramid_sum in pyramid_di.items():
+            if p > n: #For each possible sum of dice, compare the totals. If Pyramid Peter wins, add to wins
+                wins += cubic_sum * pyramid_sum # Multiply the number of times each sum occurs
+
+    return f"{(wins / (sum(cubic_di.values()) * sum(pyramid_di.values()))):.7f}" #Return the probability, rounded to 7 decimal places
+
+
+
 def problem206():
     """Euler problem 206: Concealed Square.
 
