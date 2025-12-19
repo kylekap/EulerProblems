@@ -2873,6 +2873,43 @@ def problem113(n=100):
     return increasing + decreasing-10*n #Return the difference, removingall-same-digit numbers (10^n).
 
 
+def problem120(): #TODO(Kyle): Update with more comments about functionality  # noqa: TD003
+    """Euler Problem 120: Square Remainders.
+
+    Let r be the remainder when (a-1)^n + (a+1)^n is divided by a^2.
+    For example, if a = 7 and n = 3, then r = 42: 6^3 + 8^3 = 728 ≡ 42 mod 49. As n varies, so too will r, but for 7, it turns out that rmax = 42.
+    For 3 ≤ a ≤ 1000, find ∑ rmax.
+    """
+    summation = 0
+    for a in range(3,1001):
+        if a % 2 ==0:
+            summation += ((a//2)-1)*2*a
+        else:
+            summation += (a//2)*2*a
+    return summation
+
+
+def problem124(max_range=100_000, wanted_index=10000):
+    """Euler Problem 124: Ordered radicals.
+
+    The radical of n, rad(n), is the product of the distinct prime factors of n. For example, rad(504) = 2 x 3 x 7 = 42.
+    If we calculate rad(n) for 1 ≤ n ≤ 10, then sort them on rad(n), and sorting on n if the radical values are equal, we get:
+    Unsorted:
+    n       1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    rad(n)  1, 2, 3, 2, 5, 6, 7, 2, 3, 10
+
+    Sorted by rad(n):
+    n       1, 2, 4, 8, 3, 9, 7, 5, 6, 10
+    rad(n)  1, 2, 2, 2, 3, 3, 7, 5, 6, 10
+    k       1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+    Let E(k) be the kth element in the sorted n column; for example, E(4) = 8 and E(6) = 9.
+    If rad(n) is sorted for 1 ≤ n ≤ 100000, find E(10000).
+    """
+    li = [(util.radical(i),i) for i in range(1, max_range+1)] #Get the radicals. We already had prime_factors, so we can use that & generate the radical function
+    return sorted(li)[wanted_index-1][1] #Sort the list, get the 10000th element, and return the index that made it.
+
+
 def problem145(max_num=1_000_000_000): #TODO(Kyle): #13 This is too slow
     """Euler Problem 145: Reversible Numbers.
 

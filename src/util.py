@@ -744,3 +744,6 @@ def check_right_triangle_from_coordinates(point1, point2, point3):
     c = (x3 - x2)**2 + (y3 - y2)**2
 
     return a + b == c or a + c == b or b + c == a
+
+def radical(n):
+    return multiply_list(list(set(prime_factors(n))))
