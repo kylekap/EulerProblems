@@ -111,7 +111,12 @@ def convert_str_to_list(string):
 
 
 def generate_number_from_digits(*args):
+    """Generate a number from a list of digits, in order."""
     return int("".join([str(i) for i in args]))
+
+
+def reverse_int(num):
+    return int(str(num)[::-1])
 
 
 def find_all_divisors(n):
@@ -680,3 +685,12 @@ def countall(iterable):
     for x in iterable:
         di[x] = di.get(x, 0) + 1
     return di
+
+def check_odd_digits(num):
+    return len([x for x in convert_int_to_list(num) if x % 2 == 1]) == len(convert_int_to_list(num))
+
+def check_even(x):
+    return x % 2 == 0
+
+def check_odd(x):
+    return x % 2 == 1

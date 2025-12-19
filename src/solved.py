@@ -2722,8 +2722,22 @@ def problem99(txt_file="data/0099_base_exp.txt"):
     return line_of_max+1 #Enumerate starts at 0
 
 
-def problem100():
-    return None
+def problem100(min_denom=1_000_000_000_000, x=15, y=21): #1_000_000_000_000
+    """Euler Problem 100: Arranged Probability.
+
+    If a box contains twenty-one coloured discs, composed of fifteen blue discs and six red discs, and two discs were taken at random, it can be seen that the probability of taking two blue discs,
+    P(BB) = (15/21) * (14/20) = 1/2.
+    The next such arrangement, for which there is exactly 50% chance of taking two blue discs at random, is a box containing eighty-five blue discs and thirty-five red discs.
+    By finding the first arrangement to contain over 10^12 = 100,000,000,000 discs in total, determine the number of blue discs contained in the box.
+    """
+    #So we're solving iterations of x**2-2x-y**2+y=0
+    #The next_x = 3*x + 2*y - 2
+    #The next_y = 4*x + 3*y - 3
+    while y < min_denom:
+        next_x = 3*x + 2*y - 2
+        next_y = 4*x + 3*y - 3
+        x, y = next_x, next_y
+    return x, y
 
 
 """
@@ -2802,6 +2816,26 @@ def problem113(n=100):
     increasing = util.binomial_coefficient(n+9, 9)-1 #Combinatorics -> Number of increasing numbers is basically a binomial coefficient problem. Use 9 since no leading 0's
     decreasing = util.binomial_coefficient(n+10, 10)-1 #Can use 10, since decreasing doesn't worry about leading 0's.
     return increasing + decreasing-10*n #Return the difference, removingall-same-digit numbers (10^n).
+
+
+def problem145(max_num=1_000_000_000): #TODO(Kyle): #13 This is too slow
+    """Euler Problem 145: Reversible Numbers.
+
+    Some positive integers n have the property that the sum [ n + reverse(n) ] consists entirely of odd (decimal) digits. For instance, 36 + 63 = 99 and 409 + 904 = 1313.
+    We will call such numbers reversible; so 36, 63, 409, and 904 are reversible. Leading zeroes are not allowed in either n or reverse(n).
+    There are 120 reversible numbers below one-thousand.
+    How many reversible numbers are there below one-billion (10^9)?
+    """
+    num_digits = len(util.convert_int_to_list(max_num-1)) #Get number of digits. If you give me like 1000 or 100000, ignore that last one, it's not valid.
+    tot = 0
+    for ea in range(2, num_digits+1): #for each size of number
+        #Check only the odds or evens. Also, if it's divisible by 10 there's going to be a leading 0 in the reverse, so ignore.
+        if ea == 9: # 9 digits is a special case, can't work apparently  # noqa: PLR2004
+            continue
+        val = len({x for x in range(1*10**(ea-1), 1*10**ea-1, 2) if x%10 != 0 and util.check_odd_digits(x + util.reverse_int(x))})
+        tot += val
+        print(ea, val, tot, 1*10**(ea-1), 1*10**ea-1)
+    return 2*tot
 
 
 def problem205():
