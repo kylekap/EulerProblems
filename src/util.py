@@ -83,6 +83,14 @@ def convert_int_to_list(num):
     """
     return [int(x) for x in str(int(num))]
 
+def convert_big_int_to_list(num):
+    """Convert an integer into a list of digits."""
+    li = []
+    while num > 0:
+        li.append(num % 10)
+        num = num // 10
+    return li[::-1]
+
 
 def convert_list_to_str(li):
     """Convert a list of integers to a string.
@@ -180,6 +188,27 @@ def generate_fibonacci(end):
         x, y = y, x + y
         fib_list.append(y)
     return fib_list
+
+
+def fibonacci(n, f0=0, f1=1):
+    """Efficiently compute the nth Fibonacci number using matrix exponentiation.
+
+    The tuple (a, b) represents a matrix of the form [[a + b, a], [a, b]].
+    It is initialized to the identity matrix [[1, 0], [0, 1]]. The matrix is
+    squared repeatedly, and multiplied by the matrix [[1, 1], [1, 0]] if the
+    current bit of n is 1.
+
+    Once the loop is done, the produced matrix corresponds to [[1, 1], [1, 0]]
+    to the power of n. Multiplying it by the vector [F(1), F(0)] gives the
+    vector [F(n+1), F(n)]. The Fibonacci number F(n) is then returned.
+    https://stackoverflow.com/questions/18172257/efficient-calculation-of-fibonacci-series
+    """
+    a, b = 0, 1
+    for bit in f"{n:b}":
+        a, b = (a + 2 * b) * a, a * a + b * b
+        if bit == "1":
+            a, b = a + b, a
+    return a * f1 + b * f0
 
 
 def count_of_digits(val):
@@ -592,11 +621,14 @@ def generate_2d(h, w, fill_value=0):
 def sum_2d(matrix):
     return sum([sum(row) for row in matrix])
 
+
 def flatten_2d(matrix):
     return [item for row in matrix for item in row]
 
+
 def return_matrix_value(matrix, coordinate):
     return matrix[coordinate[0]][coordinate[1]]
+
 
 def set_matrix_value(matrix, coordinate, value):
     matrix[coordinate[0]][coordinate[1]] = value
@@ -677,8 +709,10 @@ def check_point_in_triangle(point1=(0,0), point2=(0,0), point3=(0,0), point=(0,0
     # If the the three triangles formed by using the point in the coordinates have areas totaling the area of the triangle, then the point is in the triangle. If it's bigger, it's outside.
     return area_of_triangle(point1, point2, point3) == area_of_triangle(point1, point2, point) + area_of_triangle(point1, point, point3) + area_of_triangle(point, point2, point3)
 
+
 def countifs(iterable, condition):
     return sum(1 for x in iterable if condition(x))
+
 
 def countall(iterable):
     di = {}
@@ -686,11 +720,27 @@ def countall(iterable):
         di[x] = di.get(x, 0) + 1
     return di
 
+
 def check_odd_digits(num):
     return len([x for x in convert_int_to_list(num) if x % 2 == 1]) == len(convert_int_to_list(num))
+
 
 def check_even(x):
     return x % 2 == 0
 
+
 def check_odd(x):
     return x % 2 == 1
+
+
+def check_right_triangle_from_coordinates(point1, point2, point3):
+    """Check if three points form a right triangle."""
+    x1, y1 = point1
+    x2, y2 = point2
+    x3, y3 = point3
+
+    a = (x2- x1)**2 + (y2 - y1)**2
+    b = (x3 - x1)**2 + (y3 - y1)**2
+    c = (x3 - x2)**2 + (y3 - y2)**2
+
+    return a + b == c or a + c == b or b + c == a

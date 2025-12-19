@@ -2511,8 +2511,43 @@ def problem90():
     return None
 
 
-def problem91():
-    return None
+def problem91(max_coordinate=50):
+    """Euler Problem 91: Right triangles with integer coordinates.
+
+    The points P (x1, y1) and Q (x2, y2) are plotted at integer coordinates and are joined to the origin, O(0, 0) to form OPQ.
+    There are exactly fourteen triangles containing a right angle that can be formed when each co-ordinate lies between 0 and 2 inclusive; that is, 0 ≤ x1, y1, x2, y2 ≤ 2.
+    Given that 0 ≤ x1, y1, x2, y2 ≤ 50, how many right triangles can be formed?
+    """
+    solutions = set()
+    x3 = 0
+    y3 = 0
+    for x1 in range(max_coordinate+1):
+        for y1 in range(max_coordinate+1):
+            for x2 in range(max_coordinate+1):
+                for y2 in range(max_coordinate+1):
+                    if (x1 == x2 and y1 == y2) or (x1 == x3 and y1 == y3) or (x2 == x3 and y2 == y3): # Check if any of the points are the same
+                        continue
+                    # Check if the points form a right triangle, and aren't already used (prevents duplicates)
+                    if util.check_right_triangle_from_coordinates((x1, y1), (x2, y2), (x3, y3)) and (x2, y2, x1, y1) not in solutions:
+                        solutions.add((x1, y1, x2, y2))
+    return len(solutions)
+
+
+def problem91_alt(max_coordinate=50):
+    """Euler Problem 91: Right triangles with integer coordinates."""
+    # I noticed that this could be a different approach. It seems to be slightly slower, but it may make it easier to understand
+    solutions = set() # Faster than a list
+    x3 = 0 # Origin x
+    y3 = 0 # Origin y
+    for ea in product(range(max_coordinate+1), repeat=4): # cartesian product, iterates through all possible combinations
+        [x1, y1, x2, y2] = ea # Unpack the cartesian product so you can actually read what's happening
+        if (x1 == x2 and y1 == y2) or (x1 == x3 and y1 == y3) or (x2 == x3 and y2 == y3): # Check if any of the points are the same
+            continue
+        # Check if the points form a right triangle & that they weren't already used (point 3 is always same, just check if 1 & 2 are reversed from another solution)
+        if util.check_right_triangle_from_coordinates((x1, y1), (x2, y2), (x3, y3)) and (x2, y2, x1, y1) not in solutions:
+            solutions.add((x1, y1, x2, y2))
+    return len(solutions)
+
 
 def problem92(max_num=10000000, desired_final_total=89):
     """Euler Problem 92: Square digit chains.
@@ -2768,6 +2803,26 @@ def problem102(filename="data/0102_triangles.txt", given_point=(0, 0)):
             contains_origin += 1
     return contains_origin
 
+
+def problem104():
+    """Euler Problem 104: Pandigital Fibonacci.
+
+    The Fibonacci sequence is defined by the recurrence relation:
+    Fn = Fn-1 + Fn-2, where F1 = 1 and F2 = 1.
+    It turns out that F541, which contains 113 digits, is the first Fibonacci number for which the last nine digits are 1-9 pandigital (contain all the digits 1 to 9, but not necessarily in order).
+    And F2749, which contains 789 digits, is the first Fibonacci number for which the first nine digits are 1-9 pandigital.
+    Given that Fk is the first Fibonacci number for which the first nine digits AND the last nine digits are 1-9 pandigital, find k.
+    """
+    x = 1
+    y = 1
+    counter = 2
+    while True:
+        x, y = y, x + y # Python's just good at big integers, so time to be lazy
+        counter += 1
+        if set(str(y % 10**9)) == set("123456789") and set(str(y // 10 ** int(math.log10(y)-8))) == set("123456789"): # Check the last 9 digits. If they are 1-9, check the first 9 digits are also 1-9
+            #y % 10**9 is the last 9 digits
+            #log10(y) is the number of digits in y, so y // 10 ** int(math.log10(y)-8) is the first 9 digits
+            return counter
 
 
 def problem112(min_bouncy=0.99):
