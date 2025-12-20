@@ -321,7 +321,14 @@ def multiply_list(*args):
 
 def add_list(*args):
     """Add a list of values."""
-    return sum(args)
+    res = 0
+    for arg in args:
+        if isinstance(arg, list):
+            for ea in arg:
+                res += ea
+        else:
+            res += arg
+    return res
 
 
 def import_2d_array_data(filename):
