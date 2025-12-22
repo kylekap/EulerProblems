@@ -962,15 +962,17 @@ def problem39_alt(max_len_of_wire=1000):
     I went and looked up the wiki for Euclids formula to make it more efficient.
     """
     di = {}
-    for m in range(2, int(max_len_of_wire**0.5) + 1): # Pythagorean triples
+    for m in range(2, int(max_len_of_wire**0.5) + 1):  # Pythagorean triples
         for n in range(1, m):
-            if (m - n) % 2 == 0 or util.gcd(m, n) != 1: # For primitive pythagorean triples, one of the two is even, and they are coprime
+            if (m - n) % 2 == 0 or util.gcd(
+                m, n
+            ) != 1:  # For primitive pythagorean triples, one of the two is even, and they are coprime
                 continue
             # Pythagorean triples, from Euclids formula
             a, b, c = util.euclids_formula(m, n)
-            perimeter = a + b + c # a + b + c = perimeter
+            perimeter = a + b + c  # a + b + c = perimeter
             k = 1
-            while k * perimeter <= max_len_of_wire: # Generate multiples of the primitive triple
+            while k * perimeter <= max_len_of_wire:  # Generate multiples of the primitive triple
                 di[k * perimeter] = di.get(k * perimeter, 0) + 1
                 k += 1
     return max(di, key=di.get)
@@ -1286,7 +1288,9 @@ def problem51(max_prime=1000000, prime_value_family_len=6):
         )  # Generates a list of all possible masks with True for replace and False for keep.
         for mask in masks:  # Iterates through all possible masks
             prime_new_numbers = prime_list(
-                prime, mask, prime_set,
+                prime,
+                mask,
+                prime_set,
             )  # Generates a list of all possible prime numbers based on the given mask
             if len(prime_new_numbers) >= prime_value_family_len:  # If you hit the right length
                 return min(prime_new_numbers)  # Return the smallest prime
@@ -1604,7 +1608,8 @@ def problem59():
 
     def allowed_char(character):
         return character in range(
-            32, 123,
+            32,
+            123,
         )  # no idea what the range is, but at least this covers all upper & lower case with numbers.
 
     def check_common_words(translated_text):
@@ -1833,7 +1838,7 @@ def problem64(max_n=10_000):
     How many continued fractions for N ≤ 10000 have an odd period?
     """
     odds = 0
-    for i in range(1, max_n+1):
+    for i in range(1, max_n + 1):
         _, cf = util.continued_fraction_sqrt(i)
         if len(cf) % 2 == 1:
             odds += 1
@@ -1863,16 +1868,16 @@ def problem65(limit=100):
     e = [2]
     i = 1
     while len(e) < limit:
-        e += [1, i*2, 1]
+        e += [1, i * 2, 1]
         i += 1
     e = e[0:limit]
     e.reverse()
     numerator, denominator = 1, e[0]
 
-    for x in range(1,limit):
-        numerator, denominator = denominator, e[x]*denominator + numerator
+    for x in range(1, limit):
+        numerator, denominator = denominator, e[x] * denominator + numerator
 
-    return util.sum_digits_powers(denominator,1)
+    return util.sum_digits_powers(denominator, 1)
 
 
 def problem66(max_d=1000):
@@ -1885,8 +1890,8 @@ def problem66(max_d=1000):
     """
     di = {}
     for d in range(2, max_d):
-        di[d] = util.pell(d)[0] #For each d, get the numerator of the fundamental solution
-    return max(di, key=di.get) #Return the d with the largest numerator
+        di[d] = util.pell(d)[0]  # For each d, get the numerator of the fundamental solution
+    return max(di, key=di.get)  # Return the d with the largest numerator
 
 
 def problem67(filename="data/0067_triangle.csv"):
@@ -1900,7 +1905,7 @@ def problem67(filename="data/0067_triangle.csv"):
     return problem18(filename)  # Already solved it in problem 18.
 
 
-def problem68(): #TODO(Kyle): #11 Complete
+def problem68():  # TODO(Kyle): #11 Complete
     return None
 
 
@@ -1913,9 +1918,9 @@ def problem69(max_n=1000000):
     Find the value of n ≤ 1000000 for which n/φ(n) is a maximum.
     """
     di = {}
-    for n in range(1, max_n+1):
-        di[n] = n/util.eulers_totient(n) # Calculate n/φ(n) and store in dictionary
-    return max(di, key=di.get) # Return the key with the highest value
+    for n in range(1, max_n + 1):
+        di[n] = n / util.eulers_totient(n)  # Calculate n/φ(n) and store in dictionary
+    return max(di, key=di.get)  # Return the key with the highest value
 
 
 def problem70(max_value=10000000):
@@ -1927,20 +1932,24 @@ def problem70(max_value=10000000):
     Find the value of n, 1 < n < 10^7, for which φ(n) is a permutation of n and the ratio n/φ(n) produces a minimum.
     """
     di = {}
-    primes = util.prime_list(max_value//1000) # Generate a list of primes, up to max_value/1000 to ensure n=x*y is less than max_value.
-    #To maximize the ratio n/φ(n), n must be the product of two distinct primes. So we only check those.
+    primes = util.prime_list(
+        max_value // 1000
+    )  # Generate a list of primes, up to max_value/1000 to ensure n=x*y is less than max_value.
+    # To maximize the ratio n/φ(n), n must be the product of two distinct primes. So we only check those.
     for x in primes:
-        for y in [y for y in primes if x < y]: # Ensure distinct primes, and x < y to avoid double checking
+        for y in [y for y in primes if x < y]:  # Ensure distinct primes, and x < y to avoid double checking
             n = x * y
-            if n > max_value: # If n is too large, skip
+            if n > max_value:  # If n is too large, skip
                 continue
-            t = (x - 1) * (y - 1) # Calculate φ(n)
-            if util.are_permutations(n, t): # Check if n and φ(n) are permutations
-                di[n] = n / t # Store n/φ(n) in dictionary
-    return min(di, key=di.get) # Return the key with the lowest value
+            t = (x - 1) * (y - 1)  # Calculate φ(n)
+            if util.are_permutations(n, t):  # Check if n and φ(n) are permutations
+                di[n] = n / t  # Store n/φ(n) in dictionary
+    return min(di, key=di.get)  # Return the key with the lowest value
 
 
-def problem71(max_d=1000000, target_fraction=(3, 7)): #TODO(Kyle): #12 Should be able to do this without the for loop on n?
+def problem71(
+    max_d=1000000, target_fraction=(3, 7)
+):  # TODO(Kyle): #12 Should be able to do this without the for loop on n?
     """Euler Problem 71: Ordered fractions.
 
     Consider the fraction, n/d, where n and d are positive integers. If n<d and HCF(n,d)=1, it is called a reduced proper fraction.
@@ -1949,13 +1958,13 @@ def problem71(max_d=1000000, target_fraction=(3, 7)): #TODO(Kyle): #12 Should be
     It can be seen that 2/5 is the fraction immediately to the left of 3/7.
     By listing the set of reduced proper fractions for d ≤ 1,000,000 in ascending order of size, find the numerator of the fraction immediately to the left of 3/7.
     """
-    left_fraction = ((target_fraction[0]-1)/(target_fraction[1]+1), target_fraction)
-    for d in range(1, max_d + 1): # Go through all denominators
-        max_n = int(target_fraction[0]*d/target_fraction[1]) # Largest n where n/d < 3/7
-        min_n = int(left_fraction[0]*d) # Smallest n where n/d >= 2/5
-        for n in reversed(range(min_n, max_n)): #use the biggest, since it'll be closest to 3/7
-            if left_fraction[0]<(n/d): # If n/d is closer to target_fraction than left_fraction
-                left_fraction = (n/d, util.reduce_fraction(n, d)) # Use it
+    left_fraction = ((target_fraction[0] - 1) / (target_fraction[1] + 1), target_fraction)
+    for d in range(1, max_d + 1):  # Go through all denominators
+        max_n = int(target_fraction[0] * d / target_fraction[1])  # Largest n where n/d < 3/7
+        min_n = int(left_fraction[0] * d)  # Smallest n where n/d >= 2/5
+        for n in reversed(range(min_n, max_n)):  # use the biggest, since it'll be closest to 3/7
+            if left_fraction[0] < (n / d):  # If n/d is closer to target_fraction than left_fraction
+                left_fraction = (n / d, util.reduce_fraction(n, d))  # Use it
             continue
     return left_fraction[1]
 
@@ -1970,8 +1979,8 @@ def problem72(max_d=1000000):
     How many elements would be contained in the set of all reduced proper fractions for d ≤ 1,000,000?
     """
     x = 0
-    for d in range(2,max_d+1): #Go through all denominators
-        x+=util.eulers_totient(d) #Number of reduced proper fractions for denominator d is φ(d)
+    for d in range(2, max_d + 1):  # Go through all denominators
+        x += util.eulers_totient(d)  # Number of reduced proper fractions for denominator d is φ(d)
     return x
 
 
@@ -1985,15 +1994,16 @@ def problem73(max_d=12000, lower_fraction=(1, 3), upper_fraction=(1, 2)):
     How many fractions lie between 1/3 and 1/2 for d ≤ 12000?
     """
     li = []
-    for d in range(1, max_d + 1): # Go through all denominators
-        max_n = int(upper_fraction[0]*d/upper_fraction[1])+1
-        min_n = int(lower_fraction[0]*d/lower_fraction[1])
+    for d in range(1, max_d + 1):  # Go through all denominators
+        max_n = int(upper_fraction[0] * d / upper_fraction[1]) + 1
+        min_n = int(lower_fraction[0] * d / lower_fraction[1])
         for n in range(min_n, max_n):
-            if n/d > lower_fraction[0]/lower_fraction[1] and n/d < upper_fraction[0]/upper_fraction[1]:
+            if n / d > lower_fraction[0] / lower_fraction[1] and n / d < upper_fraction[0] / upper_fraction[1]:
                 if util.reduce_fraction(n, d) != (n, d):
                     continue
-                li.append((n/d, util.reduce_fraction(n, d)))
+                li.append((n / d, util.reduce_fraction(n, d)))
     return len(li)
+
 
 def problem74(max_starting_val=1000000, chain_length=60):
     """Euler Problem 74: Digit factorial chains.
@@ -2009,6 +2019,7 @@ def problem74(max_starting_val=1000000, chain_length=60):
     Starting with 69 produces a chain of five non-repeating terms, but the longest non-repeating chain with a starting number below one million is sixty terms.
     How many chains, with a starting number below one million, contain exactly sixty non-repeating terms?
     """
+
     def find_chain_length(x):
         loop_val = x
         chain = [x]
@@ -2033,22 +2044,24 @@ def problem74_alt(max_starting_val=1000000, chain_length=60):
     Slightly faster. I saw someone mention a 'fingerprint', and it reminded me that the order of digits doesn't matter for factorial digit sums.
     So we can cache the factorial digit sums based on the sorted string of digits, rather than recalculating each permutation every time.
     """
-    di = {} # Cache for factorial digit sums
+    di = {}  # Cache for factorial digit sums
     total = 0
     for ea in range(1, max_starting_val):
         loop_val = ea
         chain = [ea]
         while True:
-            str_fd = "".join(sorted(str(loop_val))) # The order of the digits doesn't matter, so why bother recalculating each permutation?
+            str_fd = "".join(
+                sorted(str(loop_val))
+            )  # The order of the digits doesn't matter, so why bother recalculating each permutation?
             if str_fd not in di:
-                di[str_fd] = util.factorial_digits(loop_val) # Calculate and store if not already done
+                di[str_fd] = util.factorial_digits(loop_val)  # Calculate and store if not already done
             fd = di[str_fd]
             if fd in chain:
                 break
             chain.append(fd)
             loop_val = fd
         if chain_length == len(chain):
-            total+=1
+            total += 1
     return total
 
 
@@ -2068,15 +2081,17 @@ def problem75(max_len_of_wire=1500000):
     Given that L is the length of the wire, for how many values of L ≤ 1500000 can exactly one integer sided right triangle be formed?
     """
     di = {}
-    for m in range(2, int(max_len_of_wire**0.5) + 1): # Pythagorean triples
+    for m in range(2, int(max_len_of_wire**0.5) + 1):  # Pythagorean triples
         for n in range(1, m):
-            if (m - n) % 2 == 0 or util.gcd(m, n) != 1: # For primitive pythagorean triples, one of the two is even, and they are coprime
+            if (m - n) % 2 == 0 or util.gcd(
+                m, n
+            ) != 1:  # For primitive pythagorean triples, one of the two is even, and they are coprime
                 continue
             # Pythagorean triples, from Euclids formula
             a, b, c = util.euclids_formula(m, n)
-            perimeter = a + b + c # a + b + c = perimeter
+            perimeter = a + b + c  # a + b + c = perimeter
             k = 1
-            while k * perimeter <= max_len_of_wire: # Generate multiples of the primitive triple
+            while k * perimeter <= max_len_of_wire:  # Generate multiples of the primitive triple
                 di[k * perimeter] = di.get(k * perimeter, 0) + 1
                 k += 1
     return sum(1 for x in di.values() if x == 1)
@@ -2096,10 +2111,10 @@ def problem76(target=100):
 
     How many different ways can one hundred be written as a sum of at least two positive integers?
     """
-    #This is basically the same as the coin problem, except with all numbers.
+    # This is basically the same as the coin problem, except with all numbers.
     ways = [0] * (target + 1)  # Create list to hold number of ways to make each amount
     ways[0] = 1  # There is 1 way to make 0 amount
-    for val in range(1, target): # For each value, update the ways to make each amount
+    for val in range(1, target):  # For each value, update the ways to make each amount
         for amount in range(val, target + 1):  # For each amount that can be made with this value
             ways[amount] += ways[amount - val]
     return ways[-1]
@@ -2127,30 +2142,31 @@ def problem77(ways_target=5000):
         for amount in range(prime, len(ways)):
             ways[amount] += ways[amount - prime]
 
-    return min([x for x in range(len(ways)) if ways[x] > ways_target]) # Get the first amount with more than 5000 ways
+    return min([x for x in range(len(ways)) if ways[x] > ways_target])  # Get the first amount with more than 5000 ways
 
 
-def problem78(modulus_to_check=1000000): #TODO(Kyle): #13 Refactor
+def problem78(modulus_to_check=1000000):  # TODO(Kyle): #13 Refactor
     """Euler Problem 78: Prime summations (again).
 
     Let p(n) represent the number of different ways in which n coins can be separated into piles. For example, five coins can be separated into piles in exactly seven different ways, so p(5)=7.
     Find the least value of n for which p(n) is divisible by one million.
     """
+
     def generate_euler_pentagonal(k, s):
-        return k*(3*k + s)//2
+        return k * (3 * k + s) // 2
 
     def summation(p, n, pent):
         summ = 0
         for k, v in enumerate(pent):
             if v <= n:
-                summ += p[n-v] * (1-(k&2))
+                summ += p[n - v] * (1 - (k & 2))
             else:
                 break
         return summ
 
-    pent = [generate_euler_pentagonal(k,s) for k in range(1,202) for s in(-1,1)]
+    pent = [generate_euler_pentagonal(k, s) for k in range(1, 202) for s in (-1, 1)]
     p = [1]
-    for n in range(1,60001):
+    for n in range(1, 60001):
         p.append(summation(p, n, pent))
         if p[n] % modulus_to_check == 0:
             return n
@@ -2165,14 +2181,17 @@ def problem79(filename="data/0079_keylog.txt"):
     The text file, keylog.txt, contains fifty successful login attempts.
     Given that the three characters are always asked for in order, analyse the file so as to determine the shortest possible secret passcode of unknown length.
     """
+
     def check_match(x, y):
-        fnmatch.fnmatch(x, f"""*{"*".join(list(y))}*""") #Returns true if y is a substring of x, uses wildcards.
+        fnmatch.fnmatch(x, f"""*{"*".join(list(y))}*""")  # Returns true if y is a substring of x, uses wildcards.
 
-    data = [x.strip() for x in util.import_text_file(filename)] #I hate whitespace
+    data = [x.strip() for x in util.import_text_file(filename)]  # I hate whitespace
 
-    for pp in list(permutations({x for y in data for x in y if x in util.digits})): #Get all possible passcodes
+    for pp in list(permutations({x for y in data for x in y if x in util.digits})):  # Get all possible passcodes
         possible_password = "".join(pp)
-        if sum([1 for key in data if check_match(possible_password, key)]) == len(data): #Check if the passcode is valid by checking each key is a wildcard match.
+        if sum([1 for key in data if check_match(possible_password, key)]) == len(
+            data
+        ):  # Check if the passcode is valid by checking each key is a wildcard match.
             return possible_password
     return None
 
@@ -2186,8 +2205,8 @@ def problem79_alt(filename="data/0079_keylog.txt"):
         pp = "".join(possible_passcode)
         x = 0
         for code in data:
-            if pp.index(code[0]) < pp.index(code[1]) <pp.index(code[2]):
-                x+=1
+            if pp.index(code[0]) < pp.index(code[1]) < pp.index(code[2]):
+                x += 1
             else:
                 break
         if x == len(data):
@@ -2202,7 +2221,7 @@ def problem80(max_int=100, prec=100):
     The square root of two is 1.41421356237309504880..., and the digital sum of the first one hundred decimal digits is 475.
     For the first one hundred natural numbers, find the total of the digital sums of the first one hundred decimal digits for all the irrational square roots.
     """
-    values = [x for x in range(max_int+1) if int(x**0.5) != x**0.5]
+    values = [x for x in range(max_int + 1) if int(x**0.5) != x**0.5]
     tot = 0
     for value in values:
         tot += sum([int(x) for x in util.sqrt_by_subtraction(value, prec)])
@@ -2216,18 +2235,18 @@ def problem81(filename="data/0081_matrix.txt"):
     Find the minimal path sum from the top left to the bottom right by only moving right and down in [data/0081_matrix.txt], a 31K text file containing an 80 by 80 matrix.
     """
     matrix = util.import_2d_array_data(filename)
-    output_matrix = [[0]*len(matrix[0])]*len(matrix)
+    output_matrix = [[0] * len(matrix[0])] * len(matrix)
 
-    #Go through the matrix, starting at upper left & taking min of up & left all the way to the bottom. If no upper? Left. If no left? Up. If neither? Start.
+    # Go through the matrix, starting at upper left & taking min of up & left all the way to the bottom. If no upper? Left. If no left? Up. If neither? Start.
     for x in range(len(matrix)):
         for y in range(len(matrix[x])):
-            if x - 1 >= 0 and y - 1 >= 0: #Take min of up & left
-                output_matrix[x][y] = matrix[x][y] + min(output_matrix[x-1][y], output_matrix[x][y-1])
-            elif x - 1 >= 0: #If no left, take up
-                output_matrix[x][y] = matrix[x][y] + output_matrix[x-1][y]
-            elif y - 1 >= 0: #If no up, take left
-                output_matrix[x][y] = matrix[x][y] + output_matrix[x][y-1]
-            else: #Starting Point
+            if x - 1 >= 0 and y - 1 >= 0:  # Take min of up & left
+                output_matrix[x][y] = matrix[x][y] + min(output_matrix[x - 1][y], output_matrix[x][y - 1])
+            elif x - 1 >= 0:  # If no left, take up
+                output_matrix[x][y] = matrix[x][y] + output_matrix[x - 1][y]
+            elif y - 1 >= 0:  # If no up, take left
+                output_matrix[x][y] = matrix[x][y] + output_matrix[x][y - 1]
+            else:  # Starting Point
                 output_matrix[x][y] = matrix[x][y]
     return output_matrix[x][y]
 
@@ -2238,6 +2257,7 @@ def problem82(filename="data/0082_matrix.txt"):
     The minimal path sum in the 5 by 5 matrix below, by starting in any cell in the left column and finishing in any cell in the right column, and only moving up, down and right, is indicated in red and is equal to 994.
     Find the minimal path sum from the left column to the right column in [data/0082_matrix.txt], a 31K text file containing a 80 by 80 matrix.
     """
+
     def mindistance(ref_x, ref_y):
         lengths = []
         up_curr = 0
@@ -2248,16 +2268,16 @@ def problem82(filename="data/0082_matrix.txt"):
             up = ref_x - i
             if up >= 0:
                 up_curr += matrix[up][ref_y]
-                lengths.append(up_curr + mask[up][ref_y-1])
+                lengths.append(up_curr + mask[up][ref_y - 1])
             # Check down
             down = ref_x + i
             if down < len(matrix):
                 down_curr += matrix[down][ref_y]
-                lengths.append(down_curr + mask[down][ref_y-1])
+                lengths.append(down_curr + mask[down][ref_y - 1])
         # Check left
-        lengths.append(mask[ref_x][ref_y-1])
+        lengths.append(mask[ref_x][ref_y - 1])
 
-        return min(lengths) # Pick the shortest
+        return min(lengths)  # Pick the shortest
 
     matrix = util.import_2d_array_data(filename)
     mask = util.generate_2d(len(matrix), len(matrix[0]), 0)
@@ -2274,15 +2294,16 @@ def problem83(filename="data/0083_matrix.txt"):
     Find the minimal path sum from the top left to the bottom right in [data/0083_matrix.txt], a 31K text file containing a 80 by 80 matrix.
     """
     matrix = util.import_2d_array_data(filename)
-    return util.modified_dijkstra(matrix,
-                                  (0,0), # Start
-                                  (len(matrix)-1, len(matrix[0])-1), # End
-                                  )
+    return util.modified_dijkstra(
+        matrix,
+        (0, 0),  # Start
+        (len(matrix) - 1, len(matrix[0]) - 1),  # End
+    )
 
 
 def problem_84(iterations=1_000_000):
     board = [
-        "GO", #00
+        "GO",  # 00
         "A1",
         "CC1",
         "A2",
@@ -2292,8 +2313,7 @@ def problem_84(iterations=1_000_000):
         "CH1",
         "B2",
         "B3",
-        "JAIL", #10
-
+        "JAIL",  # 10
         "C1",
         "U1",
         "C2",
@@ -2303,8 +2323,7 @@ def problem_84(iterations=1_000_000):
         "CC2",
         "D2",
         "D3",
-        "FP", #20
-
+        "FP",  # 20
         "E1",
         "CH2",
         "E2",
@@ -2314,8 +2333,7 @@ def problem_84(iterations=1_000_000):
         "F2",
         "U2",
         "F3",
-        "G2J", #30
-
+        "G2J",  # 30
         "G1",
         "G2",
         "CC3",
@@ -2324,12 +2342,13 @@ def problem_84(iterations=1_000_000):
         "CH3",
         "H1",
         "T2",
-        "H2", #39
+        "H2",  # 39
     ]
+
     class Monopoly:
         def __init__(self, dice_size=6, num_doubles_to_jail=3, num_community_chest=16, num_chance=16):
-            self.CC = self.shuffle(["GO", "JAIL"]+[""]*(num_community_chest-2))
-            self.CH = self.shuffle(["GO", "JAIL", "C1", "E3", "H2", "R1", "R", "R", "U", -3]+[""]*(num_chance-10))
+            self.CC = self.shuffle(["GO", "JAIL"] + [""] * (num_community_chest - 2))
+            self.CH = self.shuffle(["GO", "JAIL", "C1", "E3", "H2", "R1", "R", "R", "U", -3] + [""] * (num_chance - 10))
             self.dice_size = dice_size
             self.current_square = 0
             self.visited_squares = dict.fromkeys(board, 0)
@@ -2352,31 +2371,31 @@ def problem_84(iterations=1_000_000):
 
             if is_double:
                 self.doubles_to_jail_streak += 1
-                if self.doubles_to_jail_streak == self.num_doubles_to_jail: # Go to jail, reset the counter
+                if self.doubles_to_jail_streak == self.num_doubles_to_jail:  # Go to jail, reset the counter
                     next_square = self.move_card("JAIL", self.current_square)
                     self.doubles_to_jail_streak = 0
-                else: # No jail... yet
+                else:  # No jail... yet
                     next_square = self.move_dice(sum(dice_result))
-            else: # Not a double, reset the counter
+            else:  # Not a double, reset the counter
                 self.doubles_to_jail_streak = 0
                 next_square = self.move_dice(sum(dice_result))
 
             # Do square effect
-            if board[next_square].startswith("CC"):# Community Chest
+            if board[next_square].startswith("CC"):  # Community Chest
                 card, self.CC = self.draw_card(self.CC)
                 if card != "":
                     next_square = self.move_card(card, next_square)
-            elif board[next_square].startswith("CH"): # Chance
+            elif board[next_square].startswith("CH"):  # Chance
                 card, self.CH = self.draw_card(self.CH)
-                if isinstance(card, int): # Check if card is a number, since -3 is a special case
+                if isinstance(card, int):  # Check if card is a number, since -3 is a special case
                     next_square = self.move_dice(card)
-                elif card != "": # Check if card is anything else
+                elif card != "":  # Check if card is anything else
                     next_square = self.move_card(card, next_square)
-            if board[next_square] == "G2J": # Jail
+            if board[next_square] == "G2J":  # Jail
                 next_square = self.move_card("JAIL", self.current_square)
 
-            self.current_square = next_square # Update the current square now that we're done moving
-            self.visited_squares[board[self.current_square]] += 1 # Update visited squares
+            self.current_square = next_square  # Update the current square now that we're done moving
+            self.visited_squares[board[self.current_square]] += 1  # Update visited squares
 
         def roll(self):
             # Roll dice using cryptographically secure random number generator
@@ -2385,18 +2404,18 @@ def problem_84(iterations=1_000_000):
         def roll_n(self, n):
             # Returns a list of n rolls, and True if they are all the same
             rolls = [self.roll() for _ in range(n)]
-            return rolls, len(set(rolls))==1
+            return rolls, len(set(rolls)) == 1
 
         def move_dice(self, dice_result):
-            next_square = self.current_square + dice_result # Next square
-            if next_square > len(board) - 1: # You can move forwards, so wrap
+            next_square = self.current_square + dice_result  # Next square
+            if next_square > len(board) - 1:  # You can move forwards, so wrap
                 next_square -= len(board)
-            elif next_square < 0: # You can move backwards, so wrap
+            elif next_square < 0:  # You can move backwards, so wrap
                 next_square += len(board)
             return next_square
 
         def move_card(self, card, position):
-        # Need a starting square for the move_card due to the R & U.
+            # Need a starting square for the move_card due to the R & U.
             while not board[position].startswith(card):
                 position = (position + 1) % len(board)
             return position
@@ -2421,22 +2440,23 @@ def problem85(nearest_total=2_000_000):
     Although there exists no rectangular grid that contains exactly two million rectangles, find the area of the grid with the nearest number of rectangles to two million.
     """
 
-    def num_rectangles(x, y): # Returns the number of rectangles in an x by y grid
+    def num_rectangles(x, y):  # Returns the number of rectangles in an x by y grid
         tot = 0
-        for ea_x in range(x): # x by y
+        for ea_x in range(x):  # x by y
             for ea_y in range(y):
-                tot+=(x-ea_x) * (y-ea_y) # I didn't want to deal with +1, so i'm starting at subtracting 0 and going to 1 less than the number.
+                tot += (
+                    (x - ea_x) * (y - ea_y)
+                )  # I didn't want to deal with +1, so i'm starting at subtracting 0 and going to 1 less than the number.
                 # I thought it was a factorial at first, but it's not - original was missing 5. Instead it's a sum of the different possible x and y combinations
         return tot
 
-    nearest = (0, 0, 0) # x, y, count of rectangles
+    nearest = (0, 0, 0)  # x, y, count of rectangles
     for x in range(1, 100):
-        for y in range(1, 100): # 100x100 grid to limit how big it actually gets.
+        for y in range(1, 100):  # 100x100 grid to limit how big it actually gets.
             rectangles = num_rectangles(x, y)
-            if abs(rectangles-nearest_total) < (abs(nearest[2]-nearest_total)):
+            if abs(rectangles - nearest_total) < (abs(nearest[2] - nearest_total)):
                 nearest = (x, y, rectangles)
-    return nearest[0]*nearest[1]
-
+    return nearest[0] * nearest[1]
 
 
 def problem86():
@@ -2453,7 +2473,7 @@ def problem87(total=50_000_000):
     47 = 2^2 + 3^3 + 2^4
     How many numbers below fifty-million can be expressed as the sum of a prime square, prime cube, and prime fourth power?
     """
-    instances = int(total**0.5)+1
+    instances = int(total**0.5) + 1
     primes = util.prime_list(instances)
     squares = [x**2 for x in primes if x**2 < total]
     cubes = [x**3 for x in primes if x**3 < total]
@@ -2499,12 +2519,12 @@ def prolem89():
     text_lines = util.import_text_file("data/0089_roman.txt")
     tracker = {"original": 0, "roman": 0}
     for line in text_lines:
-        original = line.strip().upper() #Clean the line
-        val = util.roman_numeral_to_int(original) #Convert to int
-        roman = util.int_to_roman_numeral(val) #Convert to roman numerals
-        tracker["original"] += len(original) #Add to tracker
-        tracker["roman"] += len(roman) #Add to tracker
-    return tracker["original"] - tracker["roman"] #Return the difference
+        original = line.strip().upper()  # Clean the line
+        val = util.roman_numeral_to_int(original)  # Convert to int
+        roman = util.int_to_roman_numeral(val)  # Convert to roman numerals
+        tracker["original"] += len(original)  # Add to tracker
+        tracker["roman"] += len(roman)  # Add to tracker
+    return tracker["original"] - tracker["roman"]  # Return the difference
 
 
 def problem90():
@@ -2521,14 +2541,19 @@ def problem91(max_coordinate=50):
     solutions = set()
     x3 = 0
     y3 = 0
-    for x1 in range(max_coordinate+1):
-        for y1 in range(max_coordinate+1):
-            for x2 in range(max_coordinate+1):
-                for y2 in range(max_coordinate+1):
-                    if (x1 == x2 and y1 == y2) or (x1 == x3 and y1 == y3) or (x2 == x3 and y2 == y3): # Check if any of the points are the same
+    for x1 in range(max_coordinate + 1):
+        for y1 in range(max_coordinate + 1):
+            for x2 in range(max_coordinate + 1):
+                for y2 in range(max_coordinate + 1):
+                    if (
+                        (x1 == x2 and y1 == y2) or (x1 == x3 and y1 == y3) or (x2 == x3 and y2 == y3)
+                    ):  # Check if any of the points are the same
                         continue
                     # Check if the points form a right triangle, and aren't already used (prevents duplicates)
-                    if util.check_right_triangle_from_coordinates((x1, y1), (x2, y2), (x3, y3)) and (x2, y2, x1, y1) not in solutions:
+                    if (
+                        util.check_right_triangle_from_coordinates((x1, y1), (x2, y2), (x3, y3))
+                        and (x2, y2, x1, y1) not in solutions
+                    ):
                         solutions.add((x1, y1, x2, y2))
     return len(solutions)
 
@@ -2536,15 +2561,22 @@ def problem91(max_coordinate=50):
 def problem91_alt(max_coordinate=50):
     """Euler Problem 91: Right triangles with integer coordinates."""
     # I noticed that this could be a different approach. It seems to be slightly slower, but it may make it easier to understand
-    solutions = set() # Faster than a list
-    x3 = 0 # Origin x
-    y3 = 0 # Origin y
-    for ea in product(range(max_coordinate+1), repeat=4): # cartesian product, iterates through all possible combinations
-        [x1, y1, x2, y2] = ea # Unpack the cartesian product so you can actually read what's happening
-        if (x1 == x2 and y1 == y2) or (x1 == x3 and y1 == y3) or (x2 == x3 and y2 == y3): # Check if any of the points are the same
+    solutions = set()  # Faster than a list
+    x3 = 0  # Origin x
+    y3 = 0  # Origin y
+    for ea in product(
+        range(max_coordinate + 1), repeat=4
+    ):  # cartesian product, iterates through all possible combinations
+        [x1, y1, x2, y2] = ea  # Unpack the cartesian product so you can actually read what's happening
+        if (
+            (x1 == x2 and y1 == y2) or (x1 == x3 and y1 == y3) or (x2 == x3 and y2 == y3)
+        ):  # Check if any of the points are the same
             continue
         # Check if the points form a right triangle & that they weren't already used (point 3 is always same, just check if 1 & 2 are reversed from another solution)
-        if util.check_right_triangle_from_coordinates((x1, y1), (x2, y2), (x3, y3)) and (x2, y2, x1, y1) not in solutions:
+        if (
+            util.check_right_triangle_from_coordinates((x1, y1), (x2, y2), (x3, y3))
+            and (x2, y2, x1, y1) not in solutions
+        ):
             solutions.add((x1, y1, x2, y2))
     return len(solutions)
 
@@ -2557,14 +2589,16 @@ def problem92(max_num=10000000, desired_final_total=89):
     Will stop at 1 as it repeats itself.
     How many starting numbers below ten million will arrive at 89?
     """
+
     def check_final_total(x):
         curr = x
         while curr not in [1, 89]:
-            curr = util.sum_digits_powers(curr,2)
+            curr = util.sum_digits_powers(curr, 2)
         return curr
+
     di = {}
     for ea in range(1, max_num):
-        val = util.sum_digits_powers(ea,2)
+        val = util.sum_digits_powers(ea, 2)
         if val in di:
             di[val] += 1
         else:
@@ -2573,27 +2607,29 @@ def problem92(max_num=10000000, desired_final_total=89):
     cum_tot = 0
     for key, value in di.items():
         if check_final_total(key) == desired_final_total:
-            cum_tot+=value
+            cum_tot += value
     return cum_tot
 
 
 def problem92_alt(max_num=10000000, desired_final_total=89):
     def get_totals_final_amount(max_num):
-        li = [0]*81*len(util.convert_int_to_list(max_num))
+        li = [0] * 81 * len(util.convert_int_to_list(max_num))
         for ea in range(1, len(li)):
             if check_final_total(ea) == desired_final_total:
                 li.append(ea)
         return set(li)
+
     def check_final_total(x):
         curr = x
         while curr not in [1, 89]:
-            curr = util.sum_digits_powers(curr,2)
+            curr = util.sum_digits_powers(curr, 2)
         return curr
+
     sums = get_totals_final_amount(max_num)
     ct = 0
     for ea in range(1, max_num):
-        if util.sum_digits_powers(ea,2) in sums:
-            ct+=1
+        if util.sum_digits_powers(ea, 2) in sums:
+            ct += 1
     return ct
 
 
@@ -2601,13 +2637,13 @@ def problem93():
     return None
 
 
-def problem94(max_perimeter=1_000_000_000): #not fast enough?
+def problem94(max_perimeter=1_000_000_000):  # not fast enough?
     result = 0
-    for a,b,c in util.pythagorean_triples_under(max_perimeter//3+2):
-        if abs(2*a-c)==1:               # (c,c,2*a) almost equilateral triangle
-            result += 2*a+2*c
-        if abs(2*b-c)==1:               # (c,c,2*b) almost equilateral triangle
-            result += 2*b+2*c
+    for a, b, c in util.pythagorean_triples_under(max_perimeter // 3 + 2):
+        if abs(2 * a - c) == 1:  # (c,c,2*a) almost equilateral triangle
+            result += 2 * a + 2 * c
+        if abs(2 * b - c) == 1:  # (c,c,2*b) almost equilateral triangle
+            result += 2 * b + 2 * c
     return result
 
 
@@ -2628,6 +2664,7 @@ def problem96():
     A 6K text file, sudoku.txt (right click and 'Save Link/Target As...'), contains fifty different Su Doku puzzles ranging in difficulty, but all with unique solutions (the first puzzle in the file is the example above).
     By solving all fifty puzzles find the sum of the 3-digit numbers found in the top left corner of each solution grid.
     """
+
     class Sudoku:
         def __init__(self, board):
             self.board = board
@@ -2644,16 +2681,19 @@ def problem96():
 
         def get_row(self, x):
             return self.board[x]
+
         def _check_row(self, x, num):
             return num in self.get_row(x)
 
         def get_col(self, y):
             return [self.board[i][y] for i in range(9)]
+
         def _check_col(self, y, num):
             return num in self.get_col(y)
 
         def get_box(self, x, y):
             return [self.board[3 * (x // 3) + i][3 * (y // 3) + j] for i, j in product(range(3), range(3))]
+
         def _check_box(self, x, y, num):
             return num in self.get_box(x, y)
 
@@ -2664,30 +2704,41 @@ def problem96():
             for x in range(9):
                 for y in range(9):
                     if self.board[x][y] == 0:
-                        self.guess_board[x][y] = [i for i in range(1, 10) if not self.check_all(x, y, i)] # Get the possible answers
+                        self.guess_board[x][y] = [
+                            i for i in range(1, 10) if not self.check_all(x, y, i)
+                        ]  # Get the possible answers
                     else:
-                        self.guess_board[x][y] = [] # If the box is already filled, there's no other possible answers
+                        self.guess_board[x][y] = []  # If the box is already filled, there's no other possible answers
 
         def exact_solve(self):
             # Get the number of possible answers for each empty box. If any are 1, solve that one. If none are 1, break
-            while 1 in util.countall([len(self.guess_board[x][y if isinstance(self.guess_board[x][y], list) else 0]) for x in range(9) for y in range(9)]):
+            while 1 in util.countall(
+                [
+                    len(self.guess_board[x][y if isinstance(self.guess_board[x][y], list) else 0])
+                    for x in range(9)
+                    for y in range(9)
+                ]
+            ):
                 for x in range(9):
                     for y in range(9):
-                        if len(self.guess_board[x][y]) == 1: # If there's only one possible answer
-                            self.board[x][y] = self.guess_board[x][y][0] # Set the box to that answer
-                            self.set_possibilities() # Update the possibilities
+                        if len(self.guess_board[x][y]) == 1:  # If there's only one possible answer
+                            self.board[x][y] = self.guess_board[x][y][0]  # Set the box to that answer
+                            self.set_possibilities()  # Update the possibilities
             return self.board
-
 
         def brute_force_solve(self, board, row, col):
             if row >= len(board):
                 return True, board
             if board[row][col]:
-                return self.brute_force_solve(board, row + 1 if col == len(board[0])-1 else row, (col + 1) % len(board[0]))
+                return self.brute_force_solve(
+                    board, row + 1 if col == len(board[0]) - 1 else row, (col + 1) % len(board[0])
+                )
 
             for num in [i for i in range(1, 10) if not self.check_all(row, col, i)]:
                 board[row][col] = num
-                if self.brute_force_solve(board, row + 1 if col == len(board[0])-1 else row, (col + 1) % len(board[0])):
+                if self.brute_force_solve(
+                    board, row + 1 if col == len(board[0]) - 1 else row, (col + 1) % len(board[0])
+                ):
                     return True, board
                 board[row][col] = 0
             return False
@@ -2698,23 +2749,26 @@ def problem96():
 
     for line in data:
         if line.startswith("Grid"):
-            active_board = [] # Reset the board for the next grid
+            active_board = []  # Reset the board for the next grid
         else:
-            cleaned_line = line.replace("  ", " ").replace(" ", "").replace("\n", "").replace("\r\n", "") # Housekeeping
-            cleaned_line = [int(i) for i in cleaned_line] # Convert to int
-            active_board.append(cleaned_line) # Add to board
+            cleaned_line = (
+                line.replace("  ", " ").replace(" ", "").replace("\n", "").replace("\r\n", "")
+            )  # Housekeeping
+            cleaned_line = [int(i) for i in cleaned_line]  # Convert to int
+            active_board.append(cleaned_line)  # Add to board
 
-            if len(active_board) == len(active_board[0]): # If the board is square
-                sudoku_to_solve = Sudoku(active_board) # Create the sudoku object
-                sudoku_to_solve.exact_solve() # Reduces the complexity by pre-solving the 1 possibility cells.
-                brute, board = sudoku_to_solve.brute_force_solve(sudoku_to_solve.board, 0, 0) # Brute force solution
-                if brute: # If a solution was found
-                    sudoku_to_solve.board = board # Set the board to the solution
-                    first_three_spots_total += util.generate_number_from_digits(sudoku_to_solve.board[0][0], sudoku_to_solve.board[0][1], sudoku_to_solve.board[0][2]) # Add the sum of the first three numbers
+            if len(active_board) == len(active_board[0]):  # If the board is square
+                sudoku_to_solve = Sudoku(active_board)  # Create the sudoku object
+                sudoku_to_solve.exact_solve()  # Reduces the complexity by pre-solving the 1 possibility cells.
+                brute, board = sudoku_to_solve.brute_force_solve(sudoku_to_solve.board, 0, 0)  # Brute force solution
+                if brute:  # If a solution was found
+                    sudoku_to_solve.board = board  # Set the board to the solution
+                    first_three_spots_total += util.generate_number_from_digits(
+                        sudoku_to_solve.board[0][0], sudoku_to_solve.board[0][1], sudoku_to_solve.board[0][2]
+                    )  # Add the sum of the first three numbers
                 else:
                     print("No solution found!")
     return first_three_spots_total
-
 
 
 def problem97():
@@ -2724,8 +2778,9 @@ def problem97():
     However, in 2004 there was found a massive non-Mersenne prime which contains 2,357,207 digits: 28433 * 2^7830457 + 1.
     Find the last ten digits of this prime number.
     """
-    x = (28433)*(2**7830457)+1
+    x = (28433) * (2**7830457) + 1
     return str(x % 10**10)
+
 
 def problem98():
     return None
@@ -2743,21 +2798,24 @@ def problem99(txt_file="data/0099_base_exp.txt"):
     max_exponent = 1
     line_of_max = 0
 
-    for line_num, line in enumerate(util.import_2d_array_data(txt_file)): #line[0] is base, line[1] is exponent, enumerate to track the line #
+    for line_num, line in enumerate(
+        util.import_2d_array_data(txt_file)
+    ):  # line[0] is base, line[1] is exponent, enumerate to track the line #
         next_value = int(line[0])
         next_exponent = int(line[1])
 
-
-        if next_exponent*math.log(next_value) > max_exponent*math.log(max_value): # x^y == y*log(x), which is easier to work with
-            #Update maximums
+        if next_exponent * math.log(next_value) > max_exponent * math.log(
+            max_value
+        ):  # x^y == y*log(x), which is easier to work with
+            # Update maximums
             max_value = next_value
             max_exponent = next_exponent
             line_of_max = line_num
 
-    return line_of_max+1 #Enumerate starts at 0
+    return line_of_max + 1  # Enumerate starts at 0
 
 
-def problem100(min_denom=1_000_000_000_000, x=15, y=21): #1_000_000_000_000
+def problem100(min_denom=1_000_000_000_000, x=15, y=21):  # 1_000_000_000_000
     """Euler Problem 100: Arranged Probability.
 
     If a box contains twenty-one coloured discs, composed of fifteen blue discs and six red discs, and two discs were taken at random, it can be seen that the probability of taking two blue discs,
@@ -2765,12 +2823,12 @@ def problem100(min_denom=1_000_000_000_000, x=15, y=21): #1_000_000_000_000
     The next such arrangement, for which there is exactly 50% chance of taking two blue discs at random, is a box containing eighty-five blue discs and thirty-five red discs.
     By finding the first arrangement to contain over 10^12 = 100,000,000,000 discs in total, determine the number of blue discs contained in the box.
     """
-    #So we're solving iterations of x**2-2x-y**2+y=0
-    #The next_x = 3*x + 2*y - 2
-    #The next_y = 4*x + 3*y - 3
+    # So we're solving iterations of x**2-2x-y**2+y=0
+    # The next_x = 3*x + 2*y - 2
+    # The next_y = 4*x + 3*y - 3
     while y < min_denom:
-        next_x = 3*x + 2*y - 2
-        next_y = 4*x + 3*y - 3
+        next_x = 3 * x + 2 * y - 2
+        next_y = 4 * x + 3 * y - 3
         x, y = next_x, next_y
     return x, y
 
@@ -2781,6 +2839,7 @@ This section contains problem solutions after the first 100 problems.
 Answers will be ordered by problem number, but will not cover full range of solutions.
 ###################################################################################################
 """
+
 
 def problem102(filename="data/0102_triangles.txt", given_point=(0, 0)):
     """Euler Problem 102: Triangle containment.
@@ -2817,11 +2876,13 @@ def problem104():
     y = 1
     counter = 2
     while True:
-        x, y = y, x + y # Python's just good at big integers, so time to be lazy
+        x, y = y, x + y  # Python's just good at big integers, so time to be lazy
         counter += 1
-        if set(str(y % 10**9)) == set("123456789") and set(str(y // 10 ** int(math.log10(y)-8))) == set("123456789"): # Check the last 9 digits. If they are 1-9, check the first 9 digits are also 1-9
-            #y % 10**9 is the last 9 digits
-            #log10(y) is the number of digits in y, so y // 10 ** int(math.log10(y)-8) is the first 9 digits
+        if set(str(y % 10**9)) == set("123456789") and set(str(y // 10 ** int(math.log10(y) - 8))) == set(
+            "123456789"
+        ):  # Check the last 9 digits. If they are 1-9, check the first 9 digits are also 1-9
+            # y % 10**9 is the last 9 digits
+            # log10(y) is the number of digits in y, so y // 10 ** int(math.log10(y)-8) is the first 9 digits
             return counter
 
 
@@ -2839,6 +2900,7 @@ def problem112(min_bouncy=0.99):
 
     Find the least number for which the proportion of bouncy numbers is exactly 99%.
     """
+
     def check_increasing(num):
         numstr = str(num)
         return all(int(numstr[i]) <= int(numstr[i + 1]) for i in range(len(numstr) - 1))
@@ -2852,10 +2914,12 @@ def problem112(min_bouncy=0.99):
 
     while True:
         total_checked += 1
-        if not check_increasing(total_checked) and not check_decreasing(total_checked): #Check if number is bouncy (aka, not increasing && not decreasing)
+        if not check_increasing(total_checked) and not check_decreasing(
+            total_checked
+        ):  # Check if number is bouncy (aka, not increasing && not decreasing)
             bouncy += 1
         if bouncy / total_checked > min_bouncy:
-            return total_checked-1
+            return total_checked - 1
 
 
 def problem113(n=100):
@@ -2868,12 +2932,16 @@ def problem113(n=100):
     As n increases, the proportion of bouncy numbers below n increases such that there are only 12951 numbers below one-million that are not bouncy and only 277032 non-bouncy numbers below 10^10.
     How many numbers below a googol (10^100) are not bouncy?
     """
-    increasing = util.binomial_coefficient(n+9, 9)-1 #Combinatorics -> Number of increasing numbers is basically a binomial coefficient problem. Use 9 since no leading 0's
-    decreasing = util.binomial_coefficient(n+10, 10)-1 #Can use 10, since decreasing doesn't worry about leading 0's.
-    return increasing + decreasing-10*n #Return the difference, removingall-same-digit numbers (10^n).
+    increasing = (
+        util.binomial_coefficient(n + 9, 9) - 1
+    )  # Combinatorics -> Number of increasing numbers is basically a binomial coefficient problem. Use 9 since no leading 0's
+    decreasing = (
+        util.binomial_coefficient(n + 10, 10) - 1
+    )  # Can use 10, since decreasing doesn't worry about leading 0's.
+    return increasing + decreasing - 10 * n  # Return the difference, removingall-same-digit numbers (10^n).
 
 
-def problem120(): #TODO(Kyle): Update with more comments about functionality  # noqa: TD003
+def problem120():  # TODO(Kyle): Update with more comments about functionality  # noqa: TD003
     """Euler Problem 120: Square Remainders.
 
     Let r be the remainder when (a-1)^n + (a+1)^n is divided by a^2.
@@ -2881,11 +2949,11 @@ def problem120(): #TODO(Kyle): Update with more comments about functionality  # 
     For 3 ≤ a ≤ 1000, find ∑ rmax.
     """
     summation = 0
-    for a in range(3,1001):
-        if a % 2 ==0:
-            summation += ((a//2)-1)*2*a
+    for a in range(3, 1001):
+        if a % 2 == 0:
+            summation += ((a // 2) - 1) * 2 * a
         else:
-            summation += (a//2)*2*a
+            summation += (a // 2) * 2 * a
     return summation
 
 
@@ -2906,11 +2974,13 @@ def problem124(max_range=100_000, wanted_index=10000):
     Let E(k) be the kth element in the sorted n column; for example, E(4) = 8 and E(6) = 9.
     If rad(n) is sorted for 1 ≤ n ≤ 100000, find E(10000).
     """
-    li = [(util.radical(i),i) for i in range(1, max_range+1)] #Get the radicals. We already had prime_factors, so we can use that & generate the radical function
-    return sorted(li)[wanted_index-1][1] #Sort the list, get the 10000th element, and return the index that made it.
+    li = [
+        (util.radical(i), i) for i in range(1, max_range + 1)
+    ]  # Get the radicals. We already had prime_factors, so we can use that & generate the radical function
+    return sorted(li)[wanted_index - 1][1]  # Sort the list, get the 10000th element, and return the index that made it.
 
 
-def problem145(max_num=1_000_000_000): #TODO(Kyle): #13 This is too slow
+def problem145(max_num=1_000_000_000):  # TODO(Kyle): #13 This is too slow
     """Euler Problem 145: Reversible Numbers.
 
     Some positive integers n have the property that the sum [ n + reverse(n) ] consists entirely of odd (decimal) digits. For instance, 36 + 63 = 99 and 409 + 904 = 1313.
@@ -2918,16 +2988,24 @@ def problem145(max_num=1_000_000_000): #TODO(Kyle): #13 This is too slow
     There are 120 reversible numbers below one-thousand.
     How many reversible numbers are there below one-billion (10^9)?
     """
-    num_digits = len(util.convert_int_to_list(max_num-1)) #Get number of digits. If you give me like 1000 or 100000, ignore that last one, it's not valid.
+    num_digits = len(
+        util.convert_int_to_list(max_num - 1)
+    )  # Get number of digits. If you give me like 1000 or 100000, ignore that last one, it's not valid.
     tot = 0
-    for ea in range(2, num_digits+1): #for each size of number
-        #Check only the odds or evens. Also, if it's divisible by 10 there's going to be a leading 0 in the reverse, so ignore.
-        if ea == 9: # 9 digits is a special case, can't work apparently  # noqa: PLR2004
+    for ea in range(2, num_digits + 1):  # for each size of number
+        # Check only the odds or evens. Also, if it's divisible by 10 there's going to be a leading 0 in the reverse, so ignore.
+        if ea == 9:  # 9 digits is a special case, can't work apparently  # noqa: PLR2004
             continue
-        val = len({x for x in range(1*10**(ea-1), 1*10**ea-1, 2) if x%10 != 0 and util.check_odd_digits(x + util.reverse_int(x))})
+        val = len(
+            {
+                x
+                for x in range(1 * 10 ** (ea - 1), 1 * 10**ea - 1, 2)
+                if x % 10 != 0 and util.check_odd_digits(x + util.reverse_int(x))
+            }
+        )
         tot += val
-        print(ea, val, tot, 1*10**(ea-1), 1*10**ea-1)
-    return 2*tot
+        print(ea, val, tot, 1 * 10 ** (ea - 1), 1 * 10**ea - 1)
+    return 2 * tot
 
 
 def problem205():
@@ -2941,25 +3019,28 @@ def problem205():
     """
 
     def dice_possibilities(dice_size=6, n=1):
-        return product(range(1, dice_size + 1), repeat=n) #Returns all possible combinations
+        return product(range(1, dice_size + 1), repeat=n)  # Returns all possible combinations
 
     wins = 0
     cubic_di = {}
     pyramid_di = {}
 
     for ea in dice_possibilities(dice_size=6, n=6):
-        cubic_di[sum(ea)] = cubic_di.get(sum(ea), 0) + 1 #Generate a dict of all possible sums of dice, and how many times they occur
+        cubic_di[sum(ea)] = (
+            cubic_di.get(sum(ea), 0) + 1
+        )  # Generate a dict of all possible sums of dice, and how many times they occur
 
     for ea in dice_possibilities(dice_size=4, n=9):
-        pyramid_di[sum(ea)] = pyramid_di.get(sum(ea), 0) + 1 #Generate a dict of all possible sums of dice, and how many times they occur
+        pyramid_di[sum(ea)] = (
+            pyramid_di.get(sum(ea), 0) + 1
+        )  # Generate a dict of all possible sums of dice, and how many times they occur
 
     for n, cubic_sum in cubic_di.items():
         for p, pyramid_sum in pyramid_di.items():
-            if p > n: #For each possible sum of dice, compare the totals. If Pyramid Peter wins, add to wins
-                wins += cubic_sum * pyramid_sum # Multiply the number of times each sum occurs
+            if p > n:  # For each possible sum of dice, compare the totals. If Pyramid Peter wins, add to wins
+                wins += cubic_sum * pyramid_sum  # Multiply the number of times each sum occurs
 
-    return f"{(wins / (sum(cubic_di.values()) * sum(pyramid_di.values()))):.7f}" #Return the probability, rounded to 7 decimal places
-
+    return f"{(wins / (sum(cubic_di.values()) * sum(pyramid_di.values()))):.7f}"  # Return the probability, rounded to 7 decimal places
 
 
 def problem206():
@@ -2967,17 +3048,20 @@ def problem206():
 
     Find the unique positive integer whose square has the form 1_2_3_4_5_6_7_8_9_0.
     """
-    for ea in product(util.convert_str_to_list(util.digits[::-1]), repeat=8): #Enumerate all possible combinations. There are 8 digits, since we know last digit is 0
-        #997242480 answer
-        num = f"1{ea[0]}2{ea[1]}3{ea[2]}4{ea[3]}5{ea[4]}6{ea[5]}7{ea[6]}8{ea[7]}900" #Build it
+    for ea in product(
+        util.convert_str_to_list(util.digits[::-1]), repeat=8
+    ):  # Enumerate all possible combinations. There are 8 digits, since we know last digit is 0
+        # 997242480 answer
+        num = f"1{ea[0]}2{ea[1]}3{ea[2]}4{ea[3]}5{ea[4]}6{ea[5]}7{ea[6]}8{ea[7]}900"  # Build it
         number = int(num)
-        if math.isqrt(number)**2 == number: #Check if it's a square
-            return math.isqrt(number), ea # We know there's only 1, so stop & return it.
+        if math.isqrt(number) ** 2 == number:  # Check if it's a square
+            return math.isqrt(number), ea  # We know there's only 1, so stop & return it.
     return None
 
 
 def problem206_alt():
     """Alternate solution for problem 206, from internet search & a little internal change for formats."""
+
     def alternating_digits(n):
         return str(n)[::2]
 
@@ -2988,9 +3072,9 @@ def problem206_alt():
         if alternating_digits(x**2) == "1234567890":
             return x
         if x % 100 == 30:  # noqa: PLR2004
-            x+=40
+            x += 40
         else:
-            x+=60
+            x += 60
     return None
 
 
@@ -3007,8 +3091,10 @@ def problem808(num_elements):
     Find the sum of the first 50 reversible prime squares.
     """
     primes = util.prime_list(100_000_000)
-    prime_squares = {x * x for x in primes if x*x != int(str(x*x)[::-1])} # Ignore palindromes, generate squared primes
-    reversed_prime_squares = {int(str(x)[::-1]) for x in prime_squares} # Generate reversed squared primes
-    shared = [x for x in prime_squares if x in reversed_prime_squares] # Find shared values
-    shared.sort() # Order the list
-    return sum(shared[:num_elements]) # Return the sum of the first 50
+    prime_squares = {
+        x * x for x in primes if x * x != int(str(x * x)[::-1])
+    }  # Ignore palindromes, generate squared primes
+    reversed_prime_squares = {int(str(x)[::-1]) for x in prime_squares}  # Generate reversed squared primes
+    shared = [x for x in prime_squares if x in reversed_prime_squares]  # Find shared values
+    shared.sort()  # Order the list
+    return sum(shared[:num_elements])  # Return the sum of the first 50
