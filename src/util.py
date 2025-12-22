@@ -4,7 +4,21 @@ from pathlib import Path
 uppercase_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 lowercase_letters = uppercase_letters.lower()
 digits = "0123456789"
-roman_numerals = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000, "IV": 4, "IX": 9, "XL": 40, "XC": 90, "CD": 400, "CM": 900}
+roman_numerals = {
+    "I": 1,
+    "V": 5,
+    "X": 10,
+    "L": 50,
+    "C": 100,
+    "D": 500,
+    "M": 1000,
+    "IV": 4,
+    "IX": 9,
+    "XL": 40,
+    "XC": 90,
+    "CD": 400,
+    "CM": 900,
+}
 
 
 def is_prime(n):
@@ -82,6 +96,7 @@ def convert_int_to_list(num):
 
     """
     return [int(x) for x in str(int(num))]
+
 
 def convert_big_int_to_list(num):
     """Convert an integer into a list of digits."""
@@ -502,8 +517,8 @@ def eulers_totient(n):
     if n == 0:
         return 0
     result = n
-    for p in set(prime_factors(n)): # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
-        result *= (1 - 1 / p)
+    for p in set(prime_factors(n)):  # Use the formula: φ(n) = n * Π(1 - 1/p) for each distinct prime factor p of n
+        result *= 1 - 1 / p
     return int(result)
 
 
@@ -513,8 +528,8 @@ def gcd(a, b):
     The basic Euclidean algorithm is based on the principle that the GCD of two numbers does not change if the larger number
     is replaced by its remainder when divided by the smaller number. The algorithm stops when the remainder is zero.
     """
-    while b: #While b is not zero
-        a, b = b, a % b #Keep replacing a with b and b with a % b (moving down the chain)
+    while b:  # While b is not zero
+        a, b = b, a % b  # Keep replacing a with b and b with a % b (moving down the chain)
     return a
 
 
@@ -544,7 +559,7 @@ def factorial_digits(n):
         8: 40320,
         9: 362880,
         0: 1,
-        } #Precomputed factorials of digits 0-9
+    }  # Precomputed factorials of digits 0-9
     return sum(fact.get(int(digit)) for digit in str(n))
 
 
@@ -553,10 +568,10 @@ def triangle_check(a, b, c):
     return a**2 + b**2 == c**2
 
 
-def euclids_formula(m,n):
-    a = m**2 - n**2 # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
-    b = 2*m*n # b = 2mn
-    c = m**2 + n**2 # c = m^2 + n^2
+def euclids_formula(m, n):
+    a = m**2 - n**2  # Pythagorean triple, a^2 + b^2 = c^2. a = m^2 - n^2
+    b = 2 * m * n  # b = 2mn
+    c = m**2 + n**2  # c = m^2 + n^2
     return a, b, c
 
 
@@ -566,7 +581,7 @@ def continued_fraction_sqrt(c):
     Modified from From wikipedia (https://en.wikipedia.org/wiki/Integer_square_root#continued_fraction_sqrt_Python).
     Returns [] if c is a perfect square, otherwise returns the period of the continued fraction.
     """
-    a0 = int(c**0.5) # Get the whole number start
+    a0 = int(c**0.5)  # Get the whole number start
 
     # Perfect square: return period empty
     if a0**2 == c:
@@ -600,24 +615,24 @@ def pell(original_value):
     """
     p, k, x1, y = 1, 1, 1, 0
     int_sqrt_d = int(original_value**0.5)
-    if int_sqrt_d**2 == original_value: # d is a square
+    if int_sqrt_d**2 == original_value:  # d is a square
         return int_sqrt_d, None
     while k != 1 or y == 0:
-        p = k * ((p//k) + 1) - p
-        p-= ((p - int_sqrt_d)//k) * k
-        x1, y = (p*x1 + original_value * y)//abs(k), (p*y + x1)//abs(k)
-        k = (p*p - original_value)//k
+        p = k * ((p // k) + 1) - p
+        p -= ((p - int_sqrt_d) // k) * k
+        x1, y = (p * x1 + original_value * y) // abs(k), (p * y + x1) // abs(k)
+        k = (p * p - original_value) // k
     return x1, y
 
 
 def sqrt_by_subtraction(number, precision):
     """Francis Jarvis method to calculate square root of an integer."""
-    a, b = 5*number, 5
-    while len(str(b)) < precision+3:
+    a, b = 5 * number, 5
+    while len(str(b)) < precision + 3:
         if a >= b:
-            a,b = a-b, b+10
+            a, b = a - b, b + 10
         else:
-            a, b = a*100, (b-b%10)*10+b%10
+            a, b = a * 100, (b - b % 10) * 10 + b % 10
     return str(b)[:precision]
 
 
@@ -641,25 +656,33 @@ def set_matrix_value(matrix, coordinate, value):
     matrix[coordinate[0]][coordinate[1]] = value
 
 
-def modified_dijkstra(matrix, start=(0,0), destination=(0,0)):
+def modified_dijkstra(matrix, start=(0, 0), destination=(0, 0)):
     size = len(matrix)
-    infinity = sum_2d(matrix) + 1 # Bigger than any of the searches
+    infinity = sum_2d(matrix) + 1  # Bigger than any of the searches
     unvisited = [(row, col) for row in range(size) for col in range(size)]
     distances = generate_2d(size, size, infinity)
     set_matrix_value(distances, start, return_matrix_value(matrix, start))
     while return_matrix_value(distances, destination) == infinity:
         current = min(unvisited, key=lambda node: return_matrix_value(distances, node))
-        for neighbor in [(current[0]-1, current[1]), # up
-                         (current[0]+1, current[1]), # down
-                         (current[0], current[1]-1), # left
-                         (current[0], current[1]+1), # right
-                         ]:
-            if neighbor in unvisited: # If neighbor is unvisited, this will also serve to make sure we only check cells that are actually in the matrix
-                set_matrix_value(distances,
-                                      neighbor,
-                                      min(return_matrix_value(distances, neighbor), return_matrix_value(distances, current) + return_matrix_value(matrix, neighbor)))
-        unvisited.remove(current) # We've visited it now
-    return return_matrix_value(distances, destination) # Return the final value
+        for neighbor in [
+            (current[0] - 1, current[1]),  # up
+            (current[0] + 1, current[1]),  # down
+            (current[0], current[1] - 1),  # left
+            (current[0], current[1] + 1),  # right
+        ]:
+            if (
+                neighbor in unvisited
+            ):  # If neighbor is unvisited, this will also serve to make sure we only check cells that are actually in the matrix
+                set_matrix_value(
+                    distances,
+                    neighbor,
+                    min(
+                        return_matrix_value(distances, neighbor),
+                        return_matrix_value(distances, current) + return_matrix_value(matrix, neighbor),
+                    ),
+                )
+        unvisited.remove(current)  # We've visited it now
+    return return_matrix_value(distances, destination)  # Return the final value
 
 
 def top_x_from_dict(num_values, my_dict):
@@ -697,24 +720,33 @@ def int_to_roman_numeral(n):
 
 
 def pythagorean_triples_under(k):
-    max_m = (-1 + (k*2+1)**0.5)/2
-    for m in range(2, int(max_m)): # Pythagorean triples
+    max_m = (-1 + (k * 2 + 1) ** 0.5) / 2
+    for m in range(2, int(max_m)):  # Pythagorean triples
         for n in range(1, m):
-            if m*m+n*n > k:
+            if m * m + n * n > k:
                 break
-            if gcd(m,n) == 1:
-                yield m*m-n*n,2*m*n,m*m+n*n
+            if gcd(m, n) == 1:
+                yield m * m - n * n, 2 * m * n, m * m + n * n
 
 
-def area_of_triangle(point1=(0,0), point2=(0,0), point3=(0,0)):
+def area_of_triangle(point1=(0, 0), point2=(0, 0), point3=(0, 0)):
     """Calculate the area of a triangle given three points."""
-    return abs(point1[0] * (point2[1] - point3[1]) + point2[0] * (point3[1] - point1[1]) + point3[0] * (point1[1] - point2[1])) / 2
+    return (
+        abs(
+            point1[0] * (point2[1] - point3[1])
+            + point2[0] * (point3[1] - point1[1])
+            + point3[0] * (point1[1] - point2[1])
+        )
+        / 2
+    )
 
 
-def check_point_in_triangle(point1=(0,0), point2=(0,0), point3=(0,0), point=(0,0)):
+def check_point_in_triangle(point1=(0, 0), point2=(0, 0), point3=(0, 0), point=(0, 0)):
     """Check if a point is inside a triangle given three points."""
     # If the the three triangles formed by using the point in the coordinates have areas totaling the area of the triangle, then the point is in the triangle. If it's bigger, it's outside.
-    return area_of_triangle(point1, point2, point3) == area_of_triangle(point1, point2, point) + area_of_triangle(point1, point, point3) + area_of_triangle(point, point2, point3)
+    return area_of_triangle(point1, point2, point3) == area_of_triangle(point1, point2, point) + area_of_triangle(
+        point1, point, point3
+    ) + area_of_triangle(point, point2, point3)
 
 
 def countifs(iterable, condition):
@@ -746,11 +778,12 @@ def check_right_triangle_from_coordinates(point1, point2, point3):
     x2, y2 = point2
     x3, y3 = point3
 
-    a = (x2- x1)**2 + (y2 - y1)**2
-    b = (x3 - x1)**2 + (y3 - y1)**2
-    c = (x3 - x2)**2 + (y3 - y2)**2
+    a = (x2 - x1) ** 2 + (y2 - y1) ** 2
+    b = (x3 - x1) ** 2 + (y3 - y1) ** 2
+    c = (x3 - x2) ** 2 + (y3 - y2) ** 2
 
     return a + b == c or a + c == b or b + c == a
+
 
 def radical(n):
     return multiply_list(list(set(prime_factors(n))))

@@ -27,6 +27,7 @@ def active_problem():
             chain.append(fd)
             loop_val = fd
         return chain
+
     max_len = 0
     max_chain = []
     for x in range(1, 1_000_000):
