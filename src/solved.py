@@ -2910,6 +2910,27 @@ def problem124(max_range=100_000, wanted_index=10000):
     return sorted(li)[wanted_index-1][1] #Sort the list, get the 10000th element, and return the index that made it.
 
 
+def problem125(max_value=10**8):
+    """Euler Problem 125: Palindromic sums.
+
+    The palindromic number 595 is interesting because it can be written as the sum of consecutive squares: 62 + 72 + 82 + 92 + 102 + 112 + 122.
+    There are exactly eleven palindromes below one-thousand that can be written as consecutive square sums, and the sum of these palindromes is 4164. Note that 1 = 02 + 12 has not been included as this problem is concerned with the squares of positive integers.
+    Find the sum of all the numbers less than 10^8 that are both palindromic and can be written as the sum of consecutive squares.
+    """
+    max_sqrt = int(max_value**0.5)+1
+    li = []
+    temp = 0
+    for start_num in range(1, max_sqrt):
+        temp = start_num**2
+        for j in range(start_num+1, max_sqrt):
+            temp += j**2
+            if temp > max_value:
+                break
+            if util.is_palindrome(temp):
+                li.append(temp)
+    return sum(set(li))
+
+
 def problem145(max_num=1_000_000_000): #TODO(Kyle): #13 This is too slow
     """Euler Problem 145: Reversible Numbers.
 
