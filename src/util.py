@@ -754,3 +754,23 @@ def check_right_triangle_from_coordinates(point1, point2, point3):
 
 def radical(n):
     return multiply_list(list(set(prime_factors(n))))
+
+
+
+def list_n_primes(n):
+
+    def prime(i, primes):
+        for prime in primes:
+            if not (i == prime or i % prime):
+                return False
+        primes.add(i)
+        return i
+
+    primes = {2}
+    i, p = 2, 0
+    while True:
+        if prime(i, primes):
+            p += 1
+            if p == n:
+                return primes
+        i += 1
